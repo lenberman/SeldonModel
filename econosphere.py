@@ -7,23 +7,25 @@ import sys
 #ipdb.set_trace()
 
 locs = {}
+now = 0
 
 
 class node:
     indx = 0
 
-    def _init__(self, name=None):
+    def _init__(self, lifetime=(now, None), name=None):
         # increment then stor
         node.indx += 1
         self.nId = node.indx
+        self.lifetime = lifetime
 
 
-#  directed  edges with (multi-dimsensional) capacity
-class edg:
-    def __init__(self, capacity, src=None, tgt=None, delay=None):
+#  directed  edges with (multi-dimsensional) capacity and adjustable delay.
+class edg(node):
+    def __init__(self, capacity, src=None, tgt=None, lifetime=(now, now+1)):
+        node.__init__(self, lifetime)
         self.edge = [src, tgt]
-        self.capacity = capacity
-        self.delay = delay
+        self.capacity = capacity  # (useValue,capacity,unit cost)
 
 
 class location:
@@ -66,7 +68,7 @@ class corp(iNode):
 class value(iNode):
     gifts = location(0)
 
-    def __init__(self, useV):
+    def __init__(self, useV, owner):
         iNode.__init__(self, useV)
 
     def useValue(self):
@@ -92,34 +94,31 @@ class commodity(value):
                 parts=None,
                 owner=None,
                 amt=1):
-        edg(amt, self)  # return out edge 
-
-
-class labor(value):
-    def __init__(self, concrete, period):
-        value.__init_(self, concrete)
-        self.period = period
-
-        def createCommodity(self):   # by envisioning use
-            pow(self.concrete, concrete)
+        edg(amt, self)  # return out edge
 
 
 class bNode(gNode, iNode):  # Biological nodes & selves
-    def __init__(self, info, loc):
+    def __init__(self, name, info, loc):
         gNode.__init__(self, loc)
-        iNode.__init__(self, info)
+        iNode.__init__(self, name, info)
 
     def compete(self, other):
         pass
 
 
 class person(bNode, corp):  # Economic nodes &  selves
-    def __init__(self, name, skills, loc, capital=None):
-        bNode.__init__(self, skills, loc)
+    class labor(edg):
+        def __init__(self, concrete, period):
+            edg.__init_(self, concrete)
+            self.period = period
+            
+    def __init__(self, name, loc, skills=None, capital=None):
+        bNode.__init__(self, name, skills, loc)
         corp.__init__(self, capital)
+        self.skills = skills
 
-    def labor(self, period=None):
-        [gNode(self) , 1]
+    def getLabor(self, start=0, duration=1):
+        person.labor(self.skills, self, None, (now+start, now+start+duration))
 
 
 class Market(iNode, gNode):
