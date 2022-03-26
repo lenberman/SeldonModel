@@ -3,8 +3,8 @@ import random
 import statistics
 import math
 import sys
-import ipdb
-ipdb.set_trace()
+#import ipdb
+#ipdb.set_trace()
 
 locs = {}
 
@@ -18,15 +18,23 @@ class node:
         self.nId = node.indx
 
 
+#  directed  edges with (multi-dimsensional) capacity
+class edg:
+    def __init__(self, capacity, src=None, tgt=None, delay=None):
+        self.edge = [src, tgt]
+        self.capacity = capacity
+        self.delay = delay
+
+
 class location:
 
     def __init__(self, t, i=None, j=None, k=None):
         val = (t, i, j, k)
-        val = locs[val]
-        if None is val:
-            val = (t, i, j, k)
+        try:
+            val = locs[val]
+        except KeyError:
             locs[val] = val
-        val
+            val
 
 
 class gNode(node):  # Geometrical nodes.  Override
@@ -48,6 +56,11 @@ class iNode(node):  # iNodes are controlled by sNodes (state nodes)class iNode:
     def __init__(self, info, encoding=None):
         self.info = info
         self.encoding = encoding
+
+
+class corp(iNode):
+    def __init__(self, loc, capital=None):
+        self.capital = capital
 
 
 class value(iNode):
@@ -79,7 +92,7 @@ class commodity(value):
                 parts=None,
                 owner=None,
                 amt=1):
-        [None]
+        edg(amt, self)  # return out edge 
 
 
 class labor(value):
@@ -91,6 +104,15 @@ class labor(value):
             pow(self.concrete, concrete)
 
 
+class bNode(gNode, iNode):  # Biological nodes & selves
+    def __init__(self, info, loc):
+        gNode.__init__(self, loc)
+        iNode.__init__(self, info)
+
+    def compete(self, other):
+        pass
+
+
 class person(bNode, corp):  # Economic nodes &  selves
     def __init__(self, name, skills, loc, capital=None):
         bNode.__init__(self, skills, loc)
@@ -100,23 +122,9 @@ class person(bNode, corp):  # Economic nodes &  selves
         [gNode(self) , 1]
 
 
-class bNode(gNode, iNode):  # Biological nodes & selves
-    def __init__(self, info, loc):
-        gNode.__init__(self, loc)
-        iNode.__init__(self, info)
-
-    def compete(self, other):
-        pass
-
 class Market(iNode, gNode):
     def __init__(self):
-        xchange = {}
+        self.xchange = {}
 
     def addUseV(self, useV, price=None):  # price $|useValue
         1
-
-
-class corp(iNode):
-    def __init__(self, loc, capital=None):
-        self.capital = capital
-
