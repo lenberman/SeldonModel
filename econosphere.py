@@ -3,8 +3,8 @@ import random
 import statistics
 import math
 import sys
-#import ipdb
-#ipdb.set_trace()
+# import ipdb
+# ipdb.set_trace()
 
 locs = {}
 now = 0
@@ -13,7 +13,7 @@ now = 0
 class node:
     indx = 0
 
-    def _init__(self, lifetime=(now, None), name=None):
+    def _init__(self, lifetime=(now, None)):
         # increment then stor
         node.indx += 1
         self.nId = node.indx
@@ -55,21 +55,26 @@ class iNode(node):  # iNodes are controlled by sNodes (state nodes)class iNode:
                   "commodity", "BUS", "CAR", "CARRIAGE", "PLATFORM",
                   "BUSSTOP",  "ELEVATOR", "STAIRWAY", "STREET", "COMPOSITE"]
 
-    def __init__(self, info, encoding=None):
+    def __init__(self, name, info, encoding=None):
+        node.__init__(self,  name)
         self.info = info
         self.encoding = encoding
 
+        def setOwner(self, owner):
+            self.owner = owner
+
 
 class corp(iNode):
-    def __init__(self, loc, capital=None):
+    def __init__(self, name, info, loc, capital=None):
+        iNode.__init__(self, name, info, capital)
         self.capital = capital
 
 
 class value(iNode):
     gifts = location(0)
 
-    def __init__(self, useV, owner):
-        iNode.__init__(self, useV)
+    def __init__(self, name, useV, owner):
+        iNode.__init__(self, (useV, owner))
 
     def useValue(self):
         self.info
@@ -81,19 +86,41 @@ class value(iNode):
 # commodities may be owned,
 #        factories have locations, processes do not
 class commodity(value):
-    def __init__(self, useV, locA=None, owner=None):
+    def __init__(self, useV,
+                 cv,  # # c/v: organic composition of commodity. capital/labor at locA.
+                 rt,  # # realization time
+                 locA=(now),
+                 owner=None,
+                 capital=None):
         value.__init__(self, useV, owner)
         self.owner = owner
+        self.capital = capital
+        self.locA = locA
+        self.cv = cv
+        self.rt = rt
 
     def getOwner(self):
         self.owner
 
-        # next get out-edges from commodity node
-    def produce(self,
-                loc,  labor,  # must have location and labor
-                parts=None,
-                owner=None,
-                amt=1):
+    def exchange(self, other):
+        o1 = self.owner
+        self.owner = other.owner
+        other.owner = o1
+
+        # next realize produces out-edges from commodity node, sources of commodities 
+    def instantiate(self,
+                    loc,  labor,  # must have location and labor
+                    parts=None,
+                    amt=1):
+        edg(amt, self, None, (now, now+self.rt))  # return out edge
+
+        # next  produce & connect out-edge from commodity node
+    def transport(self,
+                  loc,
+                  owner=None,  # #default don't change owner
+                  amt=None):  # #default : ALL
+        if owner is None:
+            owner = self.owner
         edg(amt, self)  # return out edge
 
 
@@ -111,7 +138,7 @@ class person(bNode, corp):  # Economic nodes &  selves
         def __init__(self, concrete, period):
             edg.__init_(self, concrete)
             self.period = period
-            
+
     def __init__(self, name, loc, skills=None, capital=None):
         bNode.__init__(self, name, skills, loc)
         corp.__init__(self, capital)
@@ -127,3 +154,5 @@ class Market(iNode, gNode):
 
     def addUseV(self, useV, price=None):  # price $|useValue
         1
+
+len = person("Len", (0,0,0,1),"skills")
