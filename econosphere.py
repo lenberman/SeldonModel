@@ -67,6 +67,12 @@ class iNode(node):  # iNodes are controlled by sNodes (state nodes)class iNode:
         self.owner = owner
 
 
+class technology(iNode):   # # scale factors for interaction modes 
+    def __init__(self, name, info):
+        iNode.__init__(self, name, info)
+        self.factor = {}   # # scale factors for interaction modes 
+
+
 class corp(iNode):
     def __init__(self, name, info, loc, capital=None):
         iNode.__init__(self, name, info, capital)
