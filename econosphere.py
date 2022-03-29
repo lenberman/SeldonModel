@@ -49,19 +49,27 @@ class gNode(node):  # Geometrical nodes.  Override
 
 
 class iNode(node):  # iNodes are controlled by sNodes (state nodes)class iNode:
-    INFO_TYPES = ["nPerson", "cPerson", "lGov",
-                  "STATE",  # # enables relative-personhood of iNodes
-                  "NATION",  # # biologically derived identity
-                  "health", "military",
-                  "commodity"]
+    INFO_TYPES = ["nPerson",
+                  "cPerson",
+                  "lGov",
+                  "state",  # # model constraints
+                  "nation",  # # biologically derived identity. force
+                  "health",
+                  "military",
+                  "technology",
+                  "commodity",
+                  "fCapital",
+                  "mCapital",
+                  "eCapital",
+                  "bCapitcal"]
 
     # govt = getState(self, name, spaceTime=(location(now)))
 
-    def __init__(self, name, info, encoding=None):
+    def __init__(self, name, info, technology=None):
         node.__init__(self)
         self.name = name
         self.info = info
-        self.encoding = encoding
+        self.technology = technology
 
     def setOwner(self, owner):
         self.owner = owner
@@ -82,8 +90,8 @@ class corp(iNode):
 class value(iNode):
     gifts = location(0)
 
-    def __init__(self, name, useV, owner):
-        iNode.__init__(self, (useV, owner))
+    def __init__(self, name, useV, owner=None):
+            iNode.__init__(self, name, (useV, owner))
 
     def useValue(self):
         self.info

@@ -3,11 +3,12 @@ from commodity import *
 
 
 class bNode(gNode, iNode):  # Biological nodes & selves
-    def __init__(self, name, info, loc):
+    def __init__(self, name, info, loc, capital=None, tech=None):
         gNode.__init__(self, loc)
-        iNode.__init__(self, name, info)
+        iNode.__init__(self, name, info,tech)
+        self.capital = capital
 
-    def compete(self, other):
+    def compete(self, other=None):  # # use technology
         pass
 
 
@@ -28,3 +29,9 @@ class person(bNode, corp):  # Economic nodes &  selves
 
 
 out1 = person("Len", location(), "skills")
+out1
+print(out1)
+val = value("corn","corn.v",out1)
+print(val)
+com = commodity(val.useValue(), 1,1, out1)
+print(com)

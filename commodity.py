@@ -2,6 +2,12 @@
 from econosphere import *
 
 
+class capital:
+    def __init__(self, cap):  # # capital or Transformation of capital as 2 vectors of length 5
+        self.capital = cap  # # (cf, cm, cphys, celec, cbio)
+        # # fixed/units  money phys elec bio 
+
+
 # commodities may be owned,
 #        factories have locations, processes do not
 class commodity(value):
@@ -13,7 +19,7 @@ class commodity(value):
                  capital=None):
         value.__init__(self, useV, owner)
         self.owner = owner
-        self.capital = capital
+        self.capital = capital  # # (cf, cm, cphys, celec, cbio)
         self.locA = locA
         self.cv = cv
         self.rt = rt
@@ -38,8 +44,8 @@ class commodity(value):
                   loc,
                   owner=None,  # #default don't change owner
                   amt=None):  # #default : ALL
-        if owner is None:
-            owner = self.owner
+        if owner is not None:
+            self.owner = owner
         edg(amt, self)  # return out edge
 
 
