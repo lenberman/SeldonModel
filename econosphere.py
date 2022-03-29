@@ -3,7 +3,7 @@ import random
 import statistics
 import math
 import sys
-
+from pprint import pprint
 
 now = 0
 

@@ -18,11 +18,11 @@ class commodity(value):
                  owner=None,
                  capital=None):
         value.__init__(self, useV, owner)
-        self.owner = owner
         self.capital = capital  # # (cf, cm, cphys, celec, cbio)
         self.locA = locA
         self.cv = cv
         self.rt = rt
+
 
     def getOwner(self):
         self.owner

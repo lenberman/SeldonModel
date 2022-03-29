@@ -28,10 +28,10 @@ class person(bNode, corp):  # Economic nodes &  selves
         person.labor(self.skills, self, None, (now+start, now+start+duration))
 
 
+
 out1 = person("Len", location(), "skills")
-out1
-print(out1)
+vars(out1)
 val = value("corn","corn.v",out1)
-print(val)
+vars(val)
 com = commodity(val.useValue(), 1,1, out1)
-print(com)
+pprint(vars(com))
