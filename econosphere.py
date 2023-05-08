@@ -8,21 +8,24 @@ from pprint import pprint
 
 now = 0
 dimension = 3
-
+faces = 6
 
 class World:
     def __init__(self, extent):
         self.extent = extent
-        self.shape = list()
-        for i  in list(range(0, dimension)):
+        self.shape = [ faces ]
+        for i  in range(dimension-1):
             self.shape.append(extent)
-        self.surface = np.full(self.shape, None, dtype=dict.__class__)
+        print(self.shape)
+        self.surface = np.empty(self.shape, dtype=dict.__class__)
+        
 
     def __str__(self):
-        print("Dimension(" + str(dimension) + ")" + "Extent(" + str(self.extent) + ")\n")
-        print(self.surface)
-
-    def addTo(self, nd, loc):
+        rv = "Dimension(" + str(dimension) + ")" + "Extent(" + str(self.extent) + ")\n"
+        rv += str(np.shape(self.surface))
+        return rv
+        
+    def addNode(self, nd, loc=None):
         if dimension == 3:
             region = self.surface[loc[1],loc[2],loc[3]]
         elif dimension == 2:
@@ -47,33 +50,28 @@ class UseValue:
     def  UV(cls, name, list=None):    #list(name) relates this UV to previous
         obj = cls.uvList.get(name)
         if ( obj is None):   # create UseValue
-            obj = UseValue(nm)
+            obj = UseValue(nm, list)
         obj
 
-    def __init__(self, nm):
+    def __init__(self, nm, ins=None):
+        UseValue.uvId += 1
+        if ins is not None:
+            for i in ins:
+                nm += "|" + str(i.uvId)
+            nm += "|"
         self.name = nm
-        self.uvId += uvId
+        self.uvId = UseValue.uvId
         UseValue.uvList[ nm ] = self
+        UseValue.uvList[ self.uvId ] = self
         self
 
-
-class Node:   # # Node in Seldon decomposition
-    indx = 0
-
-    def __init__(self, information, event=Event()):  # # any Node may have lifetime
-        # increment then stor
-        Node.indx += 1
-        self.nId = Node.indx
-        self.birth = event
-        self.info= information
-
-    def step(self, until=now+1):
-        ...
-
+    def __str__(self):
+        return self.name + "(" + str(self.uvId) + ")"
+        
 #  directed  edges with (multi-dimsensional) capacity and adjustable delay.
 class edg:
     edgeDict = {}
-    def __init__(self, src=None, tgt=None, forward=True, end=now+1, start = now):
+    def __init__(self, src, tgt=None, forward=True, end=None, start = now):
         self.forward = forward
         if forward == True:
             self.edge = [src, tgt]
@@ -84,26 +82,27 @@ class edg:
                  
         #  self.capacity = capacity  # (UseValue,capacity,unit cost)  in agreement class
 class inclusion(edg):
-    ...
+    def __init__(self, src, tgt=None, forward=False, end=None, start = now):
+        super().__init__(self, src, tgt, forward, end, start)
+
 class meiotic(edg):
-    ...
+    def __init__(self, src, tgt=None, forward=True, end=None, start = now):
+        super().__init__(self, src, tgt, forward, end, start)
+
 class mitotic(edg):
-    ...
+    def __init__(self, src, tgt=None, forward=True, end=None, start = now):
+        super().__init__(self, src, tgt, forward, end, start)
+
 class agreement(edg):
-    ...
+    def __init__(self, src, tgt, forward=True, end=None, start = now):
+        super().__init__(self, src, tgt, forward, end, start)
 
-class bNode(Node):
-    
-        
-    def __init__(self, info=None,event=Event()):
-        super().__init__(self, info,event)
-    ...
+    def addPromise(self,uv):...
 
-class iNode(Node):
-    class zygotic(Node):
-        ...
-    @classmethod   #get nodes
-    def getINode(cls, edges):
+class Node:   # # Node in Seldon decomposition
+    indx = 0
+    @classmethod   #get node
+    def getNode(cls, edges):
         newNode = True
         for e in edges:
             if not ( e.__class__ is Meiotic):
@@ -111,6 +110,27 @@ class iNode(Node):
                 break
         if newNode == True:
             ...
+
+    def __init__(self, information, event=Event()):  # # any Node may have lifetime
+        # increment then stor
+        Node.indx += 1
+        self.nId = Node.indx
+        self.birth = event
+        self.info= information
+
+    def where(self, when=now):...
+        
+    def step(self, until=now+1):
+        ...
+
+class bNode(Node):
+    def __init__(self, info=None,event=Event()):
+        super().__init__(self, info,event)
+    ...
+
+class iNode(Node):
+    sorts = [ "Zygotic", "Commercial", "Governmental", "Institutional" ]
+    
     def __init__(self, gov, event=Event(), info=None, mny=None):
         super().__init__(self, info, event)
         self.gov = gov
@@ -126,5 +146,10 @@ class cNode(Node):
 
 if __name__ == '__main__':
     wrld = World(2)
-    print(wrld)
+    print(str(wrld))
+    ev = Event()
+    print(ev)
+    money = UseValue("medium-of-exchange")
+    print(money)
+    
     
