@@ -7,31 +7,60 @@ import numpy as np
 from pprint import pprint
 
 now = 0
-dimension = 3
-faces = 6
-
 class World:
-    def __init__(self, extent):
+    def __init__(self, extent, dimension=3, faces=6):
+        self.dimension = dimension
+        self.faces = faces
         self.extent = extent
         self.shape = [ faces ]
+        self.regions = ()
+        size = faces
         for i  in range(dimension-1):
             self.shape.append(extent)
-        print(self.shape)
-        self.surface = np.empty(self.shape, dtype=dict.__class__)
-        
+            size *= extent
+            #        self.surface = np.empty(self.shape, dtype=dict.__class__)
+        self.surface = list()
+        for i in range(size):
+            rem = i//faces
+            coord = list()
+            coord. append(i%faces)
+            for j in range(dimension-1):
+                coord.append(rem%extent)
+                rem //= extent
+            self.surface.append(coord)
+
 
     def __str__(self):
-        rv = "Dimension(" + str(dimension) + ")" + "Extent(" + str(self.extent) + ")\n"
-        rv += str(np.shape(self.surface))
+        rv = "Dimension(" + str(self.dimension) + ")" + "Extent(" + str(self.extent) + ")\n"
+        rv += str(self.shape) 
         return rv
         
+    def getRegion(self, size):
+        return Region(self, size)
+
     def addNode(self, nd, loc=None):
-        if dimension == 3:
+        if self.dimension == 3:
             region = self.surface[loc[1],loc[2],loc[3]]
-        elif dimension == 2:
+        elif self.dimension == 2:
             region = self.surface[loc[1],loc[2]]
-        elif dimension == 1:
+        elif self.dimension == 1:
             region = self.surface[loc[1]]
+
+class Region:
+    def __init__(self, world, size=1):
+        self.world = world
+        self.size = size
+        self.locales = {}
+        for i in(range(size)):
+            val = tuple(world.surface.pop())
+            self.locales[val] = {}
+        # del world.surface[0:size]
+
+    def __str__(self):
+        var = "World:" + str(self.world) + ", size= "
+        var += str(self.size) + " locales: "  str(self.locales)
+        return var
+        
 
 class Event:  # space time chunk starting now
     events = {}
@@ -126,7 +155,8 @@ class Node:   # # Node in Seldon decomposition
 class bNode(Node):
     def __init__(self, info=None,event=Event()):
         super().__init__(self, info,event)
-    ...
+    def getRootNode(self, event):...
+        
 
 class iNode(Node):
     sorts = [ "Zygotic", "Commercial", "Governmental", "Institutional" ]
@@ -146,7 +176,9 @@ class cNode(Node):
 
 if __name__ == '__main__':
     wrld = World(2)
+    reg = wrld.getRegion(12)
     print(str(wrld))
+    print(str(reg))
     ev = Event()
     print(ev)
     money = UseValue("medium-of-exchange")
