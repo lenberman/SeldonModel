@@ -38,14 +38,6 @@ class World:
     def getRegion(self, size):
         return Region(self, size)
 
-    def addNode(self, nd, loc=None):
-        if self.dimension == 3:
-            region = self.surface[loc[1],loc[2],loc[3]]
-        elif self.dimension == 2:
-            region = self.surface[loc[1],loc[2]]
-        elif self.dimension == 1:
-            region = self.surface[loc[1]]
-
 class Region:
     def __init__(self, world, size=1):
         self.world = world
@@ -57,10 +49,13 @@ class Region:
         # del world.surface[0:size]
 
     def __str__(self):
-        var = "World:" + str(self.world) + ", size= "
-        var += str(self.size) + " locales: "  str(self.locales)
+        var = "\nRegion of size(" + str(self.size) + ") in world:[" + str(self.world) + "], size= "
+        var += " locales: "  + str(self.locales)
         return var
         
+    # add node to a locale in self
+    def addNode(self, nd, locale=None):
+        ...
 
 class Event:  # space time chunk starting now
     events = {}
@@ -72,7 +67,7 @@ class Event:  # space time chunk starting now
             Event.events[val] = val
         self.val = val
 
-class UseValue:
+class UseValue:  #fear power friendship love medium-of-exchange
     uvId = 0
     uvList = dict()
     @classmethod
@@ -100,7 +95,8 @@ class UseValue:
 #  directed  edges with (multi-dimsensional) capacity and adjustable delay.
 class edg:
     edgeDict = {}
-    def __init__(self, src, tgt=None, forward=True, end=None, start = now):
+    # create edge from (src->tgt || tgt->src)
+    def __init__(self, src=None , tgt=None, forward=True, end=None, start = now):
         self.forward = forward
         if forward == True:
             self.edge = [src, tgt]
@@ -130,22 +126,21 @@ class agreement(edg):
 
 class Node:   # # Node in Seldon decomposition
     indx = 0
-    @classmethod   #get node
-    def getNode(cls, edges):
-        newNode = True
-        for e in edges:
-            if not ( e.__class__ is Meiotic):
-                newNode = False
-                break
-        if newNode == True:
-            ...
+    nodes = {}
 
-    def __init__(self, information, event=Event()):  # # any Node may have lifetime
+    def __init__(self, name, information, event=Event()):  # # any Node may have lifetime
         # increment then stor
         Node.indx += 1
         self.nId = Node.indx
+        self.edges = {}
         self.birth = event
         self.info= information
+
+        
+
+    def addEdge(self, tgt=None, forward=True, start=None, end=None):
+        tmp = edg(self, tgt, forward, end, start)
+
 
     def where(self, when=now):...
         
@@ -153,35 +148,37 @@ class Node:   # # Node in Seldon decomposition
         ...
 
 class bNode(Node):
-    def __init__(self, info=None,event=Event()):
-        super().__init__(self, info,event)
-    def getRootNode(self, event):...
+    @classmethod
+    def zygote(cls, name, info=None):
+        try:
+            return Node.nodes[name]
+        except KeyError:
+            Node.nodes[name] =  bNode(info)
+            z = Node.nodes[name]
+        return z
         
+    def __init__(self, info=None, event=Event()):
+        super().__init__(self, info,event)
+
+
+    def addEdge(self, tgt, info, event=Event()):...
+        
+    
 
 class iNode(Node):
     sorts = [ "Zygotic", "Commercial", "Governmental", "Institutional" ]
     
     def __init__(self, gov, event=Event(), info=None, mny=None):
         super().__init__(self, info, event)
+        self.possessions = ()   #owned cNodes
         self.gov = gov
-        ...
-    def getCNode(self, uv , factory=False):
-        ...
 
 class cNode(Node):
-    def __init__(self, possessor, cInfo=None):
+    def __init__(self, possessor, factory=True, cInfo=None):
         super().__init__(self, cInfo)
         self.owner = possessor
+        self.info = cInfo
     ...
 
-if __name__ == '__main__':
-    wrld = World(2)
-    reg = wrld.getRegion(12)
-    print(str(wrld))
-    print(str(reg))
-    ev = Event()
-    print(ev)
-    money = UseValue("medium-of-exchange")
-    print(money)
     
     
