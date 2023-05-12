@@ -8,6 +8,7 @@ from pprint import pprint
 
 now = 0
 class World:
+    # create world with given dimension and #faces each 
     def __init__(self, extent, dimension=3, faces=6):
         self.dimension = dimension
         self.faces = faces
@@ -18,8 +19,7 @@ class World:
         for i  in range(dimension-1):
             self.shape.append(extent)
             size *= extent
-            #        self.surface = np.empty(self.shape, dtype=dict.__class__)
-        self.surface = list()
+        self.surface = {}
         for i in range(size):
             rem = i//faces
             coord = list()
@@ -27,29 +27,38 @@ class World:
             for j in range(dimension-1):
                 coord.append(rem%extent)
                 rem //= extent
-            self.surface.append(coord)
+            self.surface[tuple(coord)] = {}
 
 
     def __str__(self):
-        rv = "Dimension(" + str(self.dimension) + ")" + "Extent(" + str(self.extent) + ")\n"
-        rv += str(self.shape) 
+        rv = "Dimension(" + str(self.dimension)  + "), Extent(" + str(self.extent) + ")\n"
+        rv += str(self.shape) +"\n" + str(self.surface)
         return rv
         
     def getRegion(self, size):
-        return Region(self, size)
+        return Region(self.surface, self, size)
 
 class Region:
-    def __init__(self, world, size=1):
-        self.world = world
+    def __init__(self, regions, parent, size=1):
+        assert(size<=len(regions))
+        self.parent = parent
         self.size = size
         self.locales = {}
         for i in(range(size)):
+            a = regions.popitem()
+            self.locales[a[0]] = a[1]
+
+    def getSubregion(self, size=1):
+        subR = Region(self.locales, self, size)
+        asser(subR.parent == self)
+        for i in(range(size)):
             val = tuple(world.surface.pop())
             self.locales[val] = {}
-        # del world.surface[0:size]
+        self.size -= size
+        
 
     def __str__(self):
-        var = "\nRegion of size(" + str(self.size) + ") in world:[" + str(self.world) + "], size= "
+        var = "\nRegion of size(" + str(self.size) + ") in world:[" + str(self.parent) + "], size= "
         var += " locales: "  + str(self.locales)
         return var
         
@@ -153,12 +162,14 @@ class bNode(Node):
         try:
             return Node.nodes[name]
         except KeyError:
-            Node.nodes[name] =  bNode(info)
+            Node.nodes[name] =  bNode(name, info)
             z = Node.nodes[name]
+            z.zygote = True
         return z
         
-    def __init__(self, info=None, event=Event()):
+    def __init__(self, name=None, info=None, event=Event()):
         super().__init__(self, info,event)
+        self.zygote = False
 
 
     def addEdge(self, tgt, info, event=Event()):...
@@ -167,11 +178,20 @@ class bNode(Node):
 
 class iNode(Node):
     sorts = [ "Zygotic", "Commercial", "Governmental", "Institutional" ]
-    
+
+    @classmethod
+    def  iZygote(cls, nd):
+        assert(nd.zygote == True)
+        ...
+
     def __init__(self, gov, event=Event(), info=None, mny=None):
         super().__init__(self, info, event)
         self.possessions = ()   #owned cNodes
         self.gov = gov
+
+class govNode(iNode):...
+
+class insNode(iNode):...
 
 class cNode(Node):
     def __init__(self, possessor, factory=True, cInfo=None):
