@@ -40,21 +40,22 @@ class World:
 
 class Region:
     def __init__(self, regions, parent, size=1):
-        assert(size<=len(regions))
         self.parent = parent
         self.size = size
         self.locales = {}
+        assert(size<=len(regions))
         for i in(range(size)):
             a = regions.popitem()
             self.locales[a[0]] = a[1]
 
     def getSubregion(self, size=1):
         subR = Region(self.locales, self, size)
-        asser(subR.parent == self)
+        assert(subR.parent == self)
         for i in(range(size)):
-            val = tuple(world.surface.pop())
-            self.locales[val] = {}
+            val = self.locales.popitem()
+            subR.locales[val[0]] = val[1]
         self.size -= size
+        return subR
         
 
     def __str__(self):
