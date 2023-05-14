@@ -7,38 +7,9 @@ import numpy as np
 from pprint import pprint
 
 now = 0
-class World:
-    # create world with given dimension and #faces each 
-    def __init__(self, extent, dimension=3, faces=6):
-        self.dimension = dimension
-        self.faces = faces
-        self.extent = extent
-        self.shape = [ faces ]
-        self.regions = ()
-        size = faces
-        for i  in range(dimension-1):
-            self.shape.append(extent)
-            size *= extent
-        self.surface = {}
-        for i in range(size):
-            rem = i//faces
-            coord = list()
-            coord. append(i%faces)
-            for j in range(dimension-1):
-                coord.append(rem%extent)
-                rem //= extent
-            self.surface[tuple(coord)] = {}
-
-
-    def __str__(self):
-        rv = "Dimension(" + str(self.dimension)  + "), Extent(" + str(self.extent) + ")\n"
-        rv += str(self.shape) +"\n" + str(self.surface)
-        return rv
-        
-    def getRegion(self, size):
-        return Region(self.surface, self, size)
-
 class Region:
+    ## regions is an array locations.
+    ## parent is the region which previously contained regions
     def __init__(self, regions, parent, size=1):
         self.parent = parent
         self.size = size
@@ -183,19 +154,81 @@ class iNode(Node):
     @classmethod
     def  iZygote(cls, nd):
         assert(nd.zygote == True)
+        assert(False)
+
+
+        
+    def __init__(self, gov, poss=None, event=Event(), info=None, mny=None,name=None):
+        super().__init__(self, info, event)
+        if poss is None:
+            self.possessions = {} #owned cNodes
+        else:
+            self.possessions = poss
+        
+
+
+# linked to geometry
+class Government(iNode):
+    indx = 0
+    def  __init__(self, regions, laws=None, name=None): 
+        if name is None:
+            name = "gov" + str(Government.indx)
+            Government.indx += 1
+        super().__init__(self, laws, name)
+        self.regions = regions
+        self.nation = True
+
+    def getGov(self, size):
         ...
 
-    def __init__(self, gov, event=Event(), info=None, mny=None):
-        super().__init__(self, info, event)
-        self.possessions = ()   #owned cNodes
-        self.gov = gov
 
-class govNode(iNode):...
+## World holds regions and Nations.  Links  geometry to nodes.
+class World(Government):
+    disputeRS = None
+    
+    # create world with given dimension and #faces each 
+    def __init__(self, extent, dimension=3, faces=6):
+        self.dimension = dimension
+        self.faces = faces
+        self.extent = extent
+        self.shape = [ faces ]
+        self.states = list()
+        size = faces
+        for i  in range(dimension-1):
+            self.shape.append(extent)
+            size *= extent
+        self.surface = {}
+        for i in range(size):
+            rem = i//faces
+            coord = list()
+            coord. append(i%faces)
+            for j in range(dimension-1):
+                coord.append(rem%extent)
+                rem //= extent
+            self.surface[tuple(coord)] = {}
 
-class insNode(iNode):...
+    def getNation(self, size):
+        reg = self.getRegion( size)
+        reg = Government(reg)
+        self.states.append(reg)
+        return reg
 
-class cNode(Node):
-    def __init__(self, possessor, factory=True, cInfo=None):
+    def __str__(self):
+        rv = "Dimension(" + str(self.dimension)  + "), Extent(" + str(self.extent) + ")\n"
+        rv += str(self.shape) +"\n" + str(self.surface)
+        return rv
+        
+    def getRegion(self, size):
+        assert(size <= len(self.surface))
+        return Region(self.surface, self, size)
+
+
+class Institution(iNode):
+    def __init__(self, govList, name):
+        ...
+
+class Commerce(Node):
+    def __init__(self, possessor:iNode, factory=True, cInfo=None):
         super().__init__(self, cInfo)
         self.owner = possessor
         self.info = cInfo

@@ -6,6 +6,7 @@ from econosphere import *
 if __name__ == '__main__':
     wrld = World(2)
     reg = wrld.getRegion(12)
+    nation = wrld.getNation(6)
     print(str(wrld))
     print(str(reg))
     subR = reg.getSubregion(3)
@@ -19,4 +20,6 @@ if __name__ == '__main__':
     ev = Event()
     print(ev)
     money = UseValue("medium-of-exchange")
+    power = UseValue("power")
+    fear = UseValue("fear")
     print(money)
