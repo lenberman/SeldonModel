@@ -5,7 +5,7 @@ import math
 import sys
 import numpy as np
 from pprint import pprint
-
+import pdb; 
 now = 0
 class Region:
     ## regions is a dict with indexed by index-tuples.
@@ -143,10 +143,6 @@ class bNode(Node):
         self.zygote = False
 
 
-    def addEdge(self, target, info, event=Event()):...
-        
-    
-
 class iNode(Node):
     sorts = [ "Zygotic", "Commercial", "Governmental", "Institutional" ]
 
@@ -155,7 +151,7 @@ class iNode(Node):
         assert(nd.zygote == True)
         assert(False)
 
-    def __init__(self, gov, poss=None, event=Event(), info=None, mny=None,name=None):
+    def __init__(self, gov=None, poss=None, event=Event(), info=None, mny=None,name=None):
         super().__init__(self, info, event)
         if poss is None:
             self.possessions = {} #owned cNodes
@@ -177,10 +173,10 @@ class Government(iNode):
         self.nation = False
 
     @classmethod
-    def getInsitution(participants, name, rules=None):
+    def getInsitution(cls, participants, name, rules=None):
         external = participants[0].nation
-        for gov in participants:
-            assert(external is gov.nation)
+        for gov in participants.items():
+            assert(external is gov[1].nation)
         inst = Institution(participants, name)
         return inst
             
@@ -222,7 +218,7 @@ class World(Government):
         gov = Government(reg)
         gov.nation = True
         self.states.append(gov)
-        edge = gov.addEdge(self, Inclusion, False)
+        edge = gov.addEdge(self, edgClass=Inclusion, fwd=False)
         return gov
 
     def __str__(self):
@@ -236,8 +232,12 @@ class World(Government):
 
 
 class Institution(iNode):
-    def __init__(self, govList, name):
-        ...
+    # Adds institution with govList members
+    def __init__(self, govList, nm):
+        super().__init__(self, name=nm)
+        for member in govList.values():
+            member.addEdge(tgt=self, edgClass=Meiotic)
+
 
 class Commerce(Node):
     def __init__(self, possessor:iNode, factory=True, cInfo=None):
