@@ -1,0 +1,8 @@
+n
+n
+n
+n
+b World.getInsitution
+b Institution.__init__
+alias pv pp vars()
+alias pvs pp vars(self)
