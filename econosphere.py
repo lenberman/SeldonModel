@@ -155,25 +155,24 @@ class iNode(Node):
         assert(nd.zygote == True)
         assert(False)
 
-
-        
     def __init__(self, gov, poss=None, event=Event(), info=None, mny=None,name=None):
         super().__init__(self, info, event)
         if poss is None:
             self.possessions = {} #owned cNodes
         else:
             self.possessions = poss
-        
+        self.name = name
+        self.money = mny
 
 
 # linked to geometry
 class Government(iNode):
     indx = 0
-    def  __init__(self, region, laws=None, name=None): 
-        if name is None:
-            name = "gov" + str(Government.indx)
+    def  __init__(self, region, laws=None, nm=None): 
+        if nm is None:
+            nm = "gov" + str(Government.indx)
             Government.indx += 1
-        super().__init__(self, laws, name)
+        super().__init__(self, laws, name=nm)
         self.region = region
         self.nation = False
 

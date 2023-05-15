@@ -5,7 +5,6 @@ from econosphere import *
 
 if __name__ == '__main__':
     wrld = World(2)
-    reg = wrld.getRegion(12)
     nation = wrld.getNation(6)
     tmp = nation.getSubGov(3)
     print(str(wrld))
