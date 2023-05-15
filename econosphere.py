@@ -8,10 +8,8 @@ from pprint import pprint
 
 now = 0
 class Region:
-    ## regions is an array locations.
-    ## parent is the region which previously contained regions
-    def __init__(self, regions, parent, size=1):
-        self.parent = parent
+    ## regions is a dict with indexed by index-tuples.
+    def __init__(self, regions, size=1):
         self.size = size
         self.locales = {}
         assert(size<=len(regions))
@@ -20,8 +18,7 @@ class Region:
             self.locales[a[0]] = a[1]
 
     def getSubregion(self, size=1):
-        subR = Region(self.locales, self, size)
-        assert(subR.parent == self)
+        subR = Region(self.locales, size)
         for i in(range(size)):
             val = self.locales.popitem()
             subR.locales[val[0]] = val[1]
@@ -30,8 +27,7 @@ class Region:
         
 
     def __str__(self):
-        var = "\nRegion of size(" + str(self.size) + ") in world:[" + str(self.parent) + "], size= "
-        var += " locales: "  + str(self.locales)
+        var = "\nRegion of size(" + str(self.size) + ")   locales: "  + str(self.locales)
         return var
         
     # add node to a locale in self
@@ -87,21 +83,21 @@ class edg:
         self.end = end
                  
         #  self.capacity = capacity  # (UseValue,capacity,unit cost)  in agreement class
-class inclusion(edg):
-    def __init__(self, src, tgt=None, forward=False, end=None, start = now):
-        super().__init__(self, src, tgt, forward, end, start)
+class Inclusion(edg):
+    def __init__(self, *src, target=None, forward=False, end=None, start = now):
+        super().__init__(src, target, forward, end, start)
 
-class meiotic(edg):
-    def __init__(self, src, tgt=None, forward=True, end=None, start = now):
-        super().__init__(self, src, tgt, forward, end, start)
+class Meiotic(edg):
+    def __init__(self, *src, target=None, forward=True, end=None, start = now):
+        super().__init__(src, target, forward, end, start)
 
-class mitotic(edg):
-    def __init__(self, src, tgt=None, forward=True, end=None, start = now):
-        super().__init__(self, src, tgt, forward, end, start)
+class Mitotic(edg):
+    def __init__(self, *src, target=None, forward=True, end=None, start = now):
+        super().__init__(src, target, forward, end, start)
 
-class agreement(edg):
-    def __init__(self, src, tgt, forward=True, end=None, start = now):
-        super().__init__(self, src, tgt, forward, end, start)
+class Agreement(edg):
+    def __init__(self, src, target, forward=True, end=None, start = now):
+        super().__init__(src, target, forward, end, start)
 
     def addPromise(self,uv):...
 
@@ -112,16 +108,19 @@ class Node:   # # Node in Seldon decomposition
     def __init__(self, name, information, event=Event()):  # # any Node may have lifetime
         # increment then stor
         Node.indx += 1
+        self.name = name
         self.nId = Node.indx
-        self.edges = {}
+        self.edges = list()
         self.birth = event
         self.info= information
+        Node.nodes[name] = self
 
-        
-
-    def addEdge(self, tgt=None, forward=True, start=None, end=None):
-        tmp = edg(self, tgt, forward, end, start)
-
+    def addEdge(self, tgt=None, edgClass=None, fwd=True, strt=None, nd=None):
+        tmp = edgClass(self, target=tgt, forward=fwd, end=nd, start=strt)
+        self.edges.append(tmp)
+        return tmp
+            
+            
 
     def where(self, when=now):...
         
@@ -144,7 +143,7 @@ class bNode(Node):
         self.zygote = False
 
 
-    def addEdge(self, tgt, info, event=Event()):...
+    def addEdge(self, target, info, event=Event()):...
         
     
 
@@ -170,17 +169,29 @@ class iNode(Node):
 # linked to geometry
 class Government(iNode):
     indx = 0
-    def  __init__(self, regions, laws=None, name=None): 
+    def  __init__(self, region, laws=None, name=None): 
         if name is None:
             name = "gov" + str(Government.indx)
             Government.indx += 1
         super().__init__(self, laws, name)
-        self.regions = regions
-        self.nation = True
+        self.region = region
+        self.nation = False
 
-    def getGov(self, size):
-        ...
+    @classmethod
+    def getInsitution(participants, name, rules=None):
+        external = participants[0].nation
+        for gov in participants:
+            assert(external is gov.nation)
+        inst = Institution(participants, name)
+        return inst
+            
 
+    # internal governmental subdivision
+    def getSubGov(self, size):
+        reg = Region(self.region.locales, size)
+        reg = Government(reg)
+        edge = reg.addEdge(self, Mitotic, False)
+        return reg
 
 ## World holds regions and Nations.  Links  geometry to nodes.
 class World(Government):
@@ -209,9 +220,11 @@ class World(Government):
 
     def getNation(self, size):
         reg = self.getRegion( size)
-        reg = Government(reg)
-        self.states.append(reg)
-        return reg
+        gov = Government(reg)
+        gov.nation = True
+        self.states.append(gov)
+        edge = gov.addEdge(self, Inclusion, False)
+        return gov
 
     def __str__(self):
         rv = "Dimension(" + str(self.dimension)  + "), Extent(" + str(self.extent) + ")\n"
@@ -220,7 +233,7 @@ class World(Government):
         
     def getRegion(self, size):
         assert(size <= len(self.surface))
-        return Region(self.surface, self, size)
+        return Region(self.surface, size)
 
 
 class Institution(iNode):
