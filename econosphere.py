@@ -5,20 +5,20 @@ now = 0
 
 
         #  self.capacity = capacity  # (UseValue,capacity,unit cost)  in agreement class
-class Inclusion(edg):
+class Inclusion(Edge):
     def __init__(self, *src, target=None, forward=False, end=None, start = now):
         super().__init__(src, target, forward, end, start)
 
-class Meiotic(edg):
+class Meiotic(Edge):
     def __init__(self, *src, target=None, forward=True, end=None, start = now):
         super().__init__(src, target, forward, end, start)
 
-class Mitotic(edg):
+class Mitotic(Edge):
     def __init__(self, *src, target=None, forward=True, end=None, start = now):
         super().__init__(src, target, forward, end, start)
 
-class Agreement(edg):
-    def __init__(self, src, target, forward=True, end=None, start = now):
+class Agreement(Edge):
+    def __init__(self, *src, target=None, forward=True, end=None, start = now):
         super().__init__(src, target, forward, end, start)
 
     def addPromise(self,uv):...
@@ -136,11 +136,11 @@ class Institution(iNode):
 
 
 class Commerce(Node):
-    def __init__(self, possessor:iNode, factory=True, cInfo=None):
+    def __init__(self, possessor:iNode, factory=True, cInfo=None, useValue=None):
         super().__init__(self, cInfo)
         self.owner = possessor
         self.info = cInfo
-    ...
+        self.uv = useValue
 
 if __name__ == '__main__':    
     plt.plot([1, 2, 3, 4])
