@@ -1,33 +1,29 @@
 #!/usr/bin/python3
 from econosphere import *
 
-
-class capital:
-    def __init__(self, cap):  # # capital or Transformation of capital as 2 vectors of length 5
-        self.capital = cap  # # (cf, cm, cphys, celec, cbio)
-        # # fixed/units  money phys elec bio 
-
-
-# commodities may be owned,
+# commodities may be owned, may be physical
 #        factories have locations, processes do not
 class commodity(value):
+    money = None
     def __init__(self, useV,
                  cv,  # # c/v: organic composition of commodity. capital/labor at locA.
                  rt,  # # realization time
+                 cs,  # # sensitivity to change in capital dCdM
                  locA=(now),
                  owner=None,
                  capital=None):
         value.__init__(self, useV, owner)
         self.capital = capital  # # (cf, cm, cphys, celec, cbio)
         self.locA = locA
-        self.cv = cv
-        self.rt = rt
-
+        self.cv = cv  # # sensitivity to change in labor input dCdL
+        self.rt = rt  # #
+        self.dCdM = 0  # sensitivity to change in capital
 
     def getOwner(self):
         self.owner
 
-    def exchange(self, other):
+        # # vector of values relative to other commodities.
+    def exchange(self, other=money):
         o1 = self.owner
         self.owner = other.owner
         other.owner = o1
@@ -47,13 +43,4 @@ class commodity(value):
         if owner is not None:
             self.owner = owner
         edg(amt, self)  # return out edge
-
-
-class Market(iNode, gNode):
-    def __init__(self):
-        self.xchange = {}
-
-    def addUseV(self, useV, price=None):  # price $|useValue
-        1
-
 

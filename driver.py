@@ -1,14 +1,20 @@
 #!/usr/bin/python3
 import sys
 from econosphere import *
-import pdb; pdb.set_trace()
+##import pdb; pdb.set_trace()
 
 
 if __name__ == '__main__':
     wrld = World(2)
+    nList = wrld << (("USA", 6), ("China", 6))
+    for i in nList:
+        print(str(i))
+    pList = wrld >> ("Alice", "Bob")
+
+"""
     nations = {}
-    nations[0] = wrld.getNation(6)
-    nations[1] = wrld.getNation(6)
+    nations[0] = wrld.getNation(6,"USA")
+    nations[1] = wrld.getNation(6, "China")
     institution = Government.getInsitution(nations, "Fed")
     subgov = nations[0].getSubGov(3)
     print(str(wrld))
@@ -24,3 +30,4 @@ if __name__ == '__main__':
     power = UseValue("power")
     fear = UseValue("fear")
     print(money)
+"""

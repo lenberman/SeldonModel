@@ -1,0 +1,18 @@
+An event should consist of a tuple/list of i,j,ks and a pt in unit cube.  EventList
+which holds events in temporal order.
+
+base classes:
+     Event
+     Region
+     UseValue
+     edg
+     Node
+
+Derived classes:
+        bNode
+        Commerce: owned by iNodes
+        iNode
+                # derived from iNode
+        Insitution
+        Government
+        World

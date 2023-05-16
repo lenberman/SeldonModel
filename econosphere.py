@@ -1,27 +1,26 @@
 from econosphereBase import * 
 
-now = 0
 
-
-
-        #  self.capacity = capacity  # (UseValue,capacity,unit cost)  in agreement class
+#  self.capacity = capacity  # (UseValue,capacity,unit cost)  in agreement class
 class Inclusion(Edge):
-    def __init__(self, *src, target=None, forward=False, end=None, start = now):
+    def __init__(self, *src, target=None, forward=False, end=None, start = NOW):
         super().__init__(src, target, forward, end, start)
 
 class Meiotic(Edge):
-    def __init__(self, *src, target=None, forward=True, end=None, start = now):
+    def __init__(self, *src, target=None, forward=True, end=None, start = NOW):
         super().__init__(src, target, forward, end, start)
 
 class Mitotic(Edge):
-    def __init__(self, *src, target=None, forward=True, end=None, start = now):
+    def __init__(self, *src, target=None, forward=True, end=None, start = NOW):
         super().__init__(src, target, forward, end, start)
 
 class Agreement(Edge):
-    def __init__(self, *src, target=None, forward=True, end=None, start = now):
+    def __init__(self, *src, target=None, forward=True, end=None, start = NOW):
         super().__init__(src, target, forward, end, start)
 
-    def addPromise(self,uv):...
+    def addPromise(self,uv):
+        ...
+
 
 class bNode(Node):
     @classmethod
@@ -29,13 +28,13 @@ class bNode(Node):
         try:
             return Node.nodes[name]
         except KeyError:
-            Node.nodes[name] =  bNode(name, info)
+            Node.nodes[name] =  bNode(name, info,Event)
             z = Node.nodes[name]
             z.zygote = True
         return z
-        
-    def __init__(self, name=None, info=None, event=Event()):
-        super().__init__(self, info,event)
+
+    def __init__(self, name, info, event):
+        super().__init__(name, info,event)
         self.zygote = False
 
 
@@ -47,7 +46,7 @@ class iNode(Node):
         assert(nd.zygote == True)
         assert(False)
 
-    def __init__(self, gov=None, poss=None, event=Event(), info=None, mny=None,name=None):
+    def __init__(self, gov=None, poss=None, event=None, info=None, mny=None,name=None):
         super().__init__(self, info, event)
         if poss is None:
             self.possessions = {} #owned cNodes
@@ -88,6 +87,23 @@ class Government(iNode):
 class World(Government):
     disputeRS = None
     
+    # returns list of nations
+    def __lshift__(self, tgtList):
+        nList = list()
+        for nat in tgtList:
+            nList.append(self.getNation(nat[0], nat[1]))
+        return nList
+
+    # returns list of zygotes
+    def __rshift__(self, tgtList):
+        nList = list()
+        for nat in tgtList:
+            z=bNode.zygote(nat)
+            z.addEdge(self, edgClass=Inclusion, fwd=False)
+            nList.append(z)
+        return nList
+
+
     # create world with given dimension and #faces each 
     def __init__(self, extent, dimension=3, faces=6):
         self.dimension = dimension
@@ -109,9 +125,9 @@ class World(Government):
                 rem //= extent
             self.surface[tuple(coord)] = {}
 
-    def getNation(self, size):
+    def getNation(self, name, size):
         reg = self.getRegion( size)
-        gov = Government(reg)
+        gov = Government(reg, nm=name)
         gov.nation = True
         self.states.append(gov)
         edge = gov.addEdge(self, edgClass=Inclusion, fwd=False)
@@ -119,7 +135,7 @@ class World(Government):
 
     def __str__(self):
         rv = "Dimension(" + str(self.dimension)  + "), Extent(" + str(self.extent) + ")\n"
-        rv += str(self.shape) +"\n" + str(self.surface)
+        rv += str(self.shape) +"\n" + str(self.surface) + "\n" + str(self.states)
         return rv
         
     def getRegion(self, size):
