@@ -116,6 +116,8 @@ class Node:   # # Node in Seldon decomposition
         Node.indx += 1
         self.name = name
         self.nId = Node.indx
+        if self.name is None:
+            self.name = "Node_" + str(self.nId)
         self.edges = list()
         self.birth = event
         self.info= information

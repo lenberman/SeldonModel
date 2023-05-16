@@ -1,3 +1,8 @@
+1) create World
+2) create Nations
+3) create Insitutions
+4) create zygotes & iZygotes
+
 An event should consist of a tuple/list of i,j,ks and a pt in unit cube.  EventList
 which holds events in temporal order.
 

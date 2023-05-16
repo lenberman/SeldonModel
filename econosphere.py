@@ -43,8 +43,24 @@ class iNode(Node):
 
     @classmethod
     def  iZygote(cls, nd):
-        assert(nd.zygote == True)
-        assert(False)
+        for edge in nd.edges:
+            if edge.__class__ is Inclusion:
+                pair = edge.edge
+                if pair[0] is nd:
+                    gov = pair[1]
+                else:
+                    gov = pair[0]
+        assert gov.__class__ is World
+        try:
+            Node.nodes[nd.name]
+            name= "i_" + nd.name
+            iZ = iNode(gov, name)
+        except KeyError:
+            name=nd.name
+            iZ = iNode(gov, name)
+        Node.nodes[name] = iZ
+        iZ.addEdge(iZ, edgClass=Inclusion)
+        return iZ
 
     def __init__(self, gov=None, poss=None, event=None, info=None, mny=None,name=None):
         super().__init__(self, info, event)
@@ -69,6 +85,7 @@ class Government(iNode):
 
     @classmethod
     def getInsitution(cls, participants, name, rules=None):
+        # set inclusion node to luib(participants)
         external = participants[0].nation
         for gov in participants.items():
             assert(external is gov[1].nation)

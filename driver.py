@@ -7,9 +7,18 @@ from econosphere import *
 if __name__ == '__main__':
     wrld = World(2)
     nList = wrld << (("USA", 6), ("China", 6))
-    for i in nList:
+    zList = wrld >> ("Alice", "Bob")
+    iZList = list()
+    for z in zList:
+        iz = iNode.iZygote(z)
+        iZList.append(iz)
+        print(str(vars(iz)))
+
+
+    for i in nList + pList:
         print(str(i))
-    pList = wrld >> ("Alice", "Bob")
+    for i in nList + pList:
+        print(str(vars(i)))
 
 """
     nations = {}
