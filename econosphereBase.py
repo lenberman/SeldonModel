@@ -118,7 +118,7 @@ class Node:   # # Node in Seldon decomposition
         self.nId = Node.indx
         if self.name is None:
             self.name = "Node_" + str(self.nId)
-        self.edges = list()
+        self.edges = []
         self.birth = event
         self.info= information
         try:
@@ -130,6 +130,8 @@ class Node:   # # Node in Seldon decomposition
     def addEdge(self, tgt=None, edgClass=None, fwd=True, strt=None, nd=None):
         tmp = edgClass(self, target=tgt, forward=fwd, end=nd, start=strt)
         self.edges.append(tmp)
+        if not tgt is None:
+            tgt.edges.append(tmp)
         return tmp
 
     def __str__(self):

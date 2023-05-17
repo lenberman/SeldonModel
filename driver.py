@@ -1,12 +1,14 @@
 #!/usr/bin/python3
 import sys
 from econosphere import *
-##import pdb; pdb.set_trace()
+#import pdb; pdb.set_trace()
 
 
 if __name__ == '__main__':
     wrld = World(2)
     nList = wrld << (("USA", 6), ("China", 6))
+    institution = Institution(nList, "WorldBank")
+    print(str(vars(institution)))
     zList = wrld >> ("Alice", "Bob")
     iZList = list()
     for z in zList:
@@ -15,16 +17,16 @@ if __name__ == '__main__':
         print(str(vars(iz)))
 
 
-    for i in nList + pList:
+    for i in nList + zList:
         print(str(i))
-    for i in nList + pList:
+    for i in nList + zList:
         print(str(vars(i)))
 
 """
     nations = {}
     nations[0] = wrld.getNation(6,"USA")
     nations[1] = wrld.getNation(6, "China")
-    institution = Government.getInsitution(nations, "Fed")
+    institution = Insitution(nations, "Fed")
     subgov = nations[0].getSubGov(3)
     print(str(wrld))
     alice = bNode.zygote("Alice")

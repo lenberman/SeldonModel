@@ -3,19 +3,19 @@ from econosphereBase import *
 
 #  self.capacity = capacity  # (UseValue,capacity,unit cost)  in agreement class
 class Inclusion(Edge):
-    def __init__(self, *src, target=None, forward=False, end=None, start = NOW):
+    def __init__(self, src, target=None, forward=False, end=None, start = NOW):
         super().__init__(src, target, forward, end, start)
 
 class Meiotic(Edge):
-    def __init__(self, *src, target=None, forward=True, end=None, start = NOW):
+    def __init__(self, src, target=None, forward=True, end=None, start = NOW):
         super().__init__(src, target, forward, end, start)
 
 class Mitotic(Edge):
-    def __init__(self, *src, target=None, forward=True, end=None, start = NOW):
+    def __init__(self, src, target=None, forward=True, end=None, start = NOW):
         super().__init__(src, target, forward, end, start)
 
 class Agreement(Edge):
-    def __init__(self, *src, target=None, forward=True, end=None, start = NOW):
+    def __init__(self, src, target=None, forward=True, end=None, start = NOW):
         super().__init__(src, target, forward, end, start)
 
     def addPromise(self,uv):
@@ -40,6 +40,14 @@ class bNode(Node):
 
 class iNode(Node):
     sorts = [ "Zygotic", "Commercial", "Governmental", "Institutional" ]
+
+    @classmethod
+    def lub(cls,nds):
+        if len(nds) == 1:
+            return nds[0]
+        path2World = nds[0]. p2W()
+        return path2World
+            
 
     @classmethod
     def  iZygote(cls, nd):
@@ -71,11 +79,27 @@ class iNode(Node):
         self.name = name
         self.money = mny
 
+    def p2W(self):
+        val = [self]
+        for e in self.edges:
+            if e.__class__ is Inclusion:
+                if e.edge[0] is self:
+                    parent = e.edge[1]
+                else:
+                    parent = e.edge[0]
+                if parent.__class__ is World:
+                    val.append(parent)
+                else:
+                    val += parent.p2W()
+                break
+        return val
+
 
 # linked to geometry
 class Government(iNode):
     indx = 0
     def  __init__(self, region, laws=None, nm=None): 
+        super().__init__(self)
         if nm is None:
             nm = "gov" + str(Government.indx)
             Government.indx += 1
@@ -83,15 +107,6 @@ class Government(iNode):
         self.region = region
         self.nation = False
 
-    @classmethod
-    def getInsitution(cls, participants, name, rules=None):
-        # set inclusion node to luib(participants)
-        external = participants[0].nation
-        for gov in participants.items():
-            assert(external is gov[1].nation)
-        inst = Institution(participants, name)
-        return inst
-            
 
     # internal governmental subdivision
     def getSubGov(self, size):
@@ -123,6 +138,7 @@ class World(Government):
 
     # create world with given dimension and #faces each 
     def __init__(self, extent, dimension=3, faces=6):
+        super().__init__(self,None)
         self.dimension = dimension
         self.faces = faces
         self.extent = extent
@@ -164,9 +180,11 @@ class Institution(iNode):
     # Adds institution with govList members
     def __init__(self, govList, nm):
         super().__init__(self, name=nm)
-        for member in govList.values():
+        for member in govList:
             member.addEdge(tgt=self, edgClass=Meiotic)
-
+        overlord = self.lub(govList)
+        ub = overlord[len(overlord}-1]
+        self.addEdge(tgt=ub,edgClass=Inclusion)
 
 class Commerce(Node):
     def __init__(self, possessor:iNode, factory=True, cInfo=None, useValue=None):

@@ -2,7 +2,8 @@ n
 n
 n
 n
-b World.getInsitution
 b Institution.__init__
+b iNode.lub
 alias pv pp vars()
 alias pvs pp vars(self)
+c
