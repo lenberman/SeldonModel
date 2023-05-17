@@ -9,6 +9,8 @@ from pprint import pprint
 import pdb; 
 NOW = 0
 #import pdb; pdb.set_trace()
+class econosphere.Inclusion: pass
+
 class Region:
     ## regions is a dict with indexed by index-tuples.
     def __init__(self, regions, size=1):
@@ -100,11 +102,27 @@ class Edge:
         def reverse(self):
             self.edge = (self.edge[1], self.edge[0])
 
+
 ##Node
 class Node:   # # Node in Seldon decomposition
     indx = 0
     nodes = {}
 
+    @classmethod
+    def commonAncestors(cls,nds, edgClass=Inclusion):
+        ancestorList = []
+        for nd in nds:
+            ancestorList += nd.ancestors(edgClass)
+        reduce(commonTail, ancestorList, nds[0].ancestors(edgClass))
+               
+    @classmethod
+    def commonTail(cls,x, y, edgClass=Inclusion):
+        res = []
+        while x[len(x)-1] == y[len(y)-1]:
+            res = x.pop() + res
+            y.pop()
+        return res
+        
     # create out-edges from self to tgt
     def __rshift__(self, tgt):
         for target in tgt:
@@ -133,6 +151,23 @@ class Node:   # # Node in Seldon decomposition
         if not tgt is None:
             tgt.edges.append(tmp)
         return tmp
+
+
+    def ancestors(self, edgClass=Inclusion):
+        val = [self]
+        for e in self.edges:
+            if e.__class__ is edgClass:
+                if e.edge[0] is self:
+                    parent = e.edge[1]
+                else:
+                    parent = e.edge[0]
+                if parent.__class__ is World:
+                    val.append(parent)
+                else:
+                    val += parent.ancestors()
+                break
+        return val
+        
 
     def __str__(self):
         rv = str(vars(self)) + str(self.birth)

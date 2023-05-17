@@ -1,5 +1,5 @@
-from econosphereBase import * 
-
+from  econosphereBase import *
+from functools import reduce
 
 #  self.capacity = capacity  # (UseValue,capacity,unit cost)  in agreement class
 class Inclusion(Edge):
@@ -42,14 +42,6 @@ class iNode(Node):
     sorts = [ "Zygotic", "Commercial", "Governmental", "Institutional" ]
 
     @classmethod
-    def lub(cls,nds):
-        if len(nds) == 1:
-            return nds[0]
-        path2World = nds[0]. p2W()
-        return path2World
-            
-
-    @classmethod
     def  iZygote(cls, nd):
         for edge in nd.edges:
             if edge.__class__ is Inclusion:
@@ -78,22 +70,6 @@ class iNode(Node):
             self.possessions = poss
         self.name = name
         self.money = mny
-
-    def p2W(self):
-        val = [self]
-        for e in self.edges:
-            if e.__class__ is Inclusion:
-                if e.edge[0] is self:
-                    parent = e.edge[1]
-                else:
-                    parent = e.edge[0]
-                if parent.__class__ is World:
-                    val.append(parent)
-                else:
-                    val += parent.p2W()
-                break
-        return val
-
 
 # linked to geometry
 class Government(iNode):
@@ -182,8 +158,7 @@ class Institution(iNode):
         super().__init__(self, name=nm)
         for member in govList:
             member.addEdge(tgt=self, edgClass=Meiotic)
-        overlord = self.lub(govList)
-        ub = overlord[len(overlord}-1]
+        ub = Node.commonAncestors(govList)[0]
         self.addEdge(tgt=ub,edgClass=Inclusion)
 
 class Commerce(Node):
