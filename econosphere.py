@@ -21,7 +21,7 @@ class Agreement(Edge):
     def addPromise(self,uv):
         ...
 
-edgeTypes = { "Inclusion" : Inclusion ,
+Edge. edgeTypes = { "Inclusion" : Inclusion ,
               "Meiotic" : Meiotic,
               "Mitotic" : Mitotic,
               "Agreement" : Agreement}
@@ -33,7 +33,7 @@ class bNode(Node):
         try:
             return Node.nodes[name]
         except KeyError:
-            Node.nodes[name] =  bNode(name, info,Event)
+            bNode(name, info,Event)
             z = Node.nodes[name]
             z.zygote = True
         return z
@@ -63,31 +63,46 @@ class iNode(Node):
         except KeyError:
             name=nd.name
             iZ = iNode(gov, name)
-        Node.nodes[name] = iZ
         iZ.addEdge(iZ, edgClass=Inclusion)
         return iZ
+   
+    # returns list of commerce nodes in tgtList
+    def __lshift__(self, tgtList):
+        nList = list()
+        for nat in tgtList:
+            nList.append(self.tion(nat[0], nat[1]))
+        return nList
 
-    def __init__(self, gov=None, poss=None, event=None, info=None, mny=None,name=None):
-        super().__init__(self, info, event)
+     # returns list of ...
+    def __rshift__(self, tgtList):
+        nList = list()
+        for sGove in tgtList:
+            i_obj=self.__class__(sGove)
+            # must add different ande & edgeTypes depending on self._class__
+            i_obj.addEdge(self, edgClass=self.__class__.targetClass, fwd=False)
+            nList.append(i_obj)
+        return nList
+
+    def __init__(self, name, gov=None, poss=None, event=None, info=None, mny=None):
+        super().__init__(name, info, event)
         if poss is None:
             self.possessions = {} #owned cNodes
         else:
             self.possessions = poss
-        self.name = name
         self.money = mny
 
 # linked to geometry
 class Government(iNode):
     indx = 0
+
     def  __init__(self, region, laws=None, nm=None): 
-        super().__init__(self)
+        super().__init__(nm)
         if nm is None:
             nm = "gov" + str(Government.indx)
             Government.indx += 1
-        super().__init__(self, laws, name=nm)
+        super().__init__(nm, laws)
         self.region = region
         self.nation = False
-
 
     # internal governmental subdivision
     def getSubGov(self, size):
@@ -107,7 +122,7 @@ class World(Government):
             nList.append(self.getNation(nat[0], nat[1]))
         return nList
 
-    # returns list of zygotes
+    # returns list of zygotes with World inclusion.
     def __rshift__(self, tgtList):
         nList = list()
         for nat in tgtList:
@@ -116,10 +131,9 @@ class World(Government):
             nList.append(z)
         return nList
 
-
     # create world with given dimension and #faces each 
-    def __init__(self, extent, dimension=3, faces=6):
-        super().__init__(self, laws=None)
+    def __init__(self, extent, nm1="Earth", dimension=3, faces=6):
+        super().__init__(self, nm=nm1, laws=None)
         self.dimension = dimension
         self.faces = faces
         self.extent = extent
@@ -160,7 +174,7 @@ class World(Government):
 class Institution(iNode):
     # Adds institution with govList members
     def __init__(self, govList, nm):
-        super().__init__(self, name=nm)
+        super().__init__(nm)
         for member in govList:
             member.addEdge(tgt=self, edgClass=Meiotic)
         ub = commonAncestors(govList)[0]

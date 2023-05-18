@@ -3,7 +3,11 @@ n
 n
 n
 b Institution.__init__
-b iNode.lub
+b commonTail
+b commonAncestors
+b Node.ancestors
+b iNode.__rshift__
+b iNode.__lshift__
 alias pv pp vars()
 alias pvs pp vars(self)
 c
