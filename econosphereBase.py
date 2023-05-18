@@ -9,7 +9,6 @@ from pprint import pprint
 import pdb; 
 NOW = 0
 #import pdb; pdb.set_trace()
-class econosphere.Inclusion: pass
 
 class Region:
     ## regions is a dict with indexed by index-tuples.
@@ -80,6 +79,7 @@ class UseValue:  #fear power friendship love medium-of-exchange
 #  directed  edges with (multi-dimsensional) capacity and adjustable delay.
 class Edge:
     edgeDict = {}
+    edgeTypes = {}
 
     @classmethod
     def connect(cls, src, tgt):
@@ -92,7 +92,7 @@ class Edge:
     # create edge from (src->tgt || tgt->src)
     def __init__(self, src=None , tgt=None, forward=True, end=None, start = NOW):
         self.forward = forward
-        if forward == True:
+        if forward == True:  # check Node.isTop
             self.edge = (src, tgt)
         else:
             self.edge = (tgt, src)
@@ -108,21 +108,6 @@ class Node:   # # Node in Seldon decomposition
     indx = 0
     nodes = {}
 
-    @classmethod
-    def commonAncestors(cls,nds, edgClass=Inclusion):
-        ancestorList = []
-        for nd in nds:
-            ancestorList += nd.ancestors(edgClass)
-        reduce(commonTail, ancestorList, nds[0].ancestors(edgClass))
-               
-    @classmethod
-    def commonTail(cls,x, y, edgClass=Inclusion):
-        res = []
-        while x[len(x)-1] == y[len(y)-1]:
-            res = x.pop() + res
-            y.pop()
-        return res
-        
     # create out-edges from self to tgt
     def __rshift__(self, tgt):
         for target in tgt:
@@ -153,7 +138,7 @@ class Node:   # # Node in Seldon decomposition
         return tmp
 
 
-    def ancestors(self, edgClass=Inclusion):
+    def ancestors(self, edgClass, stopNodeClass, forward=True):
         val = [self]
         for e in self.edges:
             if e.__class__ is edgClass:
@@ -161,10 +146,11 @@ class Node:   # # Node in Seldon decomposition
                     parent = e.edge[1]
                 else:
                     parent = e.edge[0]
-                if parent.__class__ is World:
+                if parent.__class__ is stopNodeClass:
                     val.append(parent)
+                    return val
                 else:
-                    val += parent.ancestors()
+                    val += parent.ancestors(edgClass, stopNodeClass)
                 break
         return val
         

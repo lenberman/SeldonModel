@@ -21,6 +21,11 @@ class Agreement(Edge):
     def addPromise(self,uv):
         ...
 
+edgeTypes = { "Inclusion" : Inclusion ,
+              "Meiotic" : Meiotic,
+              "Mitotic" : Mitotic,
+              "Agreement" : Agreement}
+           
 
 class bNode(Node):
     @classmethod
@@ -114,7 +119,7 @@ class World(Government):
 
     # create world with given dimension and #faces each 
     def __init__(self, extent, dimension=3, faces=6):
-        super().__init__(self,None)
+        super().__init__(self, laws=None)
         self.dimension = dimension
         self.faces = faces
         self.extent = extent
@@ -158,7 +163,7 @@ class Institution(iNode):
         super().__init__(self, name=nm)
         for member in govList:
             member.addEdge(tgt=self, edgClass=Meiotic)
-        ub = Node.commonAncestors(govList)[0]
+        ub = commonAncestors(govList)[0]
         self.addEdge(tgt=ub,edgClass=Inclusion)
 
 class Commerce(Node):
@@ -167,6 +172,20 @@ class Commerce(Node):
         self.owner = possessor
         self.info = cInfo
         self.uv = useValue
+
+def commonAncestors(nds, edgClass=Inclusion, stopNodeClass=World):
+    ancestorList = []
+    for nd in nds:
+        val = nd.ancestors(edgClass, stopNodeClass=World)
+        ancestorList.append((val))
+    return reduce(commonTail, ancestorList, nds[0].ancestors(Inclusion,World))
+               
+def commonTail(x, y):
+    res = []
+    while len(x)>0 and x[len(x)-1] == y[len(y)-1]:
+        res.insert(0,x.pop())
+        y.pop()
+    return res
 
 if __name__ == '__main__':    
     plt.plot([1, 2, 3, 4])
