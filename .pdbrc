@@ -8,6 +8,7 @@ b commonAncestors
 b Node.ancestors
 b iNode.__rshift__
 b iNode.__lshift__
+b iNode.iZygote
 alias pv pp vars()
 alias pvs pp vars(self)
 c

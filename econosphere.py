@@ -46,8 +46,14 @@ class bNode(Node):
 class iNode(Node):
     sorts = [ "Zygotic", "Commercial", "Governmental", "Institutional" ]
 
-    @classmethod
+    @classmethod  # nd must exist and be connected.
     def  iZygote(cls, nd):
+        name = nd.name
+        if not Node.nodes.get(name) is None:
+            if nd.__class__ is iNode:
+                return nd
+            else:
+                name= "i_" + name
         for edge in nd.edges:
             if edge.__class__ is Inclusion:
                 pair = edge.edge
@@ -55,14 +61,8 @@ class iNode(Node):
                     gov = pair[1]
                 else:
                     gov = pair[0]
-        assert gov.__class__ is World
-        try:
-            Node.nodes[nd.name]
-            name= "i_" + nd.name
-            iZ = iNode(gov, name)
-        except KeyError:
-            name=nd.name
-            iZ = iNode(gov, name)
+        assert issubclass(gov.__class__, Government)
+        iZ = iNode(gov, name)
         iZ.addEdge(iZ, edgClass=Inclusion)
         return iZ
    
