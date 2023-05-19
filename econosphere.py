@@ -54,6 +54,7 @@ class iNode(Node):
             if foo.__class__ is iNode:
                 return foo
             else:
+                assert foo.__class__ is bNode
                 name= "i_" + name
             foo = Node.nodes.get(name)
         for edge in nd.edges:
@@ -66,7 +67,7 @@ class iNode(Node):
                 break
         assert issubclass(gov.__class__, Government)
         iZ = iNode(name, gov)
-        iZ.addEdge(iZ, edgClass=Inclusion)
+        iZ.addEdge(gov, edgClass=Inclusion)
         return iZ
 
     def __init__(self, name, gov=None, poss=None, event=None, info=None, mny=None):
@@ -99,11 +100,10 @@ class Government(iNode):
     indx = 0
 
     def  __init__(self, region, laws=None, nm=None): 
-        super().__init__(nm)
+        super().__init__(nm, laws)
         if nm is None:
             nm = "g_" + str(Government.indx)
             Government.indx += 1
-        super().__init__(nm, laws)
         self.region = region
         self.nation = False
 
