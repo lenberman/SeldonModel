@@ -49,11 +49,13 @@ class iNode(Node):
     @classmethod  # nd must exist and be connected.
     def  iZygote(cls, nd):
         name = nd.name
-        if not Node.nodes.get(name) is None:
-            if nd.__class__ is iNode:
-                return nd
+        foo = Node.nodes.get(name)
+        while not (foo is None):
+            if foo.__class__ is iNode:
+                return foo
             else:
                 name= "i_" + name
+            foo = Node.nodes.get(name)
         for edge in nd.edges:
             if edge.__class__ is Inclusion:
                 pair = edge.edge
@@ -61,10 +63,19 @@ class iNode(Node):
                     gov = pair[1]
                 else:
                     gov = pair[0]
+                break
         assert issubclass(gov.__class__, Government)
-        iZ = iNode(gov, name)
+        iZ = iNode(name, gov)
         iZ.addEdge(iZ, edgClass=Inclusion)
         return iZ
+
+    def __init__(self, name, gov=None, poss=None, event=None, info=None, mny=None):
+        super().__init__(name, info, event)
+        if poss is None:
+            self.possessions = {} #owned cNodes
+        else:
+            self.possessions = poss
+        self.money = mny
    
     # returns list of commerce nodes in tgtList
     def __lshift__(self, tgtList):
@@ -83,14 +94,6 @@ class iNode(Node):
             nList.append(i_obj)
         return nList
 
-    def __init__(self, name, gov=None, poss=None, event=None, info=None, mny=None):
-        super().__init__(name, info, event)
-        if poss is None:
-            self.possessions = {} #owned cNodes
-        else:
-            self.possessions = poss
-        self.money = mny
-
 # linked to geometry
 class Government(iNode):
     indx = 0
@@ -98,7 +101,7 @@ class Government(iNode):
     def  __init__(self, region, laws=None, nm=None): 
         super().__init__(nm)
         if nm is None:
-            nm = "gov" + str(Government.indx)
+            nm = "g_" + str(Government.indx)
             Government.indx += 1
         super().__init__(nm, laws)
         self.region = region
@@ -153,8 +156,12 @@ class World(Government):
                 rem //= extent
             self.surface[tuple(coord)] = {}
 
-    def getNation(self, name, size):
-        reg = self.getRegion( size)
+    def getNation(self, name, size=None):
+        if size is None:
+            gov = Node.nodes.get(name)
+            if not gov is None:
+                return gov
+        reg = self.getRegion(size)
         gov = Government(reg, nm=name)
         gov.nation = True
         self.states.append(gov)
