@@ -3,6 +3,9 @@
 3) create Insitutions
 4) create zygotes & iZygotes
 
+World l&r shifts map string specs to lists of iNode
+
+
 An event should consist of a tuple/list of i,j,ks and a pt in unit cube.  EventList
 which holds events in temporal order.
 

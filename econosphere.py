@@ -25,7 +25,6 @@ Edge. edgeTypes = { "Inclusion" : Inclusion ,
               "Meiotic" : Meiotic,
               "Mitotic" : Mitotic,
               "Agreement" : Agreement}
-           
 
 class bNode(Node):
     @classmethod
@@ -50,7 +49,7 @@ class iNode(Node):
     def  iZygote(cls, nd):
         name = nd.name
         foo = Node.nodes.get(name)
-        while not (foo is None):
+        while not foo is None:
             if foo.__class__ is iNode:
                 return foo
             else:
@@ -68,6 +67,7 @@ class iNode(Node):
         assert issubclass(gov.__class__, Government)
         iZ = iNode(name, gov)
         iZ.addEdge(gov, edgClass=Inclusion)
+        iZ.zygote = True
         return iZ
 
     def __init__(self, name, gov=None, poss=None, event=None, info=None, mny=None):
@@ -77,29 +77,54 @@ class iNode(Node):
         else:
             self.possessions = poss
         self.money = mny
-   
-    # returns list of commerce nodes in tgtList
-    def __lshift__(self, tgtList):
-        nList = list()
-        for nat in tgtList:
-            nList.append(self.tion(nat[0], nat[1]))
-        return nList
+        self.zygote = False
+        self.gov = gov
+
+    # rhsList members must exist.   returns commercial iNode
+    def __lshift__(self, rhsList):
+        owner = self
+        if self.zygote:
+            _owner = iNode("_"+self.name,self.gov,info=self.info, mny=self.money,event=self.birth)
+            owner.addEdge(_owner, edgClass=Meiotic) 
+        for inode in rhsList:
+            if inode.__class__ is "str".__class__:
+                inode = Node.nodes[inode]
+            inode.addEdge(_owner, edgClass=Meiotic)
+        return 
 
      # returns list of ...
-    def __rshift__(self, tgtList):
+    def __rshift__(self, rhsList):
         nList = list()
-        for sGove in tgtList:
-            i_obj=self.__class__(sGove)
-            # must add different ande & edgeTypes depending on self._class__
-            i_obj.addEdge(self, edgClass=self.__class__.targetClass, fwd=False)
-            nList.append(i_obj)
+        for inode in rhsList:
+            if inode.__class__ is "str".__class__:
+                inode = Node.nodes[inode]
+            nList.append(inode)
+            inode.addEdge(self, edgClass=Mitotic, fwd=False)
         return nList
 
 # linked to geometry
 class Government(iNode):
     indx = 0
 
-    def  __init__(self, region, laws=None, nm=None): 
+    # naturalizes iNodes in tgtList and returns tgtList
+    def __lshift__(self, tgtList):
+        nList = list()
+        for commerce in tgtList:
+            assert commerce.__class__ is iNode
+            self.naturalize(commerce)
+        return tgtList
+
+    # subdivides this with new Government nodes with names given in tgtList.
+    # Returns new Government nodes
+    def __rshift__(self, tgtList):
+        nList = list()
+        for nam in tgtList:
+            z=self.getSubGov(nm=nam,siz=1)
+            z.addEdge(self, edgClass=Inclusion, fwd=False)
+            nList.append(z)
+        return nList
+
+    def  __init__(self, region=1, laws=None, nm=None):
         super().__init__(nm, laws)
         if nm is None:
             nm = "g_" + str(Government.indx)
@@ -107,17 +132,31 @@ class Government(iNode):
         self.region = region
         self.nation = False
 
+    def naturalize(self, nd):
+        assert nd.__class__  is iNode
+        edge = nd.getEdges(edgClass=Inclusion)
+        if edge is None:
+            edge = nd.addEdge(self, Inclusion)
+        elif len(edge) == 1:
+            edge = edge[0]
+            assert edge.edge[0] == nd
+            edge.edge[1] = self
+        else:
+            assert len(edge) == 0
+        nd.gov = self
+        return edge
+
     # internal governmental subdivision
-    def getSubGov(self, size):
-        reg = Region(self.region.locales, size)
-        reg = Government(reg)
+    def getSubGov(self, siz=1, nm=None):
+        reg = Region(self.region.locales, siz)
+        reg = Government(region=reg, nm=nm)
         edge = reg.addEdge(self, Mitotic, False)
         return reg
 
 ## World holds regions and Nations.  Links  geometry to nodes.
 class World(Government):
     disputeRS = None
-    
+
     # returns list of nations
     def __lshift__(self, tgtList):
         nList = list()
@@ -134,7 +173,7 @@ class World(Government):
             nList.append(z)
         return nList
 
-    # create world with given dimension and #faces each 
+    # create world with given dimension and #faces each
     def __init__(self, extent, nm1="Earth", dimension=3, faces=6):
         super().__init__(self, nm=nm1, laws=None)
         self.dimension = dimension
@@ -172,9 +211,9 @@ class World(Government):
         rv = "Dimension(" + str(self.dimension)  + "), Extent(" + str(self.extent) + ")\n"
         rv += str(self.shape) +"\n" + str(self.surface) + "\n" + str(self.states)
         return rv
-        
+
     def getRegion(self, size):
-        assert(size <= len(self.surface))
+        assert size <= len(self.surface)
         return Region(self.surface, size)
 
 
@@ -200,7 +239,7 @@ def commonAncestors(nds, edgClass=Inclusion, stopNodeClass=World):
         val = nd.ancestors(edgClass, stopNodeClass=World)
         ancestorList.append((val))
     return reduce(commonTail, ancestorList, nds[0].ancestors(Inclusion,World))
-               
+
 def commonTail(x, y):
     res = []
     while len(x)>0 and x[len(x)-1] == y[len(y)-1]:
@@ -208,7 +247,7 @@ def commonTail(x, y):
         y.pop()
     return res
 
-if __name__ == '__main__':    
+if __name__ == '__main__':
     plt.plot([1, 2, 3, 4])
     plt.ylabel('some numbers')
     plt.show()

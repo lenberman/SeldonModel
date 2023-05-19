@@ -2,14 +2,24 @@
 import sys
 from econosphere import *
 #import pdb; pdb.set_trace()
+import pdbrc
 
+
+#Node.nodes = {}
+#Node.indx = 0 
 
 if __name__ == '__main__':
     wrld = World(2)
-    nList = wrld << (("USA", 6), ("China", 6))
+    nList = wrld << (("USA", 6), ("China", 6)) # returns list of nations
+    usa = nList[1]
+    subGov = usa >> ("NY","CA","TX")
     institution = Institution(nList, "WorldBank")
     print(str(vars(institution)))
-    zList = wrld >> ("Alice", "Bob")
+    zList = wrld >> ("Alice", "Bob", "Carol", "Dylan")  # returns list of zygotes
+    miZList = list(map(lambda obj: iNode.iZygote(obj), zList))
+    miZList1 = subGov[2] << miZList
+    commercialNode = miZList[0] << miZList[1:]
+    #foofoo =map(lambda obj: iNode.iZygote(obj), foo)
     iZList = list()
     for z in zList:
         iz = iNode.iZygote(z)

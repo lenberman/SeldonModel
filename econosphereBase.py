@@ -78,7 +78,6 @@ class UseValue:  #fear power friendship love medium-of-exchange
         
 #  directed  edges with (multi-dimsensional) capacity and adjustable delay.
 class Edge:
-    edgeDict = {}
     edgeTypes = {}
 
     @classmethod
@@ -93,9 +92,9 @@ class Edge:
     def __init__(self, src=None , tgt=None, forward=True, end=None, start = NOW):
         self.forward = forward
         if forward == True:  # check Node.isTop
-            self.edge = (src, tgt)
+            self.edge = [src, tgt]
         else:
-            self.edge = (tgt, src)
+            self.edge = [tgt, src]
         self.start = start
         self.end = end
 
@@ -124,19 +123,24 @@ class Node:   # # Node in Seldon decomposition
         self.edges = []
         self.birth = event
         self.info= information
-        try:
-            Node.nodes[name] = self
-            raise Exception("Creating Node with used name")
-        except:
-            Node.nodes[name] = self
+        assert Node.nodes.get(name) is None
+        Node.nodes[name] = self
 
     def addEdge(self, tgt=None, edgClass=None, fwd=True, strt=None, nd=None):
         tmp = edgClass(self, target=tgt, forward=fwd, end=nd, start=strt)
+        assert not self is tgt
         self.edges.append(tmp)
         if not tgt is None:
             tgt.edges.append(tmp)
         return tmp
 
+    # returns list (possibly empty) of edges of given class.
+    def getEdges(self, edgClass):
+        rv = list()
+        for edge in self.edges:
+            if edge.__class__ is edgClass:
+                rv.append(edge)
+        return rv
 
     def ancestors(self, edgClass, stopNodeClass, forward=True):
         val = [self]
@@ -164,6 +168,9 @@ class Node:   # # Node in Seldon decomposition
     def step(self, until=NOW+1):
         ...
 
+
+Node.nodes = {}
+Node.indx = 0 
 
 if __name__ == '__main__':    
     nd = Node("test", None)
