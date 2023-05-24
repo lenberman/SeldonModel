@@ -85,12 +85,12 @@ class iNode(Node):
         owner = self
         if self.zygote:
             _owner = iNode("_"+self.name,self.gov,info=self.info, mny=self.money,event=self.birth)
-            owner.addEdge(_owner, edgClass=Meiotic) 
+            owner.addEdge(_owner, edgClass=Meiotic)
         for inode in rhsList:
             if inode.__class__ is "str".__class__:
                 inode = Node.nodes[inode]
             inode.addEdge(_owner, edgClass=Meiotic)
-        return 
+        return
 
      # returns list of ...
     def __rshift__(self, rhsList):
@@ -105,8 +105,10 @@ class iNode(Node):
 # linked to geometry
 class Government(iNode):
     indx = 0
+    governmentFunctions = { "citizen" : None , "corp" : None , "tax" : None, "MoneySupply" : None,
+                            "Market" : None }
 
-    # naturalizes iNodes in tgtList and returns tgtList
+    """  # makes  iNodes in tgtList subordinate to self, returns tgtList """
     def __lshift__(self, tgtList):
         nList = list()
         for commerce in tgtList:
@@ -114,8 +116,8 @@ class Government(iNode):
             self.naturalize(commerce)
         return tgtList
 
-    # subdivides this with new Government nodes with names given in tgtList.
-    # Returns new Government nodes
+    """ Creates named subordinate Government nodes from names in tgtList.
+    """
     def __rshift__(self, tgtList):
         nList = list()
         for nam in tgtList:
@@ -130,8 +132,12 @@ class Government(iNode):
             nm = "g_" + str(Government.indx)
             Government.indx += 1
         self.region = region
+        self.prop4ExternalViolence = None
+        self.prop4InternalViolence = None
+        self.moneySupply = None
         self.nation = False
 
+    """ Insures """
     def naturalize(self, nd):
         assert nd.__class__  is iNode
         edge = nd.getEdges(edgClass=Inclusion)
@@ -146,6 +152,11 @@ class Government(iNode):
         nd.gov = self
         return edge
 
+    """Get's list of citizens of gov't """
+    def getCitizenList(self):
+        czlf = governmentFunctions["citizen"]
+        
+
     # internal governmental subdivision
     def getSubGov(self, siz=1, nm=None):
         reg = Region(self.region.locales, siz)
@@ -159,14 +170,14 @@ class World(Government):
 
     # returns list of nations
     def __lshift__(self, tgtList):
-        nList = list()
+        nList = []
         for nat in tgtList:
             nList.append(self.getNation(nat[0], nat[1]))
         return nList
 
     # returns list of zygotes with World inclusion.
     def __rshift__(self, tgtList):
-        nList = list()
+        nList = []
         for nat in tgtList:
             z=bNode.zygote(nat)
             z.addEdge(self, edgClass=Inclusion, fwd=False)
@@ -217,6 +228,8 @@ class World(Government):
         return Region(self.surface, size)
 
 
+""" Institutions may be the target of inclusion nodes and provide their own decision
+  mechanismsintermediate, court systems..  """
 class Institution(iNode):
     # Adds institution with govList members
     def __init__(self, govList, nm):

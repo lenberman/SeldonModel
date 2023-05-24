@@ -1,64 +1,77 @@
 #!/usr/bin/python3
+""" Provides Base classes for graph and geometry """
 import random
 import statistics
 import math
 import sys
+import pdb
+from pprint import pprint
 import numpy as np
 import matplotlib.pyplot as plt
-from pprint import pprint
-import pdb; 
+
 NOW = 0
 #import pdb; pdb.set_trace()
 
 class Region:
+    """  indexed by interger points """
     ## regions is a dict with indexed by index-tuples.
     def __init__(self, regions, size=1):
         self.size = size
         self.locales = {}
         assert size<=len(regions)
-        for i in(range(size)):
-            a = regions.popitem()
-            self.locales[a[0]] = a[1]
+        while range(size):
+            aTemp = regions.popitem()
+            self.locales[aTemp[0]] = aTemp[1]
 
     def getSubregion(self, size=1):
+        """ Creates a sub-region from self """
         subR = Region(self.locales, size)
-        for i in(range(size)):
+        while range(size):
             val = self.locales.popitem()
             subR.locales[val[0]] = val[1]
         self.size -= size
         return subR
-        
+
 
     def __str__(self):
         var = "\nRegion of size(" + str(self.size) + ")   locales: "  + str(self.locales)
         return var
-        
+
     # add node to a locale in self
-    def addNode(self, nd, locale=None):
+    def addNode(self, nd, triple=None):
+        """  Add node """
         ...
 
 class Event:  # space time chunk starting NOW
+    """" time and space """
     events = {}
+
+    @classmethod
+    def getChunk(cls, t=NOW, i=None, j=None, k=None):
+        try:
+            return Event.events[(t, (i,j,k) )]
+        except KeyError:
+            return  Event(t, i, j, k)
+
     def __init__(self, t=NOW, i=None, j=None, k=None):
         self.time = t
         self.space = (i,j,k)
-        try:
-            return Event.events[(self.time,self.space)]
-        except KeyError:
-            Event.events[(self.time,self.space)] = (self.time,self.space)
+        assert Event.events.get((self.time,self.space)) is None
+        Event.events[(self.time,self.space)] = (self.time,self.space)
 
     def __str__(self):
         return "(@" + str(self.time) + "T, loc:" + str(self.space) + ")"
-        
 
-class UseValue:  #fear power friendship love medium-of-exchange
+
+class UseValue:
+    """ Examples include: fear power friendship love medium-of-exchange """
     uvId = 0
-    uvList = dict()
+    uvList = {}
     @classmethod
     def  UV(cls, name, list=None):    #list(name) relates this UV to previous
         obj = cls.uvList.get(name)
         if  obj is None:   # create UseValue
-            obj = UseValue(nm, list)
+            obj = UseValue(name, list)
         obj
 
     def __init__(self, nm, ins=None):
@@ -75,9 +88,10 @@ class UseValue:  #fear power friendship love medium-of-exchange
 
     def __str__(self):
         return self.name + "(" + str(self.uvId) + ")"
-        
+
 #  directed  edges with (multi-dimsensional) capacity and adjustable delay.
 class Edge:
+    """ 4 different semantic types of edges """
     edgeTypes = {}
 
     @classmethod
@@ -85,8 +99,8 @@ class Edge:
         return cls(src, tgt)
 
     def __str__(self):
-            return str(vars(self.edge[0])) + "\n\t>>\n" + str(vars(self.edge[1])) + \
-                "@(" + str(self.start) + ", " + str(self.end) + ")\n"
+        return str(vars(self.edge[0])) + "\n\t>>\n" + str(vars(self.edge[1])) + \
+            "@(" + str(self.start) + ", " + str(self.end) + ")\n"
 
     # create edge from (src->tgt || tgt->src)
     def __init__(self, src=None , tgt=None, forward=True, end=None, start = NOW):
@@ -104,6 +118,7 @@ class Edge:
 
 ##Node
 class Node:   # # Node in Seldon decomposition
+    """ Base class for all nodes """
     indx = 0
     nodes = {}
 
@@ -122,7 +137,10 @@ class Node:   # # Node in Seldon decomposition
             self.name = "Node_" + str(self.nId)
         self.edges = []
         self.birth = event
+        self.location = None
         self.info= information
+        self.power = None
+        self.fear = None
         assert Node.nodes.get(name) is None
         Node.nodes[name] = self
 
@@ -136,7 +154,7 @@ class Node:   # # Node in Seldon decomposition
 
     # returns list (possibly empty) of edges of given class.
     def getEdges(self, edgClass):
-        rv = list()
+        rv = []
         for edge in self.edges:
             if edge.__class__ is edgClass:
                 rv.append(edge)
@@ -157,7 +175,7 @@ class Node:   # # Node in Seldon decomposition
                     val += parent.ancestors(edgClass, stopNodeClass)
                 break
         return val
-        
+
 
     def __str__(self):
         rv = str(vars(self)) + str(self.birth)
@@ -170,12 +188,11 @@ class Node:   # # Node in Seldon decomposition
 
 
 Node.nodes = {}
-Node.indx = 0 
+Node.indx = 0
 
-if __name__ == '__main__':    
+if __name__ == '__main__':
     nd = Node("test", None)
     nd1 = Node("test1", None)
     edge = nd >> nd1
     pprint(str(edge))
     pprint(str(nd))
-    

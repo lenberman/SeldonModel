@@ -4,10 +4,6 @@ from econosphere import *
 #import pdb; pdb.set_trace()
 import pdbrc
 
-
-#Node.nodes = {}
-#Node.indx = 0 
-
 if __name__ == '__main__':
     wrld = World(2)
     nList = wrld << (("USA", 6), ("China", 6)) # returns list of nations
