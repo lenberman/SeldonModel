@@ -104,12 +104,13 @@ class iNode(Node):
             inode.addEdge(self, edgClass=Mitotic, fwd=False)
         return nList
 
-class hRegion:
+class hRegion(iNode):
     # create 3D world with given dimension and #faces each
     """ Creates a node in decomposition at given offset.
     If fixedDim != None, this is a surface.  scale is 'diameter' (half side of cube)
     """
-    def __init__(self, center=[0,0,0], scale=1, fixedDim=[], parent=None):
+    def __init__(self, center=[0,0,0], scale=1, fixedDim=[], parent=None,nm1=None):
+        super.__init__(self, nm=nm1)
         self.center = center
         self.scale = scale
         self.fixed = fixedDim
@@ -159,7 +160,7 @@ class hRegion:
 
 
 # linked to geometry
-class Government(iNode):
+class Government(hRegion):
     indx = 0
     governmentFunctions = { "citizen" : None , "corp" : None , "tax" : None, "MoneySupply" : None,
                             "Market" : None }
@@ -243,10 +244,8 @@ class World(Government):
         return nList
 
     # create world with given dimension and #faces each
-    def __init__(self, extent, nm1="Earth", dimension=3, faces=6):
-        super().__init__(self, nm=nm1, laws=None)
-        self.dimension = dimension
-        self.faces = faces
+    def __init__(self, extent, nm1="Earth", dimension=3):
+        super().__init__(self, nm=nm1, laws=None, scale=extent, center=[0,0,0])
         self.extent = extent
         self.shape = [ faces ]
         self.states = list()
