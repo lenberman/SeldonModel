@@ -40,7 +40,7 @@ class bNode(Node):
         return z
 
     def __init__(self, name, info, event):
-        super().__init__(name, info,event)
+        super().__init__(name, event)
         self.zygote = False
 
 
@@ -73,7 +73,7 @@ class iNode(Node):
         return iZ
 
     def __init__(self, name, gov=None, poss=None, event=None, info=None, mny=None):
-        super().__init__(name, info, event)
+        super().__init__(name, event)
         if poss is None:
             self.possessions = {} #owned cNodes
         else:
@@ -109,8 +109,8 @@ class hRegion(iNode):
     """ Creates a node in decomposition at given offset.
     If fixedDim != None, this is a surface.  scale is 'diameter' (half side of cube)
     """
-    def __init__(self, center=[0,0,0], scale=1, fixedDim=[], parent=None,nm1=None):
-        super.__init__(self, nm=nm1)
+    def __init__(self, center=[0,0,0], scale=1, fixedDim=[], parent=None):
+        super().__init__(self)
         self.center = center
         self.scale = scale
         self.fixed = fixedDim
@@ -183,12 +183,11 @@ class Government(hRegion):
             nList.append(z)
         return nList
 
-    def  __init__(self, region=1, laws=None, nm=None):
-        super().__init__(nm, laws)
+    def  __init__(self, laws=None, nm=None):
+        super().__init__(self)
         if nm is None:
             nm = "g_" + str(Government.indx)
             Government.indx += 1
-        self.region = region
         self.prop4ExternalViolence = None
         self.prop4InternalViolence = None
         self.moneySupply = None
@@ -245,23 +244,8 @@ class World(Government):
 
     # create world with given dimension and #faces each
     def __init__(self, extent, nm1="Earth", dimension=3):
-        super().__init__(self, nm=nm1, laws=None, scale=extent, center=[0,0,0])
-        self.extent = extent
-        self.shape = [ faces ]
-        self.states = list()
-        size = faces
-        for i  in range(dimension-1):
-            self.shape.append(extent)
-            size *= extent
-        self.surface = {}
-        for i in range(size):
-            rem = i//faces
-            coord = list()
-            coord. append(i%faces)
-            for j in range(dimension-1):
-                coord.append(rem%extent)
-                rem //= extent
-            self.surface[tuple(coord)] = {}
+        super().__init__(self)
+        Node.setName(self, nm1)
 
     def getNation(self, name, size=None):
         if size is None:

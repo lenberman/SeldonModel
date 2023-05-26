@@ -128,7 +128,7 @@ class Node:   # # Node in Seldon decomposition
             nodeTgt = target[0](target[1])
         return edge
 
-    def __init__(self, name, information, event=None):  # # any Node may have lifetime
+    def __init__(self, name=None, event=None):  # # any Node may have lifetime
         # increment then stor
         Node.indx += 1
         self.name = name
@@ -138,11 +138,16 @@ class Node:   # # Node in Seldon decomposition
         self.edges = []
         self.birth = event
         self.location = None
-        self.info= information
+        self.info= None
         self.power = None
         self.fear = None
         assert Node.nodes.get(name) is None
-        Node.nodes[name] = self
+        Node.nodes[self.name] = self
+
+    def setName(self, nm):
+        del Node.nodes[self.name]
+        self.name = nm
+        Node.nodes[self.name] = self
 
     def addEdge(self, tgt=None, edgClass=None, fwd=True, strt=None, nd=None):
         tmp = edgClass(self, target=tgt, forward=fwd, end=nd, start=strt)

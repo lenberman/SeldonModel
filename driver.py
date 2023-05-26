@@ -6,11 +6,6 @@ import pdbrc
 
 if __name__ == '__main__':
     wrld = World(2)
-    nList = wrld << (("USA", 6), ("China", 6)) # returns list of nations
-    usa = nList[1]
-    subGov = usa >> ("NY","CA","TX")
-    institution = Institution(nList, "WorldBank")
-    print(str(vars(institution)))
     zList = wrld >> ("Alice", "Bob", "Carol", "Dylan")  # returns list of zygotes
     miZList = list(map(lambda obj: iNode.iZygote(obj), zList))
     miZList1 = subGov[2] << miZList
@@ -29,6 +24,14 @@ if __name__ == '__main__':
         print(str(vars(i)))
 
 """
+    nList = wrld << (("USA", 6), ("China", 6)) # returns list of nations
+    usa = nList[1]
+    subGov = usa >> ("NY","CA","TX")
+    institution = Institution(nList, "WorldBank")
+    print(str(vars(institution)))
+
+
+
     nations = {}
     nations[0] = wrld.getNation(6,"USA")
     nations[1] = wrld.getNation(6, "China")
