@@ -14,14 +14,18 @@ class hRegion:
 
             
     def subDivide(self, codim = 1):
+        sign = [ (1, 1, 1), (-1, 1, 1), (1, -1, 1), (-1, -1, 1), (1, 1, -1), (-1, 1, -1), (1, -1, -1), (-1, -1, -1)]
         if codim == 0:
-            for indx in range(2**len(self.center)):
+            scale = self.scale*.5
+            for indx in range(2**(len(self.center)-len(self.fixed))):
                 offset = []
+                ith = 0
                 for dim in range(len(self.center)):
-                    if not dim in self.fixed: 
-                        offset.append(self.center[dim]+.5*self.scale*(-1)**(indx//2**dim))
-                    else:
-                        offset.append(self.center[dim])
+                    if not dim in self.fixed:
+                        offset.append(self.center[dim]+scale*sign[indx][ith])
+                        ith += 1
+                for  dim in self.fixed: 
+                    offset.insert(dim,self.center[dim])
                 self.subSp.append(hRegion(center=offset, scale=self.scale*.5, codim=0, fixedDim=self.fixed))
         elif codim == 1:
             for indx in range(len(self.center)):
@@ -30,11 +34,11 @@ class hRegion:
                 fd.append(indx)
                 if not indx in self.fixed:
                     offset[indx] = offset[indx] +  self.scale
-                self.subSp.append(hRegion(center=offset, codim=0, scale=self.scale, fixedDim=fd).subDivide(codim=0))
+                self.subSp.append(hRegion(center=offset, codim=0, scale=self.scale, fixedDim=fd))
                 offset = self.center.copy()
-                if not indx in self.fixed:
+                if not (indx in self.fixed):
                     offset[indx] = offset[indx] - self.scale
-                self.subSp.append(hRegion(center=offset, codim=0,scale=self.scale,fixedDim=fd).subDivide(codim=0))
+                self.subSp.append(hRegion(center=offset, codim=0,scale=self.scale,fixedDim=fd))
         return self
 
 if __name__ == '__main__':
