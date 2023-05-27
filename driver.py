@@ -17,10 +17,6 @@ if __name__ == '__main__':
     #commercialNode = miZList[0] << miZList[1:]
     #foofoo =map(lambda obj: iNode.iZygote(obj), foo)
     iZList = list()
-    for z in zList:
-        iz = iNode.iZygote(z)
-        iZList.append(iz)
-        print(str(vars(iz)))
     for i in nList + zList:
         print(str(i))
     for i in nList + zList:
@@ -30,20 +26,6 @@ if __name__ == '__main__':
 
 
 
-    nations = {}
-    nations[0] = wrld.getNation(6,"USA")
-    nations[1] = wrld.getNation(6, "China")
-    institution = Insitution(nations, "Fed")
-    subgov = nations[0].getSubGov(3)
-    print(str(wrld))
-    alice = bNode.zygote("Alice")
-    bob = bNode.zygote("Bob")
-    carol = bNode.zygote("Carol")
-    david = bNode.zygote("David")
-    print(alice is bNode.zygote("Alice"))
-    print(str(subgov))
-    ev = Event()
-    print(ev)
     money = UseValue("medium-of-exchange")
     power = UseValue("power")
     fear = UseValue("fear")
