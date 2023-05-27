@@ -12,36 +12,6 @@ import matplotlib.pyplot as plt
 NOW = 0
 #import pdb; pdb.set_trace()
 
-class Region:
-    """  indexed by interger points """
-    ## regions is a dict with indexed by index-tuples.
-    def __init__(self, regions, size=1):
-        self.size = size
-        self.locales = {}
-        assert size<=len(regions)
-        while range(size):
-            aTemp = regions.popitem()
-            self.locales[aTemp[0]] = aTemp[1]
-
-    def getSubregion(self, size=1):
-        """ Creates a sub-region from self """
-        subR = Region(self.locales, size)
-        while range(size):
-            val = self.locales.popitem()
-            subR.locales[val[0]] = val[1]
-        self.size -= size
-        return subR
-
-
-    def __str__(self):
-        var = "\nRegion of size(" + str(self.size) + ")   locales: "  + str(self.locales)
-        return var
-
-    # add node to a locale in self
-    def addNode(self, nd, triple=None):
-        """  Add node """
-        ...
-
 class Event:  # space time chunk starting NOW
     """" time and space """
     events = {}

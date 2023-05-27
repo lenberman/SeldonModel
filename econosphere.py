@@ -121,8 +121,8 @@ class hRegion(iNode):
             if len(self.fixed) !=len(parent.fixed):
                 parent.faces.append(self)
             else:
-                parent.subSp.append(self)
-        return self
+                parent.subSpace.append(self)
+        return 
 
     """ Subdivides into cubes(codim==0) or faces of cube(codim==1)
               Needs checking for 2D or 4D 
@@ -185,9 +185,6 @@ class Government(hRegion):
 
     def  __init__(self, laws=None, nm=None):
         super().__init__(self)
-        if nm is None:
-            nm = "g_" + str(Government.indx)
-            Government.indx += 1
         self.prop4ExternalViolence = None
         self.prop4InternalViolence = None
         self.moneySupply = None
@@ -302,6 +299,10 @@ def commonTail(x, y):
     return res
 
 if __name__ == '__main__':
+    tmp = hRegion()
+    tmp.subDivide(codim=1)
+    tmp1=tmp.faces[0].subDivide(codim=0)
+    vars(tmp1)
     plt.plot([1, 2, 3, 4])
     plt.ylabel('some numbers')
     plt.show()
