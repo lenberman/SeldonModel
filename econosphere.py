@@ -118,16 +118,16 @@ class hRegion(iNode):
         self.subSpace = {} # sub hyper cubes of same dimension
         self.parent = parent
         if not parent is None:
-            parent.addSub(self)
+            self.parent.addSub(self)
         return 
 
     def addSub(self, hR):
             if len(self.fixed) !=len(hR.fixed):
                 assert not hR in self.faces.values()
-                self.parent.faces[len(self.faces.keys())] = hR
+                self.faces[len(self.faces.keys())] = hR
             else:
                 assert not hR in self.subSpace.values()
-                self.parent.subSpace[len(self.subSpace.keys())] = hR
+                self.subSpace[len(self.subSpace.keys())] = hR
 
         
         
@@ -150,6 +150,7 @@ class hRegion(iNode):
                     offset.insert(coor,self.center[coor])
                 hRegion(center=offset, scale=self.scale*.5, fixedDim=self.fixed, parent=self)
         elif codim == 1:
+            scale = self.scale
             for coor in range(len(self.center)):
                 offset = self.center.copy()
                 fd = self.fixed.copy()
@@ -186,7 +187,7 @@ class Government(hRegion):
     def __rshift__(self, tgtList):
         nList = list()
         for nam in tgtList:
-            z=self.getSubGov(nm=nam,siz=1)
+            z=self.getSubGov(nm=nam)
             z.addEdge(self, edgClass=Inclusion, fwd=False)
             nList.append(z)
         return nList
@@ -231,8 +232,8 @@ class Government(hRegion):
         czlf = governmentFunctions["citizen"]
         
 
-    # internal governmental subdivision
-    def getSubGov(self, siz=1, nm=None):
+    # internal governmental subdivision.  Should add inclusion edge 
+    def getSubGov(self, nm=None):
         reg = Government(name=nm)
         edge = reg.addEdge(self, Mitotic, False)
         return reg
