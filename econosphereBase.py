@@ -127,8 +127,7 @@ class Node:   # # Node in Seldon decomposition
         if not nd is None:
             assert isinstance(nd, cls)
             return nd
-        nd = cls(name=name)
-        return nd
+        return None
 
 
     def addEdge(self, tgt=None, edgClass=None, fwd=True, strt=None, nd=None):

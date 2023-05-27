@@ -195,6 +195,7 @@ class Government(hRegion):
     def  __init__(self, name, laws=None, cntr=None):
         super().__init__(center=cntr, name=name)
         #Node.setName(self, nm)
+        
         self.prop4ExternalViolence = None
         self.prop4InternalViolence = None
         self.moneySupply = None
@@ -206,7 +207,7 @@ class Government(hRegion):
         if not gov is None:
             assert isinstance(gov,Government)
             return gov
-        gov = Government(nm=name, parent=parent)
+        gov = Government(name)
         if parent.__class__ is World:
             gov.nation = True
         edge = gov.addEdge(self, edgClass=Inclusion, fwd=False)
