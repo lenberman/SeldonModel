@@ -72,7 +72,7 @@ class iNode(Node):
         iZ.zygote = True
         return iZ
 
-    def __init__(self, name, gov=None, poss=None, event=None, info=None, mny=None):
+    def __init__(self, name=None, gov=None, poss=None, event=None, info=None, mny=None):
         super().__init__(name, event)
         if poss is None:
             self.possessions = {} #owned cNodes
@@ -109,20 +109,28 @@ class hRegion(iNode):
     """ Creates a node in decomposition at given offset.
     If fixedDim != None, this is a surface.  scale is 'diameter' (half side of cube)
     """
-    def __init__(self, center=[0,0,0], scale=1, fixedDim=[], parent=None):
-        super().__init__(self)
+    def __init__(self, center=[0,0,0], scale=1, fixedDim=[], parent=None, name=None):
+        super().__init__(name)
         self.center = center
         self.scale = scale
         self.fixed = fixedDim
-        self.faces = [] # faces of hyper-cube
-        self.subSpace = [] # sub hyper cubes of same dimension
+        self.faces = {} # faces of hyper-cube
+        self.subSpace = {} # sub hyper cubes of same dimension
         self.parent = parent
         if not parent is None:
-            if len(self.fixed) !=len(parent.fixed):
-                parent.faces.append(self)
-            else:
-                parent.subSpace.append(self)
+            parent.addSub(self)
         return 
+
+    def addSub(self, hR):
+            if len(self.fixed) !=len(hR.fixed):
+                assert not hR in self.faces.values()
+                self.parent.faces[len(self.faces.keys())] = hR
+            else:
+                assert not hR in self.subSpace.values()
+                self.parent.subSpace[len(self.subSpace.keys())] = hR
+
+        
+        
 
     """ Subdivides into cubes(codim==0) or faces of cube(codim==1)
               Needs checking for 2D or 4D 
@@ -183,12 +191,25 @@ class Government(hRegion):
             nList.append(z)
         return nList
 
-    def  __init__(self, laws=None, nm=None):
-        super().__init__(self)
+    def  __init__(self, name, laws=None, cntr=None):
+        super().__init__(center=cntr, name=name)
+        #Node.setName(self, nm)
         self.prop4ExternalViolence = None
         self.prop4InternalViolence = None
         self.moneySupply = None
         self.nation = False
+
+    """ retrieves """
+    def getGovernment(self, name, parent):
+        gov = Government.getNode(name)
+        if not gov is None:
+            assert isinstance(gov,Government)
+            return gov
+        gov = Government(nm=name, parent=parent)
+        if parent.__class__ is World:
+            gov.nation = True
+        edge = gov.addEdge(self, edgClass=Inclusion, fwd=False)
+        return gov
 
     """ Insures """
     def naturalize(self, nd):
@@ -212,8 +233,7 @@ class Government(hRegion):
 
     # internal governmental subdivision
     def getSubGov(self, siz=1, nm=None):
-        reg = Region(self.region.locales, siz)
-        reg = Government(region=reg, nm=nm)
+        reg = Government(name=nm)
         edge = reg.addEdge(self, Mitotic, False)
         return reg
 
@@ -227,7 +247,7 @@ class World(Government):
     def __lshift__(self, tgtList):
         nList = []
         for nat in tgtList:
-            nList.append(self.getNation(nat[0], nat[1]))
+            nList.append(self.getGovernment(nat,parent=self))
         return nList
 
     # returns list of zygotes with World inclusion.
@@ -240,30 +260,15 @@ class World(Government):
         return nList
 
     # create world with given dimension and #faces each
-    def __init__(self, extent, nm1="Earth", dimension=3):
-        super().__init__(self)
-        Node.setName(self, nm1)
-
-    def getNation(self, name, size=None):
-        if size is None:
-            gov = Node.nodes.get(name)
-            if not gov is None:
-                return gov
-        reg = self.getRegion(size)
-        gov = Government(reg, nm=name)
-        gov.nation = True
-        self.states.append(gov)
-        edge = gov.addEdge(self, edgClass=Inclusion, fwd=False)
-        return gov
+    def __init__(self, nm1="Earth", cntr=[0, 0, 0]):
+        super().__init__(nm1, cntr=cntr)
 
     def __str__(self):
         rv = "Dimension(" + str(self.dimension)  + "), Extent(" + str(self.extent) + ")\n"
-        rv += str(self.shape) +"\n" + str(self.surface) + "\n" + str(self.states)
         return rv
 
     def getRegion(self, size):
-        assert size <= len(self.surface)
-        return Region(self.surface, size)
+        ...
 
 
 """ Institutions may be the target of inclusion nodes and provide their own decision
@@ -279,7 +284,7 @@ class Institution(iNode):
 
 class Commerce(Node):
     def __init__(self, possessor:iNode, factory=True, cInfo=None, useValue=None):
-        super().__init__(self, cInfo)
+        super().__init__(cInfo)
         self.owner = possessor
         self.info = cInfo
         self.uv = useValue

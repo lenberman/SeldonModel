@@ -119,6 +119,18 @@ class Node:   # # Node in Seldon decomposition
         self.name = nm
         Node.nodes[self.name] = self
 
+        
+    """ retrieves """
+    @classmethod
+    def getNode(cls, name):
+        nd = Node.nodes.get(name)
+        if not nd is None:
+            assert isinstance(nd, cls)
+            return nd
+        nd = cls(name=name)
+        return nd
+
+
     def addEdge(self, tgt=None, edgClass=None, fwd=True, strt=None, nd=None):
         tmp = edgClass(self, target=tgt, forward=fwd, end=nd, start=strt)
         assert not self is tgt
