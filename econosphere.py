@@ -104,72 +104,9 @@ class iNode(Node):
             inode.addEdge(self, edgClass=Mitotic, fwd=False)
         return nList
 
-class hRegion(iNode):
-    # create 3D world with given dimension and #faces each
-    """ Creates a node in decomposition at given offset.
-    If fixedDim != None, this is a surface.  scale is 'diameter' (half side of cube)
-    """
-    def __init__(self, center=[0,0,0], scale=1, fixedDim=[], parent=None, name=None):
-        super().__init__(name)
-        self.center = center
-        self.scale = scale
-        self.fixed = fixedDim
-        self.faces = {} # faces of hyper-cube
-        self.subSpace = {} # sub hyper cubes of same dimension
-        self.parent = parent
-        if not parent is None:
-            self.parent.addSub(self)
-        return 
-
-    def addSub(self, hR):
-            if len(self.fixed) !=len(hR.fixed):
-                assert not hR in self.faces.values()
-                self.faces[len(self.faces.keys())] = hR
-            else:
-                assert not hR in self.subSpace.values()
-                self.subSpace[len(self.subSpace.keys())] = hR
-
-        
-        
-
-    """ Subdivides into cubes(codim==0) or faces of cube(codim==1)
-              Needs checking for 2D or 4D 
-    """
-    def subDivide(self, codim = 1):
-        SIGN = [ (1, 1, 1), (-1, 1, 1), (1, -1, 1), (-1, -1, 1), (1, 1, -1), (-1, 1, -1), (1, -1, -1), (-1, -1, -1)]
-        if codim == 0:
-            scale = self.scale*.5
-            for sigNdx in range(2**(len(self.center)-len(self.fixed))):
-                offset = []
-                ith = 0 # ith counts non-face dimensions, thus remaining in faces listed in self.fixed
-                for coor in range(len(self.center)): # loop over changing coordinates
-                    if not coor in self.fixed:
-                        offset.append(self.center[coor]+scale*SIGN[sigNdx][ith])
-                        ith += 1
-                for  coor in self.fixed: 
-                    offset.insert(coor,self.center[coor])
-                hRegion(center=offset, scale=self.scale*.5, fixedDim=self.fixed, parent=self)
-        elif codim == 1:
-            scale = self.scale
-            for coor in range(len(self.center)):
-                offset = self.center.copy()
-                fd = self.fixed.copy()
-                if not coor in fd:
-                    fd.append(coor)
-                    face = True
-                if not coor in self.fixed:
-                    offset[coor] = offset[coor] +  self.scale
-                hRegion(center=offset, scale=self.scale, fixedDim=fd, parent=self)
-                offset = self.center.copy()
-                if not (coor in self.fixed):
-                    offset[coor] = offset[coor] - self.scale
-                hRegion(center=offset,scale=self.scale,fixedDim=fd, parent = self)
-        return self
-
-
 
 # linked to geometry
-class Government(hRegion):
+class Government(iNode):
     indx = 0
     governmentFunctions = { "citizen" : None , "corp" : None , "tax" : None, "MoneySupply" : None,
                             "Market" : None }
@@ -192,23 +129,22 @@ class Government(hRegion):
             nList.append(z)
         return nList
 
-    def  __init__(self, name, laws=None, cntr=None):
-        super().__init__(center=cntr, name=name)
-        #Node.setName(self, nm)
-        
+    def  __init__(self, name, laws=None, hR=None):
+        super().__init__(name=name)
+        self.geo = hR
         self.prop4ExternalViolence = None
         self.prop4InternalViolence = None
         self.moneySupply = None
         self.nation = False
 
     """ retrieves """
-    def getGovernment(self, name, parent):
+    def getGovernment(self, name):
         gov = Government.getNode(name)
         if not gov is None:
             assert isinstance(gov,Government)
             return gov
         gov = Government(name)
-        if parent.__class__ is World:
+        if self.__class__ is World:
             gov.nation = True
         edge = gov.addEdge(self, edgClass=Inclusion, fwd=False)
         return gov
@@ -249,7 +185,7 @@ class World(Government):
     def __lshift__(self, tgtList):
         nList = []
         for nat in tgtList:
-            nList.append(self.getGovernment(nat,parent=self))
+            nList.append(self.getGovernment(nat))
         return nList
 
     # returns list of zygotes with World inclusion.
@@ -262,8 +198,9 @@ class World(Government):
         return nList
 
     # create world with given dimension and #faces each
-    def __init__(self, nm1="Earth", cntr=[0, 0, 0]):
-        super().__init__(nm1, cntr=cntr)
+    def __init__(self, nm1="Earth"):
+        super().__init__(nm1, hR=hRegion())
+        
 
     def __str__(self):
         rv = "Dimension(" + str(self.dimension)  + "), Extent(" + str(self.extent) + ")\n"
@@ -312,4 +249,4 @@ if __name__ == '__main__':
     vars(tmp1)
     plt.plot([1, 2, 3, 4])
     plt.ylabel('some numbers')
-    plt.show()
+    #plt.show()

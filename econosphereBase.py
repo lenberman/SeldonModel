@@ -12,6 +12,74 @@ import matplotlib.pyplot as plt
 NOW = 0
 #import pdb; pdb.set_trace()
 
+
+class hRegion:
+    # create 3D world with given dimension and #faces each
+    """ Creates a node in decomposition at given offset.
+    If fixedDim != None, this is a surface.  scale is 'diameter' (half side of cube)
+    """
+    def __init__(self, center=[0,0,0], scale=1, fixedDim=[], parent=None):
+        self.path = []
+        self.center = center
+        self.scale = scale
+        self.fixed = fixedDim
+        self.faces = {} # faces of hyper-cube
+        self.subSpace = {} # sub hyper cubes of same dimension
+        if parent is None:
+            self.path = ["/"]
+        self.parent = parent
+        if not parent is None:
+            self.parent.addSub(self)
+        return 
+
+    def addSub(self, hR):
+            if len(self.fixed) !=len(hR.fixed):
+                assert not hR in self.faces.values()
+                hR.path = self.path.copy() + [["-",len(self.faces.keys())]]
+                self.faces[len(self.faces.keys())] = hR
+            else:
+                assert not hR in self.subSpace.values()
+                hR.path = self.path.copy() + [["=",len(self.subSpace.keys())]]
+                self.subSpace[len(self.subSpace.keys())] = hR
+
+        
+        
+
+    """ Subdivides into cubes(codim==0) or faces of cube(codim==1)
+              Needs checking for 2D or 4D 
+    """
+    def subDivide(self, codim = 1):
+        SIGN = [ (1, 1, 1), (-1, 1, 1), (1, -1, 1), (-1, -1, 1), (1, 1, -1), (-1, 1, -1), (1, -1, -1), (-1, -1, -1)]
+        if codim == 0:
+            scale = self.scale*.5
+            for sigNdx in range(2**(len(self.center)-len(self.fixed))):
+                offset = []
+                ith = 0 # ith counts non-face dimensions, thus remaining in faces listed in self.fixed
+                for coor in range(len(self.center)): # loop over changing coordinates
+                    if not coor in self.fixed:
+                        offset.append(self.center[coor]+scale*SIGN[sigNdx][ith])
+                        ith += 1
+                for  coor in self.fixed: 
+                    offset.insert(coor,self.center[coor])
+                hRegion(center=offset, scale=self.scale*.5, fixedDim=self.fixed, parent=self)
+        elif codim == 1:
+            scale = self.scale
+            for coor in range(len(self.center)):
+                offset = self.center.copy()
+                fd = self.fixed.copy()
+                if not coor in fd:
+                    fd.append(coor)
+                    face = True
+                if not coor in self.fixed:
+                    offset[coor] = offset[coor] +  self.scale
+                hRegion(center=offset, scale=self.scale, fixedDim=fd, parent=self)
+                offset = self.center.copy()
+                if not (coor in self.fixed):
+                    offset[coor] = offset[coor] - self.scale
+                hRegion(center=offset,scale=self.scale,fixedDim=fd, parent = self)
+        return self
+
+    
 class Event:  # space time chunk starting NOW
     """" time and space """
     events = {}
