@@ -132,6 +132,7 @@ class Government(iNode):
     def  __init__(self, name, laws=None, hR=None):
         super().__init__(name=name)
         self.geo = hR
+        self.subs = []
         self.prop4ExternalViolence = None
         self.prop4InternalViolence = None
         self.moneySupply = None
@@ -148,6 +149,13 @@ class Government(iNode):
             gov.nation = True
         edge = gov.addEdge(self, edgClass=Inclusion, fwd=False)
         return gov
+
+    def geometrize(self, hR, frac):
+        self.geo = hR.chunkFace()
+        # For each subGov (nodes connected by Mitotic edges) geometrize.
+        for gov in self.ancestors(Mitotic, Government):
+            gov.geometrize(hR, frac)
+        
 
     """ Insures """
     def naturalize(self, nd):
@@ -180,12 +188,15 @@ class Government(iNode):
     ## World holds regions and Nations.  Links  geometry to nodes.
 class World(Government):
     disputeRS = None
-
+    
     # returns list of nations
     def __lshift__(self, tgtList):
         nList = []
         for nat in tgtList:
-            nList.append(self.getGovernment(nat))
+            gov = self.getGovernment(nat)
+            if gov.nation:
+                self.nations.append(gov)
+            nList.append(gov)
         return nList
 
     # returns list of zygotes with World inclusion.
@@ -200,7 +211,19 @@ class World(Government):
     # create world with given dimension and #faces each
     def __init__(self, nm1="Earth"):
         super().__init__(nm1, hR=hRegion())
+        self.nations = []
         
+        """
+        If natlist is [], each self.nation gets 1/len(natlist) of the earth's area. Else, natlist is pairs
+      [  [ name|gov(name) , num]+ ]
+        """
+    def geometrize(self):
+        xByNatLen = 1.0/len(self.nations)
+        for  gov in self.nations:
+            assert  gov.nation
+            assert isinstance(gov, Government)
+            Government.geometrize(gov, self.geo, xByNatLen)
+            
 
     def __str__(self):
         rv = "Dimension(" + str(self.dimension)  + "), Extent(" + str(self.extent) + ")\n"

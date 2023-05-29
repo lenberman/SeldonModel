@@ -23,6 +23,7 @@ class hRegion:
         self.center = center
         self.scale = scale
         self.fixed = fixedDim
+        self.next = 0
         self.faces = {} # faces of hyper-cube
         self.subSpace = {} # sub hyper cubes of same dimension
         if parent is None:
@@ -42,9 +43,34 @@ class hRegion:
                 hR.path = self.path.copy() + [["=",len(self.subSpace.keys())]]
                 self.subSpace[len(self.subSpace.keys())] = hR
 
-        
+    """
+    
+    """
+    def chunkFace(self):
+        if self.next.__class__ is hRegion:
+            return self.next.chunkFace()
+        if len(self.subSpace) == 0 and len(self.fixed) == 1:
+            self.subDivide(codim=0)
+            return self.chunkFace()
+        if len(self.fixed) == 0 and len(self.faces) == 0:
+            self.subDivide(codim=1)
+            return self.chunkFace()
+        if len(self.fixed)==1 and self.next < len(self.subSpace)  - 1:
+            rv = self.subSpace[self.next]
+            self.next += 1
+            return rv
+        elif len(self.fixed)==0 and self.next < len(self.faces)  - 1:
+            rv = self.faces[self.next]
+            self.next += 1
+            return rv
+        if len(self.fixed)==0:
+            self.next = self.faces[self.next].subDivide()
+        else:
+            self.next = self.subSpace[self.next].subDivide(codim=0)
+        return self.chunkFace()
         
 
+            
     """ Subdivides into cubes(codim==0) or faces of cube(codim==1)
               Needs checking for 2D or 4D 
     """
