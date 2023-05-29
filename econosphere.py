@@ -151,10 +151,14 @@ class Government(iNode):
         return gov
 
     def geometrize(self, hR, frac):
-        self.geo = hR.chunkFace()
+        self.geo = hR.chunk(codim=1) 
         # For each subGov (nodes connected by Mitotic edges) geometrize.
-        for gov in self.ancestors(Mitotic, Government):
-            gov.geometrize(hR, frac)
+        for gov in self.ancestors(edgClass=Mitotic, stopNodeClass=None,forward=True):
+            if gov[0]==self:
+                cld = gov[1]
+            else:
+                cld = gov[0]
+            cld.geometrize(hR, frac)
         
 
     """ Insures """
@@ -254,9 +258,9 @@ class Commerce(Node):
 def commonAncestors(nds, edgClass=Inclusion, stopNodeClass=World):
     ancestorList = []
     for nd in nds:
-        val = nd.ancestors(edgClass, stopNodeClass=World)
+        val = nd.ancestors(edgClass=edgClass, stopNodeClass=World, forward=True)
         ancestorList.append((val))
-    return reduce(commonTail, ancestorList, nds[0].ancestors(Inclusion,World))
+    return reduce(commonTail, ancestorList, nds[0].ancestors(edgClass=Inclusion,stopNodeClass=World,forward=True))
 
 def commonTail(x, y):
     res = []

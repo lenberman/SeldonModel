@@ -44,17 +44,17 @@ class hRegion:
                 self.subSpace[len(self.subSpace.keys())] = hR
 
     """
-    
+    chunk(self,codim) returns faces of given codim.
     """
-    def chunkFace(self):
+    def chunk(self, codim):
         if self.next.__class__ is hRegion:
-            return self.next.chunkFace()
-        if len(self.subSpace) == 0 and len(self.fixed) == 1:
-            self.subDivide(codim=0)
-            return self.chunkFace()
-        if len(self.fixed) == 0 and len(self.faces) == 0:
-            self.subDivide(codim=1)
-            return self.chunkFace()
+            return self.next.chunk(codim)
+        if codim==len(self.fixed) and len(self.subSpace) == 0:
+            self.subDivide(codim=0)   #divide region
+            return self.chunk(codim)
+        elif codim>len(self.fixed) and len(self.faces) == 0:
+            self.subDivide(codim=1)   # create faces of region
+            return self.chunk(codim)
         if len(self.fixed)==1 and self.next < len(self.subSpace)  - 1:
             rv = self.subSpace[self.next]
             self.next += 1
@@ -63,11 +63,11 @@ class hRegion:
             rv = self.faces[self.next]
             self.next += 1
             return rv
-        if len(self.fixed)==0:
-            self.next = self.faces[self.next].subDivide()
+        if len(self.fixed) != codim:
+            self.next = self.faces[self.next].subDivide(codim=0)
         else:
             self.next = self.subSpace[self.next].subDivide(codim=0)
-        return self.chunkFace()
+        return self.chunk(codim)
         
 
             
@@ -240,21 +240,35 @@ class Node:   # # Node in Seldon decomposition
                 rv.append(edge)
         return rv
 
-    def ancestors(self, edgClass, stopNodeClass, forward=True):
+    """
+    If stopNodeClass
+    """
+    def ancestors(self, *, edgClass, stopNodeClass, forward):
+        rv = []
         val = [self]
         for e in self.edges:
             if e.__class__ is edgClass:
-                if e.edge[0] is self:
-                    parent = e.edge[1]
-                else:
-                    parent = e.edge[0]
-                if parent.__class__ is stopNodeClass:
-                    val.append(parent)
-                    return val
-                else:
-                    val += parent.ancestors(edgClass, stopNodeClass)
+                other = None
+                if e.edge[0] is self and forward:
+                    other = e.edge[1]
+                elif not forward and e.edge[1] is self:
+                    other = e.edge[0]
+                if other is None: #edgClass correct, direction incorrect
+                    continue
+            else:
+                continue  #wrong edgClass.
+            # correct edgClass and other != None
+            val.append(other)
+            if other.__class__ is stopNodeClass or stopNodeClass is None:
+                rv += [val]
+                val = [self]
+                continue
+            else:  #
+                val += other.ancestors(edgClass=edgClass, stopNodeClass=stopNodeClass, forward=forward)
+                rv += [val]
+                val = self
                 break
-        return val
+        return rv
 
 
     def __str__(self):
