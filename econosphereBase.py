@@ -224,7 +224,17 @@ class Node:   # # Node in Seldon decomposition
         return None
 
 
-    def addEdge(self, tgt=None, edgClass=None, fwd=True, strt=None, nd=None):
+    def addEdge(self, *,tgt, edgClass, fwd, strt=None, nd=None):
+        for edg in self.edges: # only one inclusion edge with a given src.
+            if edg.__class__ is Edge.edgeTypes["Inclusion"] and edgClass is Edge.edgeTypes["Inclusion"]:
+                oldSrc = edg.edge[0]
+                try:
+                    oldSrc.edges.remove(edg)
+                    edg.edge[0] = self
+                    return edg
+                except ValueError:
+                    pdb.set_trace()
+                    assert False
         tmp = edgClass(self, target=tgt, forward=fwd, end=nd, start=strt)
         assert not self is tgt
         self.edges.append(tmp)

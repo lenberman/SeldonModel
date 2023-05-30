@@ -4,8 +4,8 @@ from functools import reduce
 
 
 #  self.capacity = capacity  # (UseValue,capacity,unit cost)  in agreement class
-class Inclusion(Edge):
-    def __init__(self, src, target=None, forward=False, end=None, start = NOW):
+class Inclusion(Edge):   # 
+    def __init__(self, src, target=None, forward=True, end=None, start = NOW):
         super().__init__(src, target, forward, end, start)
 
 class Meiotic(Edge):
@@ -23,7 +23,7 @@ class Agreement(Edge):
     def addPromise(self,uv):
         ...
 
-Edge. edgeTypes = { "Inclusion" : Inclusion ,
+Edge.edgeTypes = { "Inclusion" : Inclusion ,
               "Meiotic" : Meiotic,
               "Mitotic" : Mitotic,
               "Agreement" : Agreement}
@@ -68,7 +68,7 @@ class iNode(Node):
                 break
         assert issubclass(gov.__class__, Government)
         iZ = iNode(name, gov)
-        iZ.addEdge(gov, edgClass=Inclusion)
+        iZ.addEdge(tgt=gov, edgClass=Inclusion,fwd=True)
         iZ.zygote = True
         return iZ
 
@@ -87,11 +87,11 @@ class iNode(Node):
         owner = self
         if self.zygote:
             _owner = iNode("_"+self.name,self.gov,info=self.info, mny=self.money,event=self.birth)
-            owner.addEdge(_owner, edgClass=Meiotic)
+            owner.addEdge(_owner, edgClass=Meiotic, fwd=True)
         for inode in rhsList:
             if inode.__class__ is "str".__class__:
                 inode = Node.nodes[inode]
-            inode.addEdge(_owner, edgClass=Meiotic)
+            inode.addEdge(tgt=_owner, edgClass=Meiotic, fwd=True)
         return
 
      # returns list of ...
@@ -122,10 +122,10 @@ class Government(iNode):
     """ Creates named subordinate Government nodes from names in tgtList.
     """
     def __rshift__(self, tgtList):
-        nList = list()
+        nList = []
         for nam in tgtList:
             z=self.getSubGov(nm=nam)
-            z.addEdge(self, edgClass=Inclusion, fwd=False)
+            z.addEdge(tgt=self, edgClass=Inclusion, fwd=True)
             nList.append(z)
         return nList
 
@@ -147,7 +147,7 @@ class Government(iNode):
         gov = Government(name)
         if self.__class__ is World:
             gov.nation = True
-        edge = gov.addEdge(self, edgClass=Inclusion, fwd=False)
+        edge = gov.addEdge(tgt=self, edgClass=Inclusion, fwd=True)
         return gov
 
     def geometrize(self, hR, frac):
@@ -166,7 +166,7 @@ class Government(iNode):
         assert nd.__class__  is iNode
         edge = nd.getEdges(edgClass=Inclusion)
         if edge is None:
-            edge = nd.addEdge(self, Inclusion)
+            edge = nd.addEdge(tgt=self, edgClass=Inclusion, fwd=True)
         elif len(edge) == 1:
             edge = edge[0]
             assert edge.edge[0] == nd
@@ -184,7 +184,7 @@ class Government(iNode):
     # internal governmental subdivision.  Should add inclusion edge 
     def getSubGov(self, nm=None):
         reg = Government(name=nm)
-        edge = reg.addEdge(self, Mitotic, False)
+        edge = self.addEdge(tgt=reg, edgClass=Mitotic, fwd=True)
         return reg
 
 
@@ -203,12 +203,12 @@ class World(Government):
             nList.append(gov)
         return nList
 
-    # returns list of zygotes with World inclusion.
+    # returns list of zygotes with Inclusion from World.
     def __rshift__(self, tgtList):
         nList = []
         for nat in tgtList:
             z=bNode.zygote(nat)
-            z.addEdge(self, edgClass=Inclusion, fwd=False)
+            self.addEdge(tgt=z, edgClass=Inclusion, fwd=True)
             nList.append(z)
         return nList
 
@@ -244,9 +244,9 @@ class Institution(iNode):
     def __init__(self, govList, nm):
         super().__init__(nm)
         for member in govList:
-            member.addEdge(tgt=self, edgClass=Meiotic)
+            member.addEdge(tgt=self, edgClass=Meiotic, fwd=True)
         ub = commonAncestors(govList)[0]
-        self.addEdge(tgt=ub,edgClass=Inclusion)
+        self.addEdge(tgt=ub,edgClass=Inclusion, fwd=True)
 
 class Commerce(Node):
     def __init__(self, possessor:iNode, factory=True, cInfo=None, useValue=None):
@@ -259,7 +259,7 @@ def commonAncestors(nds, edgClass=Inclusion, stopNodeClass=World):
     ancestorList = []
     for nd in nds:
         val = nd.ancestors(edgClass=edgClass, stopNodeClass=World, forward=True)
-        ancestorList.append((val))
+        ancestorList.append(val)
     return reduce(commonTail, ancestorList, nds[0].ancestors(edgClass=Inclusion,stopNodeClass=World,forward=True))
 
 def commonTail(x, y):
