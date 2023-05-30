@@ -167,17 +167,13 @@ class Edge:
             "@(" + str(self.start) + ", " + str(self.end) + ")\n"
 
     # create edge from (src->tgt || tgt->src)
-    def __init__(self, src=None , tgt=None, forward=True, end=None, start = NOW):
-        self.forward = forward
-        if forward == True:  # check Node.isTop
-            self.edge = [src, tgt]
-        else:
-            self.edge = [tgt, src]
+    def __init__(self, src=None , tgt=None, end=None, start = NOW):
+        self.edge = [src, tgt]
         self.start = start
         self.end = end
 
-        def reverse(self):
-            self.edge = (self.edge[1], self.edge[0])
+    def reverse(self):
+        self.edge = (self.edge[1], self.edge[0])
 
 
 ##Node
@@ -224,18 +220,18 @@ class Node:   # # Node in Seldon decomposition
         return None
 
 
-    def addEdge(self, *,tgt, edgClass, fwd, strt=None, nd=None):
+    def addEdge(self, *,tgt, edgClass, strt=None, nd=None):
         for edg in self.edges: # only one inclusion edge with a given src.
             if edg.__class__ is Edge.edgeTypes["Inclusion"] and edgClass is Edge.edgeTypes["Inclusion"]:
                 oldSrc = edg.edge[0]
+                oldTgt = edg.edge[1]
                 try:
                     oldSrc.edges.remove(edg)
-                    edg.edge[0] = self
-                    return edg
+                    oldTgt.edges.remove(edg)
                 except ValueError:
                     pdb.set_trace()
                     assert False
-        tmp = edgClass(self, target=tgt, forward=fwd, end=nd, start=strt)
+        tmp = edgClass(self, target=tgt, end=nd, start=strt)
         assert not self is tgt
         self.edges.append(tmp)
         if not tgt is None:
