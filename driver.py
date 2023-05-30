@@ -24,6 +24,9 @@ if __name__ == '__main__':
     for i in nList + zList:
         print(str(vars(i)))
 
+    Node.nodes = {}
+    Node.indx = 0
+    
 """
 
 

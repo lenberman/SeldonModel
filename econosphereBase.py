@@ -238,7 +238,7 @@ class Node:   # # Node in Seldon decomposition
             tgt.edges.append(tmp)
         return tmp
 
-    # returns list (possibly empty) of edges of given class.
+    # returns list (possibly empty) of edges of given classboth in & out
     def getEdges(self, edgClass):
         rv = []
         for edge in self.edges:

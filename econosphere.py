@@ -84,8 +84,10 @@ class iNode(Node):
         if not gov is None:
             self.addEdge(tgt=gov,edgClass=Inclusion)
 
-    # rhsList members must exist.   returns commercial iNode
+    """ iNode operator: rhsList members must exist.   returns commercial iNode with meiotic edges from rhsList
+    """
     def __lshift__(self, rhsList):
+        assert rhsList[0].__class__ is self.__class__
         owner = self
         if self.zygote:
             _owner = iNode("_"+self.name,self.gov,info=self.info, mny=self.money,event=self.birth)
@@ -98,7 +100,7 @@ class iNode(Node):
 
      # returns list of ...
     def __rshift__(self, rhsList):
-        nList = list()
+        print("operatort >> not defined\n")
         for inode in rhsList:
             if inode.__class__ is "str".__class__:
                 inode = Node.nodes[inode]
@@ -109,13 +111,13 @@ class iNode(Node):
 
 # linked to geometry
 class Government(iNode):
-    indx = 0
+
     governmentFunctions = { "citizen" : None , "corp" : None , "tax" : None, "MoneySupply" : None,
                             "Market" : None }
 
     """  # makes  iNodes in tgtList subordinate to self, returns tgtList """
     def __lshift__(self, tgtList):
-        nList = list()
+        nList = []
         for commerce in tgtList:
             assert commerce.__class__ is iNode
             self.naturalize(commerce)
@@ -126,6 +128,7 @@ class Government(iNode):
     def __rshift__(self, tgtList):
         nList = []
         for nam in tgtList:
+            assert nam.__class__ is str
             z=self.getSubGov(nm=nam)
             z.addEdge(tgt=self, edgClass=Inclusion)
             nList.append(z)
@@ -199,6 +202,7 @@ class World(Government):
     def __lshift__(self, tgtList):
         nList = []
         for nat in tgtList:
+            assert nat.__class__ is str
             gov = self.getGovernment(nat)
             if gov.nation:
                 self.nations.append(gov)
@@ -209,6 +213,7 @@ class World(Government):
     def __rshift__(self, tgtList):
         nList = []
         for nat in tgtList:
+            assert nat.__class__ is str
             z=bNode.zygote(nat)
             z.addEdge(tgt=self, edgClass=Inclusion)
             nList.append(z)
