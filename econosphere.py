@@ -5,7 +5,7 @@ from functools import reduce
 
 #  self.capacity = capacity  # (UseValue,capacity,unit cost)  in agreement class
 class Inclusion(Edge):   # 
-    def __init__(self, src, target=None, end=None, start = NOW):
+    def __init__(self, *, src, target=None, end=None, start = NOW):
         super().__init__(src, target, end, start)
 
 class Meiotic(Edge):
@@ -115,7 +115,8 @@ class Government(iNode):
     governmentFunctions = { "citizen" : None , "corp" : None , "tax" : None, "MoneySupply" : None,
                             "Market" : None }
 
-    """  # makes  iNodes in tgtList subordinate to self, returns tgtList """
+    """  # makes  iNodes in tgtList have Inclusion edge  to self, returns tgtList with Inclusion adjusted 
+    """
     def __lshift__(self, tgtList):
         nList = []
         for commerce in tgtList:
@@ -136,7 +137,6 @@ class Government(iNode):
 
     def  __init__(self, name, laws=None, hR=None):
         super().__init__(name=name)
-        self.geo = hR
         self.subs = []
         self.prop4ExternalViolence = None
         self.prop4InternalViolence = None
@@ -155,30 +155,39 @@ class Government(iNode):
         edge = gov.addEdge(tgt=self, edgClass=Inclusion)
         return gov
 
-    def geometrize(self, hR, frac):
-        self.geo = hR.chunk(codim=1) 
+    def geometrize(self, hR):
+        if not self.geo is None:
+            assert False
+        self.geo = hR.chunk(codim=1)
+        citizenList = []
+        for citizen in self.getEdges(edgClass=Inclusion,out=False):
+            if citizen.edge[0].__class__ is Government:
+                continue
+            citizenList.append(citizen.edge[0])
+            citizen.edge[0].geo = self.geo.chunk(codim=0)
+         
+            
         # For each subGov (nodes connected by Mitotic edges) geometrize.
         for gov in self.ancestors(edgClass=Mitotic, stopNodeClass=None,forward=True):
             if gov[0]==self:
                 cld = gov[1]
             else:
                 cld = gov[0]
-            cld.geometrize(hR, frac)
-        
+            cld.geometrize(hR)
+            
+            
 
     """ Insures """
     def naturalize(self, nd):
         assert nd.__class__  is iNode
-        edge = nd.getEdges(edgClass=Inclusion)
+        edge = nd.getEdges(edgClass=Inclusion, out=True)
         if edge is None:
             edge = nd.addEdge(tgt=self, edgClass=Inclusion)
         elif len(edge) == 1:
-            edge = edge[0]
-            assert edge.edge[0] == nd
-            edge.edge[1] = self
+            nd.addEdge(tgt=self,edgClass=Inclusion)
         else:
             assert len(edge) == 0
-        nd.gov = self
+            nd.gov = self
         return edge
 
     """Get's list of citizens of gov't """
@@ -204,8 +213,6 @@ class World(Government):
         for nat in tgtList:
             assert nat.__class__ is str
             gov = self.getGovernment(nat)
-            if gov.nation:
-                self.nations.append(gov)
             nList.append(gov)
         return nList
 
@@ -219,22 +226,30 @@ class World(Government):
             nList.append(z)
         return nList
 
+
     # create world with given dimension and #faces each
     def __init__(self, nm1="Earth"):
         super().__init__(nm1, hR=hRegion())
-        self.nations = []
         
         """
         If natlist is [], each self.nation gets 1/len(natlist) of the earth's area. Else, natlist is pairs
       [  [ name|gov(name) , num]+ ]
         """
     def geometrize(self):
-        xByNatLen = 1.0/len(self.nations)
-        for  gov in self.nations:
+        for  gov in self.nations():
             assert  gov.nation
             assert isinstance(gov, Government)
-            Government.geometrize(gov, self.geo, xByNatLen)
+            Government.geometrize(gov, self.geo)
             
+    def nations(self):
+        nationList = self.getEdges(edgClass=Inclusion, out=False)
+        val = list(map(lambda obj: obj.edge[0],filter(lambda obj: obj.edge[0].__class__ is Government, nationList)))
+        return val
+
+    def notNations(self):
+        nationList = self.getEdges(edgClass=Inclusion, out=False)
+        val = list(map(lambda obj: obj.edge[0],filter(lambda obj: not obj.edge[0].__class__ is Government, nationList)))
+        return val
 
     def __str__(self):
         rv = "Dimension(" + str(self.dimension)  + "), Extent(" + str(self.extent) + ")\n"

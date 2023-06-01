@@ -197,7 +197,7 @@ class Node:   # # Node in Seldon decomposition
             self.name = "Node_" + str(self.nId)
         self.edges = []
         self.birth = event
-        self.location = None
+        self.geo = None
         self.info= None
         self.power = None
         self.fear = None
@@ -220,7 +220,7 @@ class Node:   # # Node in Seldon decomposition
         return None
 
 
-    def addEdge(self, *,tgt, edgClass, strt=None, nd=None):
+    def addEdge(self, *,tgt, edgClass, start=None, end=None):
         for edg in self.edges: # only one inclusion edge with a given src.
             if edg.__class__ is Edge.edgeTypes["Inclusion"] and edgClass is Edge.edgeTypes["Inclusion"]:
                 oldSrc = edg.edge[0]
@@ -231,19 +231,25 @@ class Node:   # # Node in Seldon decomposition
                 except ValueError:
                     pdb.set_trace()
                     assert False
-        tmp = edgClass(self, target=tgt, end=nd, start=strt)
+        tmp = edgClass(src=self, target=tgt)
         assert not self is tgt
         self.edges.append(tmp)
         if not tgt is None:
             tgt.edges.append(tmp)
         return tmp
 
-    # returns list (possibly empty) of edges of given classboth in & out
-    def getEdges(self, edgClass):
+    # returns list (possibly empty) of self-edges possibly to other, of given class and direction from self
+    def getEdges(self, *, edgClass, out=None, other=None):
         rv = []
         for edge in self.edges:
-            if edge.__class__ is edgClass:
+            if not edge.__class__ is edgClass:
+                continue
+            if ((out==True)  and self is edge.edge[0]) and ((other is None) or (other is edge.edge[1])):
                 rv.append(edge)
+                continue
+            if ((out==False)  and self is edge.edge[1]) and ((other is None) or (other is edge.edge[0])):
+                rv.append(edge)
+                continue
         return rv
 
     """
