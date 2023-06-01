@@ -138,6 +138,7 @@ class Government(iNode):
     def  __init__(self, name, laws=None, hR=None):
         super().__init__(name=name)
         self.subs = []
+        self.geo = hR
         self.prop4ExternalViolence = None
         self.prop4InternalViolence = None
         self.moneySupply = None
@@ -159,13 +160,14 @@ class Government(iNode):
         if not self.geo is None:
             assert False
         self.geo = hR.chunk(codim=1)
+        """
         citizenList = []
         for citizen in self.getEdges(edgClass=Inclusion,out=False):
             if citizen.edge[0].__class__ is Government:
                 continue
             citizenList.append(citizen.edge[0])
             citizen.edge[0].geo = self.geo.chunk(codim=0)
-         
+        """    
             
         # For each subGov (nodes connected by Mitotic edges) geometrize.
         for gov in self.ancestors(edgClass=Mitotic, stopNodeClass=None,forward=True):
@@ -296,7 +298,7 @@ if __name__ == '__main__':
     tmp = hRegion()
     tmp.subDivide(codim=1)
     tmp1=tmp.faces[0].subDivide(codim=0)
-    vars(tmp1)
+    print(vars(tmp1))
     plt.plot([1, 2, 3, 4])
     plt.ylabel('some numbers')
     #plt.show()
