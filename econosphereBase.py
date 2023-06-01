@@ -35,19 +35,16 @@ class hRegion:
             return
         else:
             assert root.__class__ is hRegion
-            self.path = []
-            self.center = hR.center
-            self.scale = hR.scale
-            self.fixed = hR.fixedDim
+            self.path = root.path.copy().append("./")
+            self.parent = root.parent
+            self.center = root.center
+            self.scale = root.scale
+            self.fixed = root.fixed.copy()
             self.next = 0
             self.faces = {} # faces of hyper-cube
             self.subSpace = {} # sub hyper cubes of same dimension
-            if parent is None:
-                self.path = ["./"]
-                self.parent = hR.parent
-                if not parent is None:
-                    import pdb; pdb.set_trace()#pdb.set_trace()
-                    self.parent.addSub(self)
+            #import pdb; pdb.set_trace()#pdb.set_trace()
+            self.parent.addSub(self)
             return
                     
 

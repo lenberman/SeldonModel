@@ -160,15 +160,7 @@ class Government(iNode):
         if not self.geo is None:
             assert False
         self.geo = hR.chunk(codim=1)
-        """
-        citizenList = []
-        for citizen in self.getEdges(edgClass=Inclusion,out=False):
-            if citizen.edge[0].__class__ is Government:
-                continue
-            citizenList.append(citizen.edge[0])
-        for citizen in citizenList:
-            citizen.geo = hRegion(root=self.geo).chunk(codim=0)
-        """
+
         # For each subGov (nodes connected by Mitotic edges) geometrize.
         for gov in self.ancestors(edgClass=Mitotic, stopNodeClass=None,forward=True):
             if gov[0]==self:
@@ -176,6 +168,16 @@ class Government(iNode):
             else:
                 cld = gov[0]
             cld.geometrize(hR)
+
+        citizenList = []
+        for citizen in self.getEdges(edgClass=Inclusion,out=False):
+            if citizen.edge[0].__class__ is Government:
+                continue
+            citizenList.append(citizen.edge[0])
+        hR = hRegion(root=self.geo)
+        for citizen in citizenList:
+            citizen.geo = hR.chunk(codim=1)
+
             
 
     """ Insures """
