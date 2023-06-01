@@ -1,0 +1,267 @@
+#This is a list of countries and other inhabited territories of the world by total population, based on estimates published by the United Nations in the 2022 revision of World Population Prospects.[2][3] These figures refer to the de facto population in a country or area as shown in the "estimates" section.
+Country / Area 	UN continental
+region[4] 	UN statistical
+subregion[4] 	Population
+(1 July 2022) 	Population
+(1 July 2023) 	Change
+
+ India 	Asia 	Southern Asia 	1,417,173,173 	1,428,627,663 	+0.81%
+ China[a] 	Asia 	Eastern Asia 	1,425,887,337 	1,425,671,352 	−0.02%
+ United States 	Americas 	Northern America 	338,289,857 	339,996,564 	+0.50%
+ Indonesia 	Asia 	South-eastern Asia 	275,501,339 	277,534,123 	+0.74%
+ Pakistan 	Asia 	Southern Asia 	235,824,863 	240,485,658 	+1.98%
+ Nigeria 	Africa 	Western Africa 	218,541,212 	223,804,632 	+2.41%
+ Brazil 	Americas 	South America 	215,313,498 	216,422,446 	+0.52%
+ Bangladesh 	Asia 	Southern Asia 	171,186,373 	172,954,319 	+1.03%
+ Russia 	Europe 	Eastern Europe 	144,713,314 	144,444,359 	−0.19%
+ Mexico 	Americas 	Central America 	127,504,126 	128,455,567 	+0.75%
+ Japan 	Asia 	Eastern Asia 	123,951,692 	123,294,513 	−0.53%
+ Ethiopia 	Africa 	Eastern Africa 	123,379,925 	126,527,060 	+2.55%
+ Philippines 	Asia 	South-eastern Asia 	115,559,009 	117,337,368 	+1.54%
+ Egypt 	Africa 	Northern Africa 	110,990,103 	112,716,599 	+1.56%
+ DR Congo 	Africa 	Middle Africa 	99,010,212 	102,262,809 	+3.29%
+ Vietnam 	Asia 	South-eastern Asia 	98,186,856 	98,858,950 	+0.68%
+ Iran 	Asia 	Southern Asia 	88,550,570 	89,172,767 	+0.70%
+ Turkey 	Asia 	Western Asia 	85,341,241 	85,816,199 	+0.56%
+ Germany 	Europe 	Western Europe 	83,369,843 	83,294,633 	−0.09%
+ Thailand 	Asia 	South-eastern Asia 	71,697,030 	71,801,279 	+0.15%
+ United Kingdom 	Europe 	Northern Europe 	67,508,936 	67,736,802 	+0.34%
+ Tanzania[b] 	Africa 	Eastern Africa 	65,497,748 	67,438,106 	+2.96%
+ France[c] 	Europe 	Western Europe 	64,626,628 	64,756,584 	+0.20%
+ South Africa 	Africa 	Southern Africa 	59,893,886 	60,414,495 	+0.87%
+ Italy 	Europe 	Southern Europe 	59,037,474 	58,870,763 	−0.28%
+ Myanmar 	Asia 	South-eastern Asia 	54,179,306 	54,577,997 	+0.74%
+ Kenya 	Africa 	Eastern Africa 	54,027,487 	55,100,587 	+1.99%
+ Colombia 	Americas 	South America 	51,874,024 	52,085,168 	+0.41%
+ South Korea 	Asia 	Eastern Asia 	51,815,810 	51,784,059 	−0.06%
+ Spain[d] 	Europe 	Southern Europe 	47,558,630 	47,519,628 	−0.08%
+ Uganda 	Africa 	Eastern Africa 	47,249,585 	48,582,334 	+2.82%
+ Sudan 	Africa 	Northern Africa 	46,874,204 	48,109,006 	+2.63%
+ Argentina 	Americas 	South America 	45,510,318 	45,773,884 	+0.58%
+ Algeria 	Africa 	Northern Africa 	44,903,225 	45,606,481 	+1.57%
+ Iraq 	Asia 	Western Asia 	44,496,122 	45,504,560 	+2.27%
+ Afghanistan 	Asia 	Southern Asia 	41,128,771 	42,239,854 	+2.70%
+ Poland 	Europe 	Eastern Europe 	39,857,146 	41,026,068 	+2.93%
+ Ukraine[e] 	Europe 	Eastern Europe 	39,701,739 	36,744,634 	−7.45%
+ Canada 	Americas 	Northern America 	38,454,327 	38,781,292 	+0.85%
+ Morocco 	Africa 	Northern Africa 	37,457,971 	37,840,044 	+1.02%
+ Saudi Arabia 	Asia 	Western Asia 	36,408,820 	36,947,025 	+1.48%
+ Angola 	Africa 	Middle Africa 	35,588,987 	36,684,203 	+3.08%
+ Uzbekistan 	Asia 	Central Asia 	34,627,653 	35,163,944 	+1.55%
+ Peru 	Americas 	South America 	34,049,589 	34,352,719 	+0.89%
+ Malaysia 	Asia 	South-eastern Asia 	33,938,222 	34,308,525 	+1.09%
+ Yemen 	Asia 	Western Asia 	33,696,614 	34,449,825 	+2.24%
+ Ghana 	Africa 	Western Africa 	33,475,870 	34,121,985 	+1.93%
+ Mozambique 	Africa 	Eastern Africa 	32,969,519 	33,897,354 	+2.81%
+   Nepal 	Asia 	Southern Asia 	30,547,580 	30,896,590 	+1.14%
+ Madagascar 	Africa 	Eastern Africa 	29,611,714 	30,325,732 	+2.41%
+ Venezuela 	Americas 	South America 	28,301,696 	28,838,499 	+1.90%
+ Ivory Coast 	Africa 	Western Africa 	28,160,543 	28,873,034 	+2.53%
+ Cameroon 	Africa 	Middle Africa 	27,914,537 	28,647,293 	+2.62%
+ Niger 	Africa 	Western Africa 	26,207,977 	27,202,843 	+3.80%
+ Australia[f] 	Oceania 	Australia and New Zealand 	26,177,414 	26,439,112 	+1.00%
+ North Korea 	Asia 	Eastern Asia 	26,069,417 	26,160,822 	+0.35%
+ Taiwan[g] 	Asia 	Eastern Asia 	23,893,395 	23,923,277 	+0.13%
+ Burkina Faso 	Africa 	Western Africa 	22,673,762 	23,251,485 	+2.55%
+ Mali 	Africa 	Western Africa 	22,593,591 	23,293,699 	+3.10%
+ Syria 	Asia 	Western Asia 	22,125,249 	23,227,014 	+4.98%
+ Sri Lanka 	Asia 	Southern Asia 	21,832,143 	21,893,579 	+0.28%
+ Malawi 	Africa 	Eastern Africa 	20,405,317 	20,931,751 	+2.58%
+ Zambia 	Africa 	Eastern Africa 	20,017,675 	20,569,738 	+2.76%
+ Romania 	Europe 	Eastern Europe 	19,659,267 	19,892,812 	+1.19%
+ Chile 	Americas 	South America 	19,603,733 	19,629,590 	+0.13%
+ Kazakhstan 	Asia 	Central Asia 	19,397,998 	19,606,634 	+1.08%
+ Ecuador 	Americas 	South America 	18,001,000 	18,190,484 	+1.05%
+ Guatemala 	Americas 	Central America 	17,843,908 	18,092,026 	+1.39%
+ Chad 	Africa 	Middle Africa 	17,723,315 	18,278,568 	+3.13%
+ Somalia[h] 	Africa 	Eastern Africa 	17,597,511 	18,143,379 	+3.10%
+ Netherlands[i] 	Europe 	Western Europe 	17,564,014 	17,618,299 	+0.31%
+ Senegal 	Africa 	Western Africa 	17,316,449 	17,763,163 	+2.58%
+ Cambodia 	Asia 	South-eastern Asia 	16,767,842 	16,944,826 	+1.06%
+ Zimbabwe 	Africa 	Eastern Africa 	16,320,537 	16,665,409 	+2.11%
+ Guinea 	Africa 	Western Africa 	13,859,341 	14,190,612 	+2.39%
+ Rwanda 	Africa 	Eastern Africa 	13,776,698 	14,094,683 	+2.31%
+ Benin 	Africa 	Western Africa 	13,352,864 	13,712,828 	+2.70%
+ Burundi 	Africa 	Eastern Africa 	12,889,577 	13,238,559 	+2.71%
+ Tunisia 	Africa 	Northern Africa 	12,356,117 	12,458,223 	+0.83%
+ Bolivia 	Americas 	South America 	12,224,110 	12,388,571 	+1.35%
+ Belgium 	Europe 	Western Europe 	11,655,930 	11,686,140 	+0.26%
+ Haiti 	Americas 	Caribbean 	11,584,996 	11,724,764 	+1.21%
+ Jordan 	Asia 	Western Asia 	11,285,869 	11,337,053 	+0.45%
+ Dominican Republic 	Americas 	Caribbean 	11,228,821 	11,332,973 	+0.93%
+ Cuba 	Americas 	Caribbean 	11,212,191 	11,194,449 	−0.16%
+ South Sudan 	Africa 	Eastern Africa 	10,913,164 	11,088,796 	+1.61%
+ Sweden 	Europe 	Northern Europe 	10,549,347 	10,612,086 	+0.59%
+ Czechia 	Europe 	Eastern Europe 	10,493,986 	10,495,295 	+0.01%
+ Honduras 	Americas 	Central America 	10,432,860 	10,593,798 	+1.54%
+ Greece 	Europe 	Southern Europe 	10,384,971 	10,341,277 	−0.42%
+ Azerbaijan[j] 	Asia 	Western Asia 	10,358,074 	10,412,652 	+0.53%
+ Portugal[k] 	Europe 	Southern Europe 	10,270,865 	10,247,605 	−0.23%
+ Papua New Guinea 	Oceania 	Melanesia 	10,142,619 	10,329,931 	+1.85%
+ Hungary 	Europe 	Eastern Europe 	9,967,308 	10,156,239 	+1.90%
+ Tajikistan 	Asia 	Central Asia 	9,952,787 	10,143,543 	+1.92%
+ Belarus 	Europe 	Eastern Europe 	9,534,955 	9,498,238 	−0.39%
+ United Arab Emirates 	Asia 	Western Asia 	9,441,129 	9,516,871 	+0.80%
+ Israel 	Asia 	Western Asia 	9,038,309 	9,174,520 	+1.51%
+ Austria 	Europe 	Western Europe 	8,939,617 	8,958,961 	+0.22%
+ Togo 	Africa 	Western Africa 	8,848,699 	9,053,799 	+2.32%
+ Switzerland 	Europe 	Western Europe 	8,740,472 	8,796,669 	+0.64%
+ Sierra Leone 	Africa 	Western Africa 	8,605,718 	8,791,092 	+2.15%
+ Laos 	Asia 	South-eastern Asia 	7,529,475 	7,633,779 	+1.39%
+ Hong Kong (China)[l] 	Asia 	Eastern Asia 	7,488,865 	7,491,609 	+0.04%
+ Serbia[m] 	Europe 	Southern Europe 	7,221,366 	7,149,077 	−1.00%
+ Nicaragua 	Americas 	Central America 	6,948,392 	7,046,311 	+1.41%
+ Libya 	Africa 	Northern Africa 	6,812,341 	6,888,388 	+1.12%
+ Bulgaria 	Europe 	Eastern Europe 	6,781,953 	6,687,717 	−1.39%
+ Paraguay 	Americas 	South America 	6,780,744 	6,861,524 	+1.19%
+ Kyrgyzstan 	Asia 	Central Asia 	6,630,623 	6,735,348 	+1.58%
+ Turkmenistan 	Asia 	Central Asia 	6,430,771 	6,516,100 	+1.33%
+ El Salvador 	Americas 	Central America 	6,336,392 	6,364,943 	+0.45%
+ Singapore 	Asia 	South-eastern Asia 	5,975,689 	6,014,723 	+0.65%
+ Congo 	Africa 	Middle Africa 	5,970,424 	6,106,869 	+2.29%
+ Denmark 	Europe 	Northern Europe 	5,882,262 	5,910,913 	+0.49%
+ Slovakia 	Europe 	Eastern Europe 	5,643,453 	5,795,199 	+2.69%
+ Central African Republic 	Africa 	Middle Africa 	5,579,144 	5,742,316 	+2.92%
+ Finland[n] 	Europe 	Northern Europe 	5,540,746 	5,545,475 	+0.09%
+ Lebanon 	Asia 	Western Asia 	5,489,740 	5,353,930 	−2.47%
+ Norway[o] 	Europe 	Northern Europe 	5,434,319 	5,474,360 	+0.74%
+ Liberia 	Africa 	Western Africa 	5,302,681 	5,418,377 	+2.18%
+ Palestine[p] 	Asia 	Western Asia 	5,250,072 	5,371,230 	+2.31%
+ New Zealand 	Oceania 	Australia and New Zealand 	5,185,289 	5,228,100 	+0.83%
+ Costa Rica 	Americas 	Central America 	5,180,829 	5,212,173 	+0.60%
+ Ireland 	Europe 	Northern Europe 	5,023,109 	5,056,935 	+0.67%
+ Mauritania 	Africa 	Western Africa 	4,736,139 	4,862,989 	+2.68%
+ Oman 	Asia 	Western Asia 	4,576,298 	4,644,384 	+1.49%
+ Panama 	Americas 	Central America 	4,408,581 	4,468,087 	+1.35%
+ Kuwait 	Asia 	Western Asia 	4,268,873 	4,310,108 	+0.97%
+ Croatia 	Europe 	Southern Europe 	4,030,358 	4,008,617 	−0.54%
+ Georgia[q] 	Asia 	Western Asia 	3,744,386 	3,728,282 	−0.43%
+ Eritrea 	Africa 	Eastern Africa 	3,684,032 	3,748,902 	+1.76%
+ Uruguay 	Americas 	South America 	3,422,794 	3,423,109 	+0.01%
+ Mongolia 	Asia 	Eastern Asia 	3,398,366 	3,447,157 	+1.44%
+ Moldova[r] 	Europe 	Eastern Europe 	3,272,996 	3,435,931 	+4.98%
+ Puerto Rico (United States) 	Americas 	Caribbean 	3,252,407 	3,260,314 	+0.24%
+ Bosnia and Herzegovina 	Europe 	Southern Europe 	3,233,527 	3,210,848 	−0.70%
+ Albania 	Europe 	Southern Europe 	2,842,321 	2,832,439 	−0.35%
+ Jamaica 	Americas 	Caribbean 	2,827,377 	2,825,544 	−0.06%
+ Armenia 	Asia 	Western Asia 	2,780,469 	2,777,971 	−0.09%
+ Lithuania 	Europe 	Northern Europe 	2,750,055 	2,718,352 	−1.15%
+ Gambia 	Africa 	Western Africa 	2,705,992 	2,773,168 	+2.48%
+ Qatar 	Asia 	Western Asia 	2,695,122 	2,716,391 	+0.79%
+ Botswana 	Africa 	Southern Africa 	2,630,296 	2,675,353 	+1.71%
+ Namibia 	Africa 	Southern Africa 	2,567,013 	2,604,172 	+1.45%
+ Gabon 	Africa 	Middle Africa 	2,388,993 	2,436,567 	+1.99%
+ Lesotho 	Africa 	Southern Africa 	2,305,826 	2,330,318 	+1.06%
+ Slovenia 	Europe 	Southern Europe 	2,119,844 	2,119,675 	−0.01%
+ Guinea-Bissau 	Africa 	Western Africa 	2,105,566 	2,150,842 	+2.15%
+ North Macedonia 	Europe 	Southern Europe 	2,093,599 	2,085,679 	−0.38%
+ Latvia 	Europe 	Northern Europe 	1,850,651 	1,830,212 	−1.10%
+ Equatorial Guinea 	Africa 	Middle Africa 	1,674,908 	1,714,672 	+2.37%
+ Kosovo[s] 	Europe 	Southern Europe 	1,659,714 	1,663,595 	+0.23%
+ Trinidad and Tobago 	Americas 	Caribbean 	1,531,045 	1,534,937 	+0.25%
+ Bahrain 	Asia 	Western Asia 	1,472,233 	1,485,510 	+0.90%
+ East Timor 	Asia 	South-eastern Asia 	1,341,296 	1,360,596 	+1.44%
+ Estonia 	Europe 	Northern Europe 	1,326,062 	1,322,766 	−0.25%
+ Mauritius 	Africa 	Eastern Africa 	1,299,469 	1,300,557 	+0.08%
+ Cyprus[t] 	Asia 	Western Asia 	1,251,489 	1,260,138 	+0.69%
+ Eswatini 	Africa 	Southern Africa 	1,201,671 	1,210,822 	+0.76%
+ Djibouti 	Africa 	Eastern Africa 	1,120,849 	1,136,455 	+1.39%
+ Réunion (France) 	Africa 	Eastern Africa 	974,052 	981,796 	+0.80%
+ Fiji 	Oceania 	Melanesia 	929,766 	936,376 	+0.71%
+ Comoros 	Africa 	Eastern Africa 	836,774 	852,075 	+1.83%
+ Guyana 	Americas 	South America 	808,726 	813,834 	+0.63%
+ Bhutan 	Asia 	Southern Asia 	782,455 	787,425 	+0.64%
+ Solomon Islands 	Oceania 	Melanesia 	724,273 	740,425 	+2.23%
+ Macao (China)[u] 	Asia 	Eastern Asia 	695,169 	704,150 	+1.29%
+ Luxembourg 	Europe 	Western Europe 	647,599 	654,768 	+1.11%
+ Montenegro 	Europe 	Southern Europe 	627,083 	626,485 	−0.10%
+ Suriname 	Americas 	South America 	618,041 	623,237 	+0.84%
+ Cape Verde 	Africa 	Western Africa 	593,150 	598,682 	+0.93%
+Western Sahara[v] 	Africa 	Northern Africa 	575,986 	587,259 	+1.96%
+ Malta 	Europe 	Southern Europe 	533,286 	535,065 	+0.33%
+ Maldives 	Asia 	Southern Asia 	521,021 	523,787 	+0.53%
+ Brunei 	Asia 	South-eastern Asia 	449,002 	452,524 	+0.78%
+ Belize 	Americas 	Central America 	405,273 	410,825 	+1.37%
+ Bahamas 	Americas 	Caribbean 	409,984 	412,624 	+0.64%
+ Guadeloupe (France) 	Americas 	Caribbean 	395,753 	395,839 	+0.02%
+ Iceland 	Europe 	Northern Europe 	372,899 	375,319 	+0.65%
+ Martinique (France) 	Americas 	Caribbean 	367,507 	366,981 	−0.14%
+ Vanuatu 	Oceania 	Melanesia 	326,741 	334,506 	+2.38%
+ Mayotte (France) 	Africa 	Eastern Africa 	326,101 	335,995 	+3.03%
+ French Polynesia (France) 	Oceania 	Polynesia 	306,279 	308,872 	+0.85%
+ French Guiana (France) 	Americas 	South America 	304,557 	312,155 	+2.49%
+ New Caledonia (France) 	Oceania 	Melanesia 	289,951 	292,991 	+1.05%
+ Barbados 	Americas 	Caribbean 	281,635 	281,996 	+0.13%
+ São Tomé and Príncipe 	Africa 	Middle Africa 	227,380 	231,856 	+1.97%
+ Samoa 	Oceania 	Polynesia 	222,382 	225,681 	+1.48%
+ Curaçao (Netherlands) 	Americas 	Caribbean 	191,164 	192,077 	+0.48%
+ Saint Lucia 	Americas 	Caribbean 	179,858 	180,251 	+0.22%
+ Guam (United States) 	Oceania 	Micronesia 	171,775 	172,952 	+0.69%
+ Kiribati 	Oceania 	Micronesia 	131,232 	133,515 	+1.74%
+ Grenada 	Americas 	Caribbean 	125,438 	126,184 	+0.59%
+ Micronesia 	Oceania 	Micronesia 	114,164 	115,224 	+0.93%
+ Jersey (United Kingdom) 	Europe 	Northern Europe 	110,779 	111,803 	+0.92%
+ Seychelles 	Africa 	Eastern Africa 	107,119 	107,660 	+0.51%
+ Tonga 	Oceania 	Polynesia 	106,858 	107,773 	+0.86%
+ Aruba (Netherlands) 	Americas 	Caribbean 	106,445 	106,277 	−0.16%
+ Saint Vincent and the Grenadines 	Americas 	Caribbean 	103,948 	103,699 	−0.24%
+ U.S. Virgin Islands (United States) 	Americas 	Caribbean 	99,465 	98,750 	−0.72%
+ Antigua and Barbuda 	Americas 	Caribbean 	93,763 	94,298 	+0.57%
+ Isle of Man (United Kingdom) 	Europe 	Northern Europe 	84,520 	84,710 	+0.22%
+ Andorra 	Europe 	Southern Europe 	79,824 	80,088 	+0.33%
+ Dominica 	Americas 	Caribbean 	72,738 	73,040 	+0.42%
+ Cayman Islands (United Kingdom) 	Americas 	Caribbean 	68,706 	69,310 	+0.88%
+ Bermuda (United Kingdom) 	Americas 	Northern America 	64,184 	64,069 	−0.18%
+ Guernsey (United Kingdom) 	Europe 	Northern Europe 	63,302 	63,544 	+0.38%
+ Greenland (Denmark) 	Americas 	Northern America 	56,466 	56,643 	+0.31%
+ Faroe Islands (Denmark) 	Europe 	Northern Europe 	53,090 	53,270 	+0.34%
+ Northern Mariana Islands (United States) 	Oceania 	Micronesia 	49,551 	49,796 	+0.49%
+ Saint Kitts and Nevis 	Americas 	Caribbean 	47,658 	47,755 	+0.20%
+ Turks and Caicos Islands (United Kingdom) 	Americas 	Caribbean 	45,703 	46,062 	+0.79%
+ American Samoa (United States) 	Oceania 	Polynesia 	44,273 	43,915 	−0.81%
+ Sint Maarten (Netherlands) 	Americas 	Caribbean 	44,175 	44,222 	+0.11%
+ Marshall Islands 	Oceania 	Micronesia 	41,569 	41,996 	+1.03%
+ Liechtenstein 	Europe 	Western Europe 	39,327 	39,585 	+0.66%
+ Monaco 	Europe 	Western Europe 	36,469 	36,298 	−0.47%
+ San Marino 	Europe 	Southern Europe 	33,661 	33,642 	−0.06%
+ Gibraltar (United Kingdom) 	Europe 	Southern Europe 	32,649 	32,688 	+0.12%
+Saint Martin (France) 	Americas 	Caribbean 	31,791 	32,077 	+0.90%
+ British Virgin Islands (United Kingdom) 	Americas 	Caribbean 	31,305 	31,538 	+0.74%
+ Caribbean Netherlands (Netherlands)[w] 	Americas 	Caribbean 	27,027 	27,148 	+0.45%
+ Palau 	Oceania 	Micronesia 	18,055 	18,058 	+0.02%
+ Cook Islands 	Oceania 	Polynesia 	17,011 	17,044 	+0.19%
+ Anguilla (United Kingdom) 	Americas 	Caribbean 	15,857 	15,900 	+0.27%
+ Nauru 	Oceania 	Micronesia 	12,668 	12,780 	+0.88%
+ Wallis and Futuna (France) 	Oceania 	Polynesia 	11,573 	11,502 	−0.61%
+ Tuvalu 	Oceania 	Polynesia 	11,312 	11,396 	+0.74%
+ Saint Barthélemy (France) 	Americas 	Caribbean 	10,967 	10,994 	+0.25%
+ Saint Pierre and Miquelon (France) 	Americas 	Northern America 	5,862 	5,840 	−0.38%
+ Saint Helena (United Kingdom)[x] 	Africa 	Western Africa 	5,374 	5,314 	−1.12%
+ Montserrat (United Kingdom) 	Americas 	Caribbean 	4,390 	4,387 	−0.07%
+ Falkland Islands (United Kingdom) 	Americas 	South America 	3,780 	3,791 	+0.29%
+ Niue 	Oceania 	Polynesia 	1,934 	1,935 	+0.05%
+ Tokelau (New Zealand) 	Oceania 	Polynesia 	1,871 	1,893 	+1.18%
+ World 			7,975,105,156 	8,045,311,448 	+0.88%
+See also
+World
+
+    List of countries and dependencies by population
+    List of countries by past and projected future population
+        List of countries by population in 2000
+        List of countries by population in 2010
+
+Continental
+Demographics of Antarctica
+List of African countries by population
+List of Asian countries by population
+List of European countries by population
+
+    List of European countries by population growth rate
+
+List of North American countries by population
+List of Oceanian countries by population
+List of South
+
+    American countries by population
+
+Transcontinental

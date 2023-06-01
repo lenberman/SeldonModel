@@ -46,12 +46,21 @@ class hRegion:
             #import pdb; pdb.set_trace()#pdb.set_trace()
             self.parent.addSub(self)
             return
-                    
 
-    def addSub(self, hR):
+    def matches(self,hR):
+        return (self.center == hR.center)  and\
+             (self.scale == hR.scale) and\
+            (self.fixed == hR.fixed)
+
+    def addSub(self, hR): #actually replaces a matching hR
             if len(self.fixed) !=len(hR.fixed):
                 assert not hR in self.faces.values()
                 hR.path = self.path.copy() + [["-",len(self.faces.keys())]]
+                # find & replace matching item in self.faces
+                for kyz in self.faces.keys():
+                    if hR.matches(self.faces[kyz]): # matches checks center,dim, and scale
+                        self.faces[kyz] = hR
+                        return
                 self.faces[len(self.faces.keys())] = hR
             else:
                 assert not hR in self.subSpace.values()
