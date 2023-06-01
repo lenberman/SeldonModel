@@ -18,20 +18,38 @@ class hRegion:
     """ Creates a node in decomposition at given offset.
     If fixedDim != None, this is a surface.  scale is 'diameter' (half side of cube)
     """
-    def __init__(self, center=[0,0,0], scale=1, fixedDim=[], parent=None):
-        self.path = []
-        self.center = center
-        self.scale = scale
-        self.fixed = fixedDim
-        self.next = 0
-        self.faces = {} # faces of hyper-cube
-        self.subSpace = {} # sub hyper cubes of same dimension
-        if parent is None:
-            self.path = ["/"]
-        self.parent = parent
-        if not parent is None:
-            self.parent.addSub(self)
-        return 
+    def __init__(self,*, center=[0,0,0], scale=1, fixedDim=[], parent=None, root=None):
+        if root is None:
+            self.path = []
+            self.center = center
+            self.scale = scale
+            self.fixed = fixedDim
+            self.next = 0
+            self.faces = {} # faces of hyper-cube
+            self.subSpace = {} # sub hyper cubes of same dimension
+            self.parent = parent
+            if parent is None:
+                self.path = ["/"]
+            if not parent is None:
+                self.parent.addSub(self)
+            return
+        else:
+            assert root.__class__ is hRegion
+            self.path = []
+            self.center = hR.center
+            self.scale = hR.scale
+            self.fixed = hR.fixedDim
+            self.next = 0
+            self.faces = {} # faces of hyper-cube
+            self.subSpace = {} # sub hyper cubes of same dimension
+            if parent is None:
+                self.path = ["./"]
+                self.parent = hR.parent
+                if not parent is None:
+                    import pdb; pdb.set_trace()#pdb.set_trace()
+                    self.parent.addSub(self)
+            return
+                    
 
     def addSub(self, hR):
             if len(self.fixed) !=len(hR.fixed):
@@ -98,10 +116,12 @@ class hRegion:
                     face = True
                 if not coor in self.fixed:
                     offset[coor] = offset[coor] +  self.scale
+                #self.faces[2*coor] = hRegion(center=offset, scale=self.scale, fixedDim=fd, parent=self)
                 hRegion(center=offset, scale=self.scale, fixedDim=fd, parent=self)
                 offset = self.center.copy()
                 if not (coor in self.fixed):
                     offset[coor] = offset[coor] - self.scale
+                #self.faces[2*coor+1] = hRegion(center=offset,scale=self.scale,fixedDim=fd, parent = self)
                 hRegion(center=offset,scale=self.scale,fixedDim=fd, parent = self)
         return self
 
