@@ -199,6 +199,9 @@ class Edge:
         self.edge = [src, tgt]
         self.start = start
         self.end = end
+        if not Node.diGraph is None:
+            Node.diGraph.add_edge(src, tgt, key=0, cls=self.__class__)
+            
 
     def reverse(self):
         self.edge = (self.edge[1], self.edge[0])
@@ -209,7 +212,7 @@ class Node:   # # Node in Seldon decomposition
     """ Base class for all nodes """
     indx = 0
     nodes = {}
-
+    diGraph = None
     # create out-edges from self to tgt
     def __rshift__(self, tgt):
         for target in tgt:
@@ -229,6 +232,8 @@ class Node:   # # Node in Seldon decomposition
         self.info= None
         self.power = None
         self.fear = None
+        if not Node.diGraph is None:
+            self.addToGraph(Node.diGraph)
         assert Node.nodes.get(name) is None
         Node.nodes[self.name] = self
 
@@ -237,6 +242,8 @@ class Node:   # # Node in Seldon decomposition
         self.name = nm
         Node.nodes[self.name] = self
 
+    def addToGraph(self,g):
+        g.add_node(self)
         
     """ retrieves """
     @classmethod

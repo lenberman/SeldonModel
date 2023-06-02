@@ -229,9 +229,10 @@ class World(Government):
         return nList
 
 
-    # create world with given dimension and #faces each
-    def __init__(self, nm1="Earth"):
+    # create world 
+    def __init__(self,*, g=None, nm1="Earth"):
         super().__init__(nm1, hR=hRegion())
+        Node.diGraph = g
         
         """
         If natlist is [], each self.nation gets 1/len(natlist) of the earth's area. Else, natlist is pairs
@@ -254,8 +255,7 @@ class World(Government):
         return val
 
     def __str__(self):
-        rv = "Dimension(" + str(self.dimension)  + "), Extent(" + str(self.extent) + ")\n"
-        return rv
+        return "World"
 
     def getRegion(self, size):
         ...
