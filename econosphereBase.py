@@ -7,8 +7,9 @@ import sys
 import pdb
 from pprint import pprint
 import numpy as np
-import networkx as nx
+import matplotlib as mpl
 import matplotlib.pyplot as plt
+import networkx as nx
 
 NOW = 0
 #import pdb; pdb.set_trace()
