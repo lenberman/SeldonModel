@@ -7,6 +7,7 @@ import sys
 import pdb
 from pprint import pprint
 import numpy as np
+import networkx as nx
 import matplotlib.pyplot as plt
 
 NOW = 0

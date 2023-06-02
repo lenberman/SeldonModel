@@ -137,7 +137,6 @@ class Government(iNode):
 
     def  __init__(self, name, laws=None, hR=None):
         super().__init__(name=name)
-        self.subs = []
         self.geo = hR
         self.prop4ExternalViolence = None
         self.prop4InternalViolence = None
