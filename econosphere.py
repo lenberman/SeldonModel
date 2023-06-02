@@ -300,6 +300,6 @@ if __name__ == '__main__':
     tmp.subDivide(codim=1)
     tmp1=tmp.faces[0].subDivide(codim=0)
     print(vars(tmp1))
-    plt.plot([1, 2, 3, 4])
+    plt.plot([1, 3, 2, 4])
     plt.ylabel('some numbers')
-    #plt.show()
+    plt.show()
