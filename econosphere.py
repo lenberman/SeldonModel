@@ -274,9 +274,9 @@ class Institution(iNode):
         self.addEdge(tgt=ub,edgClass=Inclusion)
 
 class Commerce(Node):
-    def __init__(self, possessor:iNode, factory=True, cInfo=None, useValue=None):
+    def __init__(self, owner:iNode, factory=True, info=None, useValue):
         super().__init__(cInfo)
-        self.owner = possessor
+        self.owner = owner
         self.info = cInfo
         self.uv = useValue
 
@@ -294,6 +294,10 @@ def commonTail(x, y):
         res.insert(0,x.pop())
         y.pop()
     return res
+
+Node.nodeColors = { World : "red", Government: "blue", Institution:  "yellow",
+                    iNode: "green", bNode : "purple", Commerce: "cyan" ,Node: "black"}
+
 
 if __name__ == '__main__':
     tmp = hRegion()

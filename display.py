@@ -24,18 +24,7 @@ nyInstitution = Institution(subGov, "PATH")
 nodeColor = []
 for node in G.nodes():
     cls = Node.nodes[node].__class__
-    if cls is World:
-        nodeColor.append("red")
-    elif cls is Government:
-        nodeColor.append("blue")
-    elif cls is Institution:
-        nodeColor.append("yellow")
-    elif cls is iNode:
-        nodeColor.append("green")
-    elif cls is bNode:
-        nodeColor.append("purple")
-    else:
-        nodeColor.append("orange")
+    nodeColor.append(Node.nodeColors[cls])
 
 edgeColor = []
 edgeClsDict =nx.get_edge_attributes(G,"cls")

@@ -10,6 +10,7 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import networkx as nx
+from scipy.sparse import dok_array
 
 NOW = 0
 #import pdb; pdb.set_trace()
@@ -222,6 +223,7 @@ class Node:   # # Node in Seldon decomposition
     """ Base class for all nodes """
     indx = 0
     nodes = {}
+    nodeColors = {}
     mDiGraph = None
     # create out-edges from self to tgt
     def __rshift__(self, tgt):
