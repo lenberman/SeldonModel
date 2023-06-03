@@ -19,7 +19,7 @@ institution = Institution(nList, "WorldBank")
 nyInstitution = Institution(subGov, "PATH")
 
 #for node in G.nodes():
-edgeColors = { 0 : "red", 1 : "blue", 2: "yellow", 3 : "green" }
+
                   
 nodeColor = []
 for node in G.nodes():
@@ -42,17 +42,7 @@ edgeClsDict =nx.get_edge_attributes(G,"cls")
 for edge in G.edges():
     edgeData = G.get_edge_data(edge[0],edge[1])
     for data in edgeData.items():# key is first element of data
-        edgeColor.append(edgeColors[data[0]])
-"""    
-    if cls is Inclusion:
-        edgeColor.append("red")
-    elif cls is Meiotic:
-        edgeColor.append("blue")
-    elif cls is Mitotic:
-        edgeColor.append("yellow")
-    elif cls is Agreement:
-        edgeColor.append("green")
-"""
+        edgeColor.append(Edge.edgeColors[data[0]])
 
 # Need to create a layout when doing
 # separate calls to draw nodes and edges

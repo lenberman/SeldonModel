@@ -27,6 +27,7 @@ Edge.edgeTypes = { "Inclusion" : Inclusion ,
               "Meiotic" : Meiotic,
               "Mitotic" : Mitotic,
               "Agreement" : Agreement}
+Edge.edgeColors = { 0 : "red", 1 : "blue", 2: "yellow", 3 : "green" }
 
 class bNode(Node):
     @classmethod

@@ -185,7 +185,7 @@ class UseValue:
 class Edge:
     """ 4 different semantic types of edges """
     edgeTypes = {}
-
+    edgeColors = { 0 : "red", 1 : "blue", 2: "yellow", 3 : "green" }
     @classmethod
     def connect(cls, src, tgt):
         return cls(src, tgt)
