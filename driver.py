@@ -7,7 +7,7 @@ import pdb
 #pdb.set_trace()
 
 if __name__ == '__main__':
-    G=nx.DiGraph()
+    G=nx.MultiDiGraph()
     wrld = World(g=G)
     zList = wrld >> ("Alice", "Bob", "Carol", "Dylan")  # returns list of zygotes
     miZList = list(map(lambda obj: iNode.iZygote(obj,wrld), zList))

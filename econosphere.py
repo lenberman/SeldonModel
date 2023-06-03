@@ -232,7 +232,7 @@ class World(Government):
     # create world 
     def __init__(self,*, g=None, nm1="Earth"):
         super().__init__(nm1, hR=hRegion())
-        Node.diGraph = g
+        Node.mDiGraph = g
         
         """
         If natlist is [], each self.nation gets 1/len(natlist) of the earth's area. Else, natlist is pairs

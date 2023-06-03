@@ -7,8 +7,6 @@ import networkx as nx
 
 G=nx.MultiDiGraph()
 
-nodeTypeColor = { "iNode" : .20 , "bNode" : .40, "Government" : .6, "Institution": .8 }
-
 wrld = World(g=G)
 zList = wrld >> ("Alice", "Bob", "Carol", "Dylan")  # returns list of zygotes
 miZList = list(map(lambda obj: iNode.iZygote(obj,wrld), zList))
@@ -21,80 +19,57 @@ institution = Institution(nList, "WorldBank")
 nyInstitution = Institution(subGov, "PATH")
 
 #for node in G.nodes():
+edgeColors = { 0 : "red", 1 : "blue", 2: "yellow", 3 : "green" }
                   
 nodeColor = []
 for node in G.nodes():
-    if node.__class__ is World:
-        nodeColor.append(.84)
-    elif node.__class__ is Government:
-        nodeColor.append(.66)
-    elif node.__class__ is Institution:
-        nodeColor.append(.50)
-    elif node.__class__ is iNode:
-        nodeColor.append(.33)
-    elif node.__class__ is bNode:
-        nodeColor.append(.16)
+    cls = Node.nodes[node].__class__
+    if cls is World:
+        nodeColor.append("red")
+    elif cls is Government:
+        nodeColor.append("blue")
+    elif cls is Institution:
+        nodeColor.append("yellow")
+    elif cls is iNode:
+        nodeColor.append("green")
+    elif cls is bNode:
+        nodeColor.append("purple")
+    else:
+        nodeColor.append("orange")
 
 edgeColor = []
 edgeClsDict =nx.get_edge_attributes(G,"cls")
 for edge in G.edges():
-    cls = edgeClsDict[(edge[0],edge[1],0)]
+    edgeData = G.get_edge_data(edge[0],edge[1])
+    for data in edgeData.items():# key is first element of data
+        edgeColor.append(edgeColors[data[0]])
+"""    
     if cls is Inclusion:
-        edgeColor.append(.84)
+        edgeColor.append("red")
     elif cls is Meiotic:
-        edgeColor.append(.66)
+        edgeColor.append("blue")
     elif cls is Mitotic:
-        edgeColor.append(.50)
+        edgeColor.append("yellow")
     elif cls is Agreement:
-        edgeColor.append(.33)
-
-
-#values = [val_map.get(node, 0.25) for node in G.nodes()]
-
-# Specify the edges you want here
-red_edges = [('A', 'C'), ('E', 'C')]
-edge_colours = ['black' if not edge in red_edges else 'red'
-                for edge in G.edges()]
-black_edges = [edge for edge in G.edges() if edge not in red_edges]
-
+        edgeColor.append("green")
+"""
 
 # Need to create a layout when doing
 # separate calls to draw nodes and edges
 pos = nx.spring_layout(G)
-nx.draw_networkx_nodes(G, pos, cmap=plt.get_cmap('jet'), 
-                       node_color = nodeColor, node_size = 500)
-nx.draw_networkx_labels(G, pos)
-nx.draw_networkx_edges(G, pos, edge_color=edgeColor, arrows=True)
+pos=nx.planar_layout(G)
+nx.draw_networkx_nodes(G, pos, cmap=plt.get_cmap('jet'), linewidths=2.0, node_shape='o',
+                       node_color = nodeColor, edge_colors="azure",  node_size=3000)
+nx.draw_networkx_labels(G, pos, font_size=24)
+nx.draw_networkx_edges(G, pos, edge_color=edgeColor, width=3, style="_", arrows=True, arrowsize=30, node_size=3000)
 plt.show()
 
-pos = nx.spring_layout(G, seed=63)  # Seed layout for reproducibility
-colors = range()
-options = {
-    "node_color": "#A0CBE2",
-    "edge_color": colors,
-    "width": 4,
-    "edge_cmap": plt.cm.Blues,
-    "with_labels": False,
-}
-nx.draw(G, pos, **options)
-plt.show()
-"""
-G = nx.Graph()
-G.add_edge(1, 2)
-G.add_edge(1, 3)
-G.add_edge(1, 5)
-G.add_edge(2, 3)
-G.add_edge(3, 4)
-G.add_edge(4, 5)
-
-# explicitly set positions
-pos = {1: (0, 0), 2: (-1, 0.3), 3: (2, 0.17), 4: (4, 0.255), 5: (5, 0.03)}
-"""
+exit(0)
 options = {
     "font_size": 36,
     "node_size": 3000,
-    "node_color": "white",
-    "edgecolors": "black",
+    "node_color": "orange",
+    "edgecolors": "blue",
     "linewidths": 5,
     "width": 5,
 }
@@ -103,16 +78,16 @@ nx.draw_networkx(G, pos, **options)
 
 # Set margins for the axes so that nodes aren't clipped
 ax = plt.gca()
-ax.margins(0.20)
-plt.axis("off")
+ax.margins(0.80)
+plt.axis("on")
 plt.show()
 
-G = nx.complete_graph(5)
+#G = nx.complete_graph(5)
 #write_gml(G, "./path.to.file")
 nx.draw(G)
 
 
-G = nx.DiGraph()
+#G = nx.DiGraph()
 G.add_node(1)
 G.add_nodes_from([2, 3],color="red")
 #G.add_edge(1, 2)

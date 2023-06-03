@@ -199,9 +199,19 @@ class Edge:
         self.edge = [src, tgt]
         self.start = start
         self.end = end
-        if not Node.diGraph is None:
-            Node.diGraph.add_edge(src, tgt, key=0, cls=self.__class__)
-            
+        key = -1
+        if not Node.mDiGraph is None:
+            key=self.getGraphKey()
+            Node.mDiGraph.add_edge(src.name, tgt.name, key=key, cls=self.__class__)
+
+    def getGraphKey(self):
+        key=-1
+        for pairs in Edge.edgeTypes.items():
+            key += 1
+            if pairs[1] is self.__class__:
+                return key
+        pdb.set_trace()
+        return key + 1
 
     def reverse(self):
         self.edge = (self.edge[1], self.edge[0])
@@ -212,7 +222,7 @@ class Node:   # # Node in Seldon decomposition
     """ Base class for all nodes """
     indx = 0
     nodes = {}
-    diGraph = None
+    mDiGraph = None
     # create out-edges from self to tgt
     def __rshift__(self, tgt):
         for target in tgt:
@@ -232,8 +242,8 @@ class Node:   # # Node in Seldon decomposition
         self.info= None
         self.power = None
         self.fear = None
-        if not Node.diGraph is None:
-            self.addToGraph(Node.diGraph)
+        if not Node.mDiGraph is None:
+            self.addToGraph(Node.mDiGraph)
         assert Node.nodes.get(name) is None
         Node.nodes[self.name] = self
 
@@ -243,7 +253,7 @@ class Node:   # # Node in Seldon decomposition
         Node.nodes[self.name] = self
 
     def addToGraph(self,g):
-        g.add_node(self)
+        g.add_node(self.name, cls=self.__class__)
         
     """ retrieves """
     @classmethod
@@ -263,6 +273,7 @@ class Node:   # # Node in Seldon decomposition
                 try:
                     oldSrc.edges.remove(edg)
                     oldTgt.edges.remove(edg)
+                    Node.mDiGraph.remove_edge(oldSrc.name, oldTgt.name, key=edg.getGraphKey())
                 except ValueError:
                     pdb.set_trace()
                     assert False
