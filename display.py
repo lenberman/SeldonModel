@@ -26,6 +26,7 @@ nodeColor = []
 for node in G.nodes():
     cls = Node.nodes[node].__class__
     G.nodes[node] ["color"] =  Node.nodeColors[cls]
+    G.nodes[node] ["penwidth"] =  3.0
     #nodeColorValues[Node.nodes[node]] = { "color" :  Node.nodeColors[cls] }
     nodeColor.append(Node.nodeColors[cls])
 
@@ -37,6 +38,7 @@ for edge in G.edges():
     for data in edgeData.items():# key is first element of data
         edgeColor.append(Edge.edgeColors[data[0]])
         G.edges[edge[0],edge[1], data[0]]["color"] = Edge.edgeColors[data[0]]
+        G.edges[edge[0],edge[1], data[0]]["penwidth"] = 3.0
         #edgeColorValues[(edge[0],edge[1], data[0])] = { "color" : Edge.edgeColors[data[0]] }
 
 #G.set_edge_attributes(edgeColorValues)
@@ -51,7 +53,8 @@ nx.draw_networkx_nodes(G, pos, cmap=plt.get_cmap('jet'), linewidths=2.0, node_sh
 nx.draw_networkx_labels(G, pos, font_size=24)
 nx.draw_networkx_edges(G, pos, edge_color=edgeColor, width=3, style="_", arrows=True, arrowsize=30, node_size=3000)
 write_dot(G,"multi.dot")
-A = nx.nx_agraph.to_agraph(G)
+#neato -T png multi.dot > multi.png
+#A = nx.nx_agraph.to_agraph(G)
 plt.show()
 
 exit(0)

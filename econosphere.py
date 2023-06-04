@@ -297,7 +297,7 @@ def commonTail(x, y):
         y.pop()
     return res
 
-Node.nodeColors = { World : "red", Government: "blue", Institution:  "yellow",
+Node.nodeColors = { World : "red", Government: "blue", Institution:  "gold",
                     iNode: "green", bNode : "purple", cNode: "cyan" ,Node: "black"}
 
 
