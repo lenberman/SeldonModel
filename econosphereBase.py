@@ -158,14 +158,19 @@ class Event:  # space time chunk starting NOW
 
 class UseValue:
     """ Examples include: fear power friendship love medium-of-exchange """
-    uvId = 0
     uvList = {}
+    uvId = None
     @classmethod
     def  UV(cls, name, list=None):    #list(name) relates this UV to previous
         obj = cls.uvList.get(name)
         if  obj is None:   # create UseValue
             obj = UseValue(name, list)
         obj
+
+    @classmethod
+    def resetUV(cls, *, uvList):
+        cls.uvList = uvList
+        uvId = len(UseValue.uvList)
 
     def __init__(self, nm, ins=None):
         UseValue.uvId += 1
@@ -186,7 +191,7 @@ class UseValue:
 class Edge:
     """ 4 different semantic types of edges """
     edgeTypes = {}
-    edgeColors = { 0 : "red", 1 : "blue", 2: "yellow", 3 : "green" }
+    edgeColors = {}
     @classmethod
     def connect(cls, src, tgt):
         return cls(src, tgt)

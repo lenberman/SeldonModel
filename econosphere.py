@@ -27,7 +27,7 @@ Edge.edgeTypes = { "Inclusion" : Inclusion ,
               "Meiotic" : Meiotic,
               "Mitotic" : Mitotic,
               "Agreement" : Agreement}
-Edge.edgeColors = { 0 : "red", 1 : "blue", 2: "yellow", 3 : "green" }
+Edge.edgeColors = { 0 : "red", 1 : "blue", 2: "lime", 3 : "teal" }
 
 class bNode(Node):
     @classmethod
@@ -273,12 +273,14 @@ class Institution(iNode):
         ub = commonAncestors(govList)[0]
         self.addEdge(tgt=ub,edgClass=Inclusion)
 
-class Commerce(Node):
-    def __init__(self, owner:iNode, factory=True, info=None, useValue):
+class cNode(Node):
+    def __init__(self, owner, useValue, factory=True, info=None):
         super().__init__(cInfo)
         self.owner = owner
         self.info = cInfo
         self.uv = useValue
+        self.inList = []
+        self.outList = []
 
 def commonAncestors(nds, edgClass=Inclusion, stopNodeClass=World):
     ancestorList = []
@@ -296,7 +298,7 @@ def commonTail(x, y):
     return res
 
 Node.nodeColors = { World : "red", Government: "blue", Institution:  "yellow",
-                    iNode: "green", bNode : "purple", Commerce: "cyan" ,Node: "black"}
+                    iNode: "green", bNode : "purple", cNode: "cyan" ,Node: "black"}
 
 
 if __name__ == '__main__':

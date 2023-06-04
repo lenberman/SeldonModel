@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import networkx as nx
+from networkx.drawing.nx_pydot import write_dot
 
 G=nx.MultiDiGraph()
 
@@ -20,18 +21,26 @@ nyInstitution = Institution(subGov, "PATH")
 
 #for node in G.nodes():
 
-                  
+nodeColorValues = {}
 nodeColor = []
 for node in G.nodes():
     cls = Node.nodes[node].__class__
+    G.nodes[node] ["color"] =  Node.nodeColors[cls]
+    #nodeColorValues[Node.nodes[node]] = { "color" :  Node.nodeColors[cls] }
     nodeColor.append(Node.nodeColors[cls])
 
 edgeColor = []
+edgeColorValues = {}
 edgeClsDict =nx.get_edge_attributes(G,"cls")
 for edge in G.edges():
     edgeData = G.get_edge_data(edge[0],edge[1])
     for data in edgeData.items():# key is first element of data
         edgeColor.append(Edge.edgeColors[data[0]])
+        G.edges[edge[0],edge[1], data[0]]["color"] = Edge.edgeColors[data[0]]
+        #edgeColorValues[(edge[0],edge[1], data[0])] = { "color" : Edge.edgeColors[data[0]] }
+
+#G.set_edge_attributes(edgeColorValues)
+#G.set_node_attributes(nodeColorValues)
 
 # Need to create a layout when doing
 # separate calls to draw nodes and edges
@@ -41,6 +50,8 @@ nx.draw_networkx_nodes(G, pos, cmap=plt.get_cmap('jet'), linewidths=2.0, node_sh
                        node_color = nodeColor, edge_colors="azure",  node_size=3000)
 nx.draw_networkx_labels(G, pos, font_size=24)
 nx.draw_networkx_edges(G, pos, edge_color=edgeColor, width=3, style="_", arrows=True, arrowsize=30, node_size=3000)
+write_dot(G,"multi.dot")
+A = nx.nx_agraph.to_agraph(G)
 plt.show()
 
 exit(0)

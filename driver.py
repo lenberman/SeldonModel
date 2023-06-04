@@ -18,12 +18,16 @@ if __name__ == '__main__':
     wrld.geometrize()
     institution = Institution(nList, "WorldBank")
     nyInstitution = Institution(subGov, "PATH")
-    nx.draw(G)
+    UseValue.resetUV(uvList= {  0 : "Fear",  1 : "Power",
+                        2 : "Friendship",  3 : "Loyalty",  4 : "Love",
+                        5 : "Medium-of-Exchange", 6 : "Labor",  7 : "Food",  8 : "Housing"  ,
+                        9 : "Genes"})
+
     print(str(vars(institution)))
     #miZList1 = subGov[2] << miZList
     #commercialNode = miZList[0] << miZList[1:]
     #foofoo =map(lambda obj: iNode.iZygote(obj), foo)
-    #iZList = list()
+    #iZList = list() 
     #for i in nList + zList:
     #print(str(i))
     #for i in nList + zList:
