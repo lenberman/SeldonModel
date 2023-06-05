@@ -27,8 +27,20 @@ Edge.edgeTypes = { "Inclusion" : Inclusion ,
               "Meiotic" : Meiotic,
               "Mitotic" : Mitotic,
               "Agreement" : Agreement}
-Edge.edgeColors = { 0 : "red", 1 : "blue", 2: "lime", 3 : "teal" }
+Edge.edgeColors = { 0 : "red", 1 : "blue", 2: "limegreen", 3 : "teal" }
 
+class cNode(Node):
+    def __init__(self, *, name, owner, uvI_O, factory=True, forSale=True):
+        super().__init__(name=name)
+        self.owner = owner
+        owner.own(self)
+        self.uv = uvI_O
+        self.factory = factory
+        self.forSale = forSale
+        self.where = None
+
+    def price(self): ...
+        
 class bNode(Node):
     @classmethod
     def zygote(cls, name, info=None):
@@ -73,12 +85,9 @@ class iNode(Node):
         iZ.zygote = True
         return iZ
 
-    def __init__(self, name=None, gov=None, poss=None, event=None, info=None, mny=None):
+    def __init__(self, name=None, gov=None, event=None, info=None, mny=None):
         super().__init__(name, event)
-        if poss is None:
-            self.possessions = {} #owned cNodes
-        else:
-            self.possessions = poss
+        self.possessions = {} #owned cNodes
         self.money = mny
         self.zygote = False
         self.gov = gov
@@ -109,6 +118,14 @@ class iNode(Node):
             self.addEdge(inode, edgClass=Mitotic)
         return nList
 
+    def own(self, poss:cNode):
+        inPoss = self. possessions.get(poss.name)
+        if inPoss is None:
+            self.possessions[poss.name] = [poss]
+        else:
+            inPoss.append(poss)
+        self.addEdge(tgt=poss, edgClass=Mitotic)
+        return self
 
 # linked to geometry
 class Government(iNode):
@@ -136,7 +153,7 @@ class Government(iNode):
             nList.append(z)
         return nList
 
-    def  __init__(self, name, laws=None, hR=None):
+    def  __init__(self, *, name, laws=None, hR=None):
         super().__init__(name=name)
         self.geo = hR
         self.prop4ExternalViolence = None
@@ -144,13 +161,16 @@ class Government(iNode):
         self.moneySupply = None
         self.nation = False
 
+    def createCurrency(self, name):
+        currency = cNode(name="$"+name, owner=self, uvI_O={"Medium-of-Exchange": 0, "Power": 1})
+
     """ retrieves sub-government under (Inclusion) self  """
     def getGovernment(self, name):
         gov = Government.getNode(name)
         if not gov is None:
             assert isinstance(gov,Government)
             return gov
-        gov = Government(name)
+        gov = Government(name=name)
         if self.__class__ is World:
             gov.nation = True
         edge = gov.addEdge(tgt=self, edgClass=Inclusion)
@@ -179,7 +199,6 @@ class Government(iNode):
             citizen.geo = hR.chunk(codim=1)
 
             
-
     """ Insures """
     def naturalize(self, nd):
         assert nd.__class__  is iNode
@@ -203,7 +222,6 @@ class Government(iNode):
         reg = Government(name=nm)
         edge = self.addEdge(tgt=reg, edgClass=Mitotic)
         return reg
-
 
 
     ## World holds regions and Nations.  Links  geometry to nodes.
@@ -232,7 +250,7 @@ class World(Government):
 
     # create world 
     def __init__(self,*, g=None, nm1="Earth"):
-        super().__init__(nm1, hR=hRegion())
+        super().__init__(name=nm1, hR=hRegion())
         Node.mDiGraph = g
         
         """
@@ -266,21 +284,12 @@ class World(Government):
   mechanismsintermediate, court systems..  """
 class Institution(iNode):
     # Adds institution with govList members
-    def __init__(self, govList, nm):
+    def __init__(self, *, govList, nm):
         super().__init__(nm)
         for member in govList:
             member.addEdge(tgt=self, edgClass=Meiotic)
         ub = commonAncestors(govList)[0]
         self.addEdge(tgt=ub,edgClass=Inclusion)
-
-class cNode(Node):
-    def __init__(self, owner, useValue, factory=True, info=None):
-        super().__init__(cInfo)
-        self.owner = owner
-        self.info = cInfo
-        self.uv = useValue
-        self.inList = []
-        self.outList = []
 
 def commonAncestors(nds, edgClass=Inclusion, stopNodeClass=World):
     ancestorList = []

@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from econosphere import *
+from market import *
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -16,8 +16,18 @@ usa = nList[0]
 subGov = usa >> ("NY","CA","TX")
 subGov[0] << miZList    # make iZygotes citizen of NY
 wrld.geometrize()
-institution = Institution(nList, "WorldBank")
-nyInstitution = Institution(subGov, "PATH")
+institution = Institution(govList=nList,nm="WorldBank")
+nyInstitution = Institution(govList=subGov, nm="PATH")
+
+UseValue.resetUV(uvList= {  0 : "Fear",  1 : "Power",
+                            2 : "Friendship",  3 : "Loyalty",  4 : "Love",
+                            5 : "Medium-of-Exchange", 6 : "Labor",  7 : "Food",  8 : "Housing"  ,
+                            9 : "Genes", 10: "Land"})
+
+human = cNode(name="Worker", owner=wrld, uvI_O={"Food" : -1 , "Labor" : 1})
+farm = cNode(name="Farm", owner=wrld, uvI_O={"Labor" : -1, "Food" : 1})
+moneySupply = cNode(name="u$a", owner=usa, uvI_O={"Medium-of-Exchange" : 1}, factory=False, forSale=False)
+usa_mkt = Market(money=moneySupply, govList=[usa])
 
 #for node in G.nodes():
 

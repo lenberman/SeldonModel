@@ -155,34 +155,42 @@ class Event:  # space time chunk starting NOW
     def __str__(self):
         return "(@" + str(self.time) + "T, loc:" + str(self.space) + ")"
 
-
+class cNode:
+    pass
 class UseValue:
     """ Examples include: fear power friendship love medium-of-exchange """
     uvList = {}
     uvId = None
+
+    """
+    Define a new UseValue (or retrieve by name existing uv).  
+    If cn is not None, it specifies a set of non-derived UVs
+    """
     @classmethod
-    def  UV(cls, name, list=None):    #list(name) relates this UV to previous
+    def  UV(cls, name, cn:cNode=None):    #list(name) relates this UV to previous
         obj = cls.uvList.get(name)
         if  obj is None:   # create UseValue
-            obj = UseValue(name, list)
-        obj
+            obj = UseValue(nm=name, uvs=lcn)
+        else:
+            assert lst is None
+        return obj
 
     @classmethod
     def resetUV(cls, *, uvList):
         cls.uvList = uvList
         uvId = len(UseValue.uvList)
 
-    def __init__(self, nm, ins=None):
+        """ 
+        uvs = ( name|uvId , +/-val ) +.  If uvs is None, new UseValue
+        """
+    def __init__(self, *, nm, uvs=None):
         UseValue.uvId += 1
-        if ins is not None:
-            for i in ins:
-                nm += "|" + str(i.uvId)
-            nm += "|"
         self.name = nm
         self.uvId = UseValue.uvId
+        self.cn = uvs
         UseValue.uvList[ nm ] = self
         UseValue.uvList[ self.uvId ] = self
-        self
+        return self
 
     def __str__(self):
         return self.name + "(" + str(self.uvId) + ")"
