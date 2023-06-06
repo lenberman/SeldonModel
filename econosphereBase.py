@@ -157,24 +157,24 @@ class Event:  # space time chunk starting NOW
 
 class cNode:
     pass
+
+""" Use values may are hierarchical.   """
 class UseValue:
     """ Examples include: fear power friendship love medium-of-exchange """
     uvList = {}
-    uvId = None
-
+    uvId = 0
     """
     Define a new UseValue (or retrieve by name existing uv).  
     If cn is not None, it specifies a set of non-derived UVs
     """
     @classmethod
-    def  UV(cls, name, cn:cNode=None):    #list(name) relates this UV to previous
+    def  UV(cls, name, uVector=None):    #list(name) relates this UV to previous
         obj = cls.uvList.get(name)
         if  obj is None:   # create UseValue
-            obj = UseValue(nm=name, uvs=lcn)
-        else:
-            assert lst is None
+            obj = UseValue(name=name, uVector=uVector)
         return obj
 
+    """ Used to declare fundamental, i.e. non-derivative use values."""
     @classmethod
     def resetUV(cls, *, uvList):
         cls.uvList = uvList
@@ -183,14 +183,15 @@ class UseValue:
         """ 
         uvs = ( name|uvId , +/-val ) +.  If uvs is None, new UseValue
         """
-    def __init__(self, *, nm, uvs=None):
+    def __init__(self, *, name, uVector=None):
         UseValue.uvId += 1
-        self.name = nm
+        assert name.__class__ is str
+        self.name = name
         self.uvId = UseValue.uvId
-        self.cn = uvs
-        UseValue.uvList[ nm ] = self
+        self.uv = uVector
+        UseValue.uvList[ name ] = self
         UseValue.uvList[ self.uvId ] = self
-        return self
+
 
     def __str__(self):
         return self.name + "(" + str(self.uvId) + ")"

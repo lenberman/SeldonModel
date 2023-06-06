@@ -30,13 +30,13 @@ Edge.edgeTypes = { "Inclusion" : Inclusion ,
 Edge.edgeColors = { 0 : "red", 1 : "blue", 2: "limegreen", 3 : "teal" }
 
 class cNode(Node):
-    def __init__(self, *, name, owner, uvI_O, factory=True, forSale=True):
+    def __init__(self, *, name, owner, uv:UseValue, factory=True, saleable=True):
         super().__init__(name=name)
         self.owner = owner
         owner.own(self)
-        self.uv = uvI_O
+        self.uv = uv
         self.factory = factory
-        self.forSale = forSale
+        self.saleable = saleable
         self.where = None
 
     def price(self): ...
