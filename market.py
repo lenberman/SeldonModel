@@ -1,17 +1,73 @@
 from econosphere import *
 
-""" Simple string language for specify simple sequences of time intervals, relative to the current time.  Examples: 
+""" Simple string language for specify simple sequences of time intervals, relative to the current time.  Linear sequence of offsets: init@period*k 
 """
 class TimeSpec:
     @classmethod
     def checkSpec(cls, spec):
         pass
         
+    """ Verifies the interval is valid, """
     @classmethod
     def checkInterval(cls, tpl):
-        if tpl[0].__class__ is int and tpl[0].__class__ is int:
-            return tpl[0] < tpl[1]
-        return False
+        return Decode(tpl[0]) < Decode(tpl[1])
+
+
+""" Simple string language for specify simple sequences of time intervals, relative to the current time.  Linear sequence of offsets: init@period*k 
+"""
+class Decode:
+    def __init__(self, string:str):
+        atIndx =string.find("@")
+        starIndx = string.find("*")
+        if atIndx >= 0:
+            if atIndx == 0:
+                init = 0
+            else:
+                init = int(string[0:atIndx])
+        else:
+            init = 0
+            atIndx = 0
+        if starIndx < 0:
+            period = string[atIndx:]
+            repeats = None
+        else:
+            period = string[atIndx+1:starIndx]
+            repeats = string[starIndx+1:]
+        self.at = init
+        self.repeats = repeats
+        self.period = period
+
+    def getLast(self):
+        if self.repeats is None:
+            return self.at
+        if len(self.repeats) == 0 & int(period) != 0:
+            return -1
+        return int(atIndx) + int(self.period) * int(self.repeats)
+        
+
+        
+    def __le__(self, rhs):
+        if self.at > rhs.at:
+            return False
+        elif self.at != rhs.at: 
+            return True
+        return self.period <= rhs.period
+        
+    def __gt__(self, rhs):
+        return not rhs <= self
+        
+    def __lt__(self, rhs):
+        if self.at > rhs.at:
+            return False
+        elif self.at != rhs.at: 
+            return True
+        return self.period <= rhs.period
+        
+    def __ge__(self, rhs):
+        return not rhs < self
+        
+        
+            
 
         
 class Offer:
@@ -27,7 +83,10 @@ class Offer:
         self.what = itemList
         self.quantity = quantity
         self.valid = (transWhen, until)
-        assert TimeSpec.checkInterval(self.valid)
+        try:
+            assert TimeSpec.checkInterval(self.valid)
+        except Exception:
+            pdb.set_trace
         self.where = transWhere
         self.sell = offer
         self.price = price
@@ -69,3 +128,6 @@ class Market(Institution):
         pass
 
 Node.nodeColors[ Market] = "silver"
+Node.nodeStyle = { World : "rounded", Government: "wedged", Institution:  "bold",
+                    iNode: "dashed", bNode : "dotted", cNode: "diagonals" ,
+                   Market: "filled", Node: "black"}

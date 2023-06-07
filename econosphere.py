@@ -28,6 +28,7 @@ Edge.edgeTypes = { "Inclusion" : Inclusion ,
               "Mitotic" : Mitotic,
               "Agreement" : Agreement}
 Edge.edgeColors = { 0 : "red", 1 : "blue", 2: "limegreen", 3 : "teal" }
+Edge.edgeStyles = { 0 : "dashed", 1 : "dotted", 2: "solid", 3 : "bold" }
 
 class cNode(Node):
     def __init__(self, *, name, owner, uv:UseValue, factory=True, saleable=True):
@@ -308,7 +309,6 @@ def commonTail(x, y):
 
 Node.nodeColors = { World : "red", Government: "blue", Institution:  "gold",
                     iNode: "green", bNode : "purple", cNode: "cyan" ,Node: "black"}
-
 
 if __name__ == '__main__':
     tmp = hRegion()

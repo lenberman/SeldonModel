@@ -36,8 +36,8 @@ farmer = cNode(name="Farm", owner=wrld, uv=farm, factory=True, saleable=True)
 moneySupply = cNode(name="u$a", owner=usa, uv=UseValue.UV("$$$"), factory=False, saleable=False)
 usa_mkt = Market(money=moneySupply, govList=[usa])
 
-workerNeeded = Offer(who=miZList[0], itemList=UseValue.UV("Labor"), transWhere="*", transWhen=7, 
-                     offer=False, price=2, until=13)
+workerNeeded = Offer(who=miZList[0], itemList=UseValue.UV("Labor"), transWhere="*",
+                     transWhen="7@7*52", offer=False, price=2, until="13@14*13")
 usa_mkt.submit(offer=workerNeeded)
 
 # create display
@@ -45,6 +45,7 @@ nodeColor = []
 for node in G.nodes():
     cls = Node.nodes[node].__class__
     G.nodes[node] ["color"] =  Node.nodeColors[cls]
+    G.nodes[node] ["style"] =  Node.nodeStyle[cls]
     G.nodes[node] ["penwidth"] =  3.0
     nodeColor.append(Node.nodeColors[cls])
 
@@ -54,6 +55,7 @@ for edge in G.edges():
     for data in edgeData.items():# key is first element of data
         edgeColor.append(Edge.edgeColors[data[0]])
         G.edges[edge[0],edge[1], data[0]]["color"] = Edge.edgeColors[data[0]]
+        G.edges[edge[0],edge[1], data[0]]["style"] = Edge.edgeStyles[data[0]]
         G.edges[edge[0],edge[1], data[0]]["penwidth"] = 3.0
 
 # Need to create a layout when doing separate calls to draw nodes and edges
