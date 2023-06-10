@@ -33,11 +33,12 @@ farm = UseValue(name="Farm", uVector=[("Labor", -1), ("Food", 1),("Land", 1),("$
 ### (2) the farm UseValue to illustrate an enterprise which transforms labor and $$$s 
 worker = cNode(name="Worker", owner=wrld, uv=laborer, factory=True, saleable=False)
 farmer = cNode(name="Farm", owner=wrld, uv=farm, factory=True, saleable=True)
-moneySupply = cNode(name="u$a", owner=usa, uv=UseValue.UV("$$$"), factory=False, saleable=False)
+moneySupply = cNode(name="u$a", owner=usa, uv=UseValue.UV("$$$"),
+                    factory=False, saleable=False)
 usa_mkt = Market(money=moneySupply, govList=[usa])
 
 workerNeeded = Offer(who=miZList[0], itemList=UseValue.UV("Labor"), transWhere="*",
-                     transWhen="7@7*52", offer=False, price=2, until="13@14*13")
+                     transWhen="7", offer=False, price=2, until="@14*13")
 usa_mkt.submit(offer=workerNeeded)
 
 # create display
@@ -61,9 +62,10 @@ for edge in G.edges():
 # Need to create a layout when doing separate calls to draw nodes and edges
 pos=nx.planar_layout(G)
 nx.draw_networkx_nodes(G, pos, cmap=plt.get_cmap('jet'), linewidths=2.0, node_shape='o',
-                       node_color = nodeColor, edge_colors="azure",  node_size=3000)
+                       node_color = nodeColor,  node_size=3000)
 nx.draw_networkx_labels(G, pos, font_size=24)
-nx.draw_networkx_edges(G, pos, edge_color=edgeColor, width=3, style="_", arrows=True, arrowsize=30, node_size=3000)
+nx.draw_networkx_edges(G, pos, edge_color=edgeColor, width=3, style="dotted",
+                       arrows=True, arrowsize=30, node_size=3000)
 nx.nx_agraph.write_dot(G,"multi.dot")
 #dot -T png multi.dot > multi.png  or #cat multi.dot | dot -T png > multi.dot.png
 os.system("cat multi.dot | dot -T png > multi.dot.png")

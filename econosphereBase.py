@@ -155,8 +155,6 @@ class Event:  # space time chunk starting NOW
     def __str__(self):
         return "(@" + str(self.time) + "T, loc:" + str(self.space) + ")"
 
-class cNode:
-    pass
 
 """ Use values may are hierarchical.   """
 class UseValue:
@@ -194,7 +192,7 @@ class UseValue:
 
 
     def __str__(self):
-        return self.name + "(" + str(self.uvId) + ")"
+        return self.name + ":(uvId=" + str(self.uvId) + "): " + str(self.uv)
 
 #  directed  edges with (multi-dimsensional) capacity and adjustable delay.
 class Edge:
