@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 from market import *
 import os
+import copy
 import subprocess
 import numpy as np
 import matplotlib as mpl
@@ -32,11 +33,14 @@ UseValue.resetUV(uvList= {  0 : "Fear",  1 : "Power",
 ### (1) the laborer UseValue to initialize the possessions of each iZygote and
 ### (2) the farm UseValue to illustrate an enterprise which transforms labor and $$$s 
 worker = cNode(name="Worker", owner=wrld,
-               uvList=[(UseValue.UV("Food"),  -1) , (UseValue.UV("Housing"), -1), (UseValue.UV("Labor"), 1)],  factory=True, saleable=False)
+               uvList=[(UseValue.UV("Food"),  -1) , (UseValue.UV("Housing"), -1), (UseValue.UV("Labor"), 1)],
+               factory=True, saleable=False)
 
 farmer = cNode(name="Farm", owner=wrld,
                uvList=[(UseValue.UV("Labor"),  -1) , (UseValue.UV("Land"),  -1) , (UseValue.UV("$$$"), -1)],
                factory=True, saleable=True)
+
+wrld.transfer(nd=worker, newOwner=miZList[3])
 
 moneySupply = cNode(name="u$a", owner=usa, uvList=[(UseValue.UV("$$$"),1)],
                     factory=False, saleable=False)

@@ -260,10 +260,7 @@ class Node:   # # Node in Seldon decomposition
         self.info= None
         self.power = None
         self.fear = None
-        if not Node.mDiGraph is None:
-            self.addToGraph(Node.mDiGraph)
-        assert Node.nodes.get(name) is None
-        Node.nodes[self.name] = self
+        self.addToGraph(Node.mDiGraph)
 
     def setName(self, nm):
         del Node.nodes[self.name]
@@ -271,7 +268,10 @@ class Node:   # # Node in Seldon decomposition
         Node.nodes[self.name] = self
 
     def addToGraph(self,g):
-        g.add_node(self.name, cls=self.__class__)
+        if not g  is None:
+            g.add_node(self.name, cls=self.__class__)
+        assert Node.nodes.get(self.name) is None
+        Node.nodes[self.name] = self
         
     """ retrieves """
     @classmethod

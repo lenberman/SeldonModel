@@ -1,6 +1,6 @@
 from  econosphereBase import *
 from functools import reduce
-
+import copy 
 
 
 #  self.capacity = capacity  # (UseValue,capacity,unit cost)  in agreement class
@@ -39,15 +39,32 @@ class cNode(Node):
         self.saleable = saleable
         self.where = None
         self.uv = uvList
+        self.cNodeList = []
         if len(uvList)>1:
             i = 0
             for (useValue, num) in self.uv:
                 cnUV = Node.nodes.get(useValue.name)
                 if cnUV is None:
-                    cnUV = cNode(name=useValue.name, owner=owner,uvList=[(useValue,num)])
+                    cnUV = cNode(name=useValue.name, owner=owner,uvList=[(useValue,num)],
+                                 factory=factory, saleable=saleable)
+                self.cNodeList.append(cnUV)
                 self.addEdge(tgt=cnUV, edgClass=Mitotic,label=num) #add value to edge?
                 i += 1
             
+
+    def __copy__(self):
+        cls = self.__class__
+        result = cls.__new__(cls)
+        result.__dict__.update(self.__dict__)
+        return result
+
+    def __deepcopy__(self, memo):
+        cls = self.__class__
+        result = cls.__new__(cls)
+        memo[id(self)] = result
+        for k, v in self.__dict__.items():
+            setattr(result, k, deepcopy(v, memo))
+        return result
 
     def price(self): ...
         
@@ -257,6 +274,25 @@ class World(Government):
             nList.append(z)
         return nList
 
+    """ Shallow copy/transfer of cNode"""
+    def transfer(self,  *, nd, newOwner):
+        assert isinstance(nd, cNode)
+        cp = copy.copy(nd)
+        cp.owner = newOwner
+        cp.edges = []
+        nm = nd.name + ":" + newOwner.name
+        xists = Node.getNode(nm)
+        i = 0
+        while not xists is None:
+            nm = nd.name + ":" + str(i) + ":" + newOwner.name
+            xists = Node.getNode(nm)            
+        assert xists is None
+        cp.name = nm
+        cp.addToGraph(Node.mDiGraph)
+        xists = Node.getNode(nm) # new cNode
+        assert cp == xists
+        xists.addEdge(tgt=nd, edgClass=Mitotic)
+        newOwner.addEdge(tgt=xists, edgClass=Mitotic)
 
     # create world 
     def __init__(self,*, g=None, nm1="Earth"):
