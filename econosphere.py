@@ -5,20 +5,20 @@ from functools import reduce
 
 #  self.capacity = capacity  # (UseValue,capacity,unit cost)  in agreement class
 class Inclusion(Edge):   # 
-    def __init__(self, *, src, target=None, end=None, start = NOW):
-        super().__init__(src, target, end, start)
+    def __init__(self, *, src, target=None, end=None, start = NOW,label=None):
+        super().__init__(src, target, end, start, label=label)
 
 class Meiotic(Edge):
-    def __init__(self, src, target=None, end=None, start = NOW):
-        super().__init__(src, target, end, start)
+    def __init__(self, src, target=None, end=None, start = NOW, label=None):
+        super().__init__(src, target, end, start, label=label)
 
 class Mitotic(Edge):
-    def __init__(self, src, target=None, end=None, start = NOW):
-        super().__init__(src, target, end, start)
+    def __init__(self, src, target=None, end=None, start = NOW, label=None):
+        super().__init__(src, target, end, start, label=label)
 
 class Agreement(Edge):
-    def __init__(self, src, target=None, end=None, start = NOW):
-        super().__init__(src, target, end, start)
+    def __init__(self, src, target=None, end=None, start = NOW, label=None):
+        super().__init__(src, target, end, start, label=label)
 
     def addPromise(self,uv):
         ...
@@ -42,8 +42,10 @@ class cNode(Node):
         if len(uvList)>1:
             i = 0
             for (useValue, num) in self.uv:
-                cnUV = cNode(name=name+"."+str(i), owner=owner,uvList=[(useValue,num)])
-                self.addEdge(tgt=cnUV, edgClass=Mitotic) #add value to edge?
+                cnUV = Node.nodes.get(useValue.name)
+                if cnUV is None:
+                    cnUV = cNode(name=useValue.name, owner=owner,uvList=[(useValue,num)])
+                self.addEdge(tgt=cnUV, edgClass=Mitotic,label=num) #add value to edge?
                 i += 1
             
 

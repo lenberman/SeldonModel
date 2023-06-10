@@ -209,14 +209,17 @@ class Edge:
             "@(" + str(self.start) + ", " + str(self.end) + ")\n"
 
     # create edge from (src->tgt || tgt->src)
-    def __init__(self, src=None , tgt=None, end=None, start = NOW):
+    def __init__(self, src=None , tgt=None, end=None, start = NOW, label = None):
         self.edge = [src, tgt]
         self.start = start
         self.end = end
         key = -1
         if not Node.mDiGraph is None:
             key=self.getGraphKey()
-            Node.mDiGraph.add_edge(src.name, tgt.name, key=key, cls=self.__class__)
+            if label is None:
+                Node.mDiGraph.add_edge(src.name, tgt.name, key=key, cls=self.__class__)
+            else:
+                Node.mDiGraph.add_edge(src.name, tgt.name, key=key, cls=self.__class__, label=str(label))
 
     def getGraphKey(self):
         key=-1
@@ -280,7 +283,7 @@ class Node:   # # Node in Seldon decomposition
         return None
 
 
-    def addEdge(self, *,tgt, edgClass, start=None, end=None):
+    def addEdge(self, *,tgt, edgClass, start=None, end=None, label=None):
         for edg in self.edges: # only one inclusion edge with a given src.
             if edg.__class__ is Edge.edgeTypes["Inclusion"] and edgClass is Edge.edgeTypes["Inclusion"]:
                 oldSrc = edg.edge[0]
@@ -292,7 +295,7 @@ class Node:   # # Node in Seldon decomposition
                 except ValueError:
                     pdb.set_trace()
                     assert False
-        tmp = edgClass(src=self, target=tgt)
+        tmp = edgClass(src=self, target=tgt,label=label)
         assert not self is tgt
         self.edges.append(tmp)
         if not tgt is None:

@@ -35,7 +35,7 @@ worker = cNode(name="Worker", owner=wrld,
                uvList=[(UseValue.UV("Food"),  -1) , (UseValue.UV("Housing"), -1), (UseValue.UV("Labor"), 1)],  factory=True, saleable=False)
 
 farmer = cNode(name="Farm", owner=wrld,
-               uvList=[(UseValue.UV("Labor"),  -1) , (UseValue.UV("Land"),  -1) , (UseValue.UV("Housing$$$"), -1)],
+               uvList=[(UseValue.UV("Labor"),  -1) , (UseValue.UV("Land"),  -1) , (UseValue.UV("$$$"), -1)],
                factory=True, saleable=True)
 
 moneySupply = cNode(name="u$a", owner=usa, uvList=[(UseValue.UV("$$$"),1)],
