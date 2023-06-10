@@ -167,12 +167,13 @@ class UseValue:
     """
     @classmethod
     def  UV(cls, name, uVector=None):    #list(name) relates this UV to previous
+        assert   (name.__class__ is str) or  (name.__class__ is int) 
         obj = cls.uvList.get(name)
         if  obj is None:   # create UseValue
             obj = UseValue(name=name, uVector=uVector)
         return obj
 
-    """ Used to declare fundamental, i.e. non-derivative use values."""
+    """ Resets fundamental, i.e. non-derivative use values."""
     @classmethod
     def resetUV(cls, *, uvList):
         cls.uvList = uvList

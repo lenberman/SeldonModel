@@ -31,14 +31,21 @@ Edge.edgeColors = { 0 : "red", 1 : "blue", 2: "limegreen", 3 : "teal" }
 Edge.edgeStyles = { 0 : "dashed", 1 : "dotted", 2: "solid", 3 : "bold" }
 
 class cNode(Node):
-    def __init__(self, *, name, owner, uv:UseValue, factory=True, saleable=True):
+    def __init__(self, *, name, owner, uvList, factory=True, saleable=True):
         super().__init__(name=name)
         self.owner = owner
         owner.own(self)
-        self.uv = uv
         self.factory = factory
         self.saleable = saleable
         self.where = None
+        self.uv = uvList
+        if len(uvList)>1:
+            i = 0
+            for (useValue, num) in self.uv:
+                cnUV = cNode(name=name+"."+str(i), owner=owner,uvList=[(useValue,num)])
+                self.addEdge(tgt=cnUV, edgClass=Mitotic) #add value to edge?
+                i += 1
+            
 
     def price(self): ...
         

@@ -26,14 +26,19 @@ UseValue.resetUV(uvList= {  0 : "Fear",  1 : "Power",
                             5 : "$$$", 6 : "Labor",  7 : "Food",  8 : "Housing"  ,
                             9 : "Genes", 10: "Land"})
 ### We illustrate a couple of derived UseValues.
-laborer = UseValue(name="Laborer", uVector=[("Food" , -1) , ("Housing",-1), ("Labor", 1)])
-farm = UseValue(name="Farm", uVector=[("Labor", -1), ("Food", 1),("Land", 1),("$$$", -.1)])
+#laborer = UseValue(name="Laborer", uVector=[("Food" , -1) , ("Housing",-1), ("Labor", 1)])
+#farm = UseValue(name="Farm", uVector=[("Labor", -1), ("Food", 1),("Land", 1),("$$$", -.1)])
 ### The model (World) uses
 ### (1) the laborer UseValue to initialize the possessions of each iZygote and
 ### (2) the farm UseValue to illustrate an enterprise which transforms labor and $$$s 
-worker = cNode(name="Worker", owner=wrld, uv=laborer, factory=True, saleable=False)
-farmer = cNode(name="Farm", owner=wrld, uv=farm, factory=True, saleable=True)
-moneySupply = cNode(name="u$a", owner=usa, uv=UseValue.UV("$$$"),
+worker = cNode(name="Worker", owner=wrld,
+               uvList=[(UseValue.UV("Food"),  -1) , (UseValue.UV("Housing"), -1), (UseValue.UV("Labor"), 1)],  factory=True, saleable=False)
+
+farmer = cNode(name="Farm", owner=wrld,
+               uvList=[(UseValue.UV("Labor"),  -1) , (UseValue.UV("Land"),  -1) , (UseValue.UV("Housing$$$"), -1)],
+               factory=True, saleable=True)
+
+moneySupply = cNode(name="u$a", owner=usa, uvList=[(UseValue.UV("$$$"),1)],
                     factory=False, saleable=False)
 usa_mkt = Market(money=moneySupply, govList=[usa])
 
