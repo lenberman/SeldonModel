@@ -7,7 +7,6 @@ import sys
 import pdb
 from pprint import pprint
 import numpy as np
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 import networkx as nx
 from scipy.sparse import dok_array

@@ -2,7 +2,6 @@
 import sys
 #from econosphere import *
 from market import *
-import matplotlib as mpl
 #import pdb; pdb.set_trace()
 import pdb
 #pdb.set_trace()
@@ -21,22 +20,16 @@ if __name__ == '__main__':
     nyInstitution = Institution(govList=subGov, nm="PATH")
     UseValue.resetUV(uvList= {  0 : "Fear",  1 : "Power",
                         2 : "Friendship",  3 : "Loyalty",  4 : "Love",
-                        5 : "Medium-of-Exchange", 6 : "Labor",  7 : "Food",  8 : "Housing"  ,
+                        5 : "$$$", 6 : "Labor",  7 : "Food",  8 : "Housing"  ,
                         9 : "Genes", 10: "Land"})
 
-    human = cNode(name="Worker", owner=wrld, uvI_O={"Food" : -1 , "Labor" : 1})
-    farm = cNode(name="Farm", owner=wrld, uvI_O={"Labor" : -1, "Food" : 1})
-    print(str(vars(institution)))
-    print(str(vars(human)))
-    #miZList1 = subGov[2] << miZList
-    #commercialNode = miZList[0] << miZList[1:]
-    #foofoo =map(lambda obj: iNode.iZygote(obj), foo)
-    #iZList = list() 
-    #for i in nList + zList:
-    #print(str(i))
-    #for i in nList + zList:
-    #print(str(vars(i)))
+    tStrip = Offer(who=subGov[0], itemList=UseValue.UV("$$$"), transWhere="*", offer=True, price="1", until="@10*10")
+    tBills = []
+    for i in range(1,10):
+        tBill = Offer(who=subGov[0], itemList=UseValue.UV("$$$"), transWhere="*", offer=True, price="1", until="@"+str(i)+"0")
+        tBills.append(tBill)
 
+    pdb.set_trace()
     Node.nodes = {}
     Node.indx = 0
     

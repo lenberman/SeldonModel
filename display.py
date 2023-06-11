@@ -4,7 +4,6 @@ import os
 import copy
 import subprocess
 import numpy as np
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 import networkx as nx
 
@@ -33,15 +32,21 @@ UseValue.resetUV(uvList= {  0 : "Fear",  1 : "Power",
 ### (1) the laborer UseValue to initialize the possessions of each iZygote and
 ### (2) the farm UseValue to illustrate an enterprise which transforms labor and $$$s 
 worker = cNode(name="Worker", owner=wrld,
-               uvList=[(UseValue.UV("Food"),  -1) , (UseValue.UV("Housing"), -1), (UseValue.UV("Labor"), 1)],
+               uvList=[(UseValue.UV("Food"),  -1) , (UseValue.UV("Housing"), -1), (UseValue.UV("Labor"), 3)],
                factory=True, saleable=False)
 
 farmer = cNode(name="Farm", owner=wrld,
                uvList=[(UseValue.UV("Labor"),  -1) , (UseValue.UV("Land"),  -1) , (UseValue.UV("$$$"), -1)],
                factory=True, saleable=True)
 
-wrld.transfer(nd=worker, newOwner=miZList[3])
 
+contractor = cNode(name="Shelter", owner=wrld,
+                   uvList=[(UseValue.UV("Labor"),  -1) , (UseValue.UV("Land"),  -1) , (UseValue.UV("$$$"), -1)],
+                   factory=True, saleable=True)
+
+wrld.transfer(nd=worker, newOwner=miZList[3])
+wrld.transfer(nd=farmer, newOwner=miZList[0])
+wrld.transfer(nd=contractor, newOwner=miZList[1])
 moneySupply = cNode(name="u$a", owner=usa, uvList=[(UseValue.UV("$$$"),1)],
                     factory=False, saleable=False)
 usa_mkt = Market(money=moneySupply, govList=[usa])
@@ -49,6 +54,9 @@ usa_mkt = Market(money=moneySupply, govList=[usa])
 workerNeeded = Offer(who=miZList[0], itemList=UseValue.UV("Labor"), transWhere="*",
                      transWhen="7", offer=False, price=2, until="@14*13")
 usa_mkt.submit(offer=workerNeeded)
+
+tStrip = Offer(who=subGov[0], itemList=UseValue.UV("$$$"), transWhere="*", offer=True, price="1", until="@10*10")
+tBill = Offer(who=subGov[0], itemList=UseValue.UV("$$$"), transWhere="*", offer=True, price="1", until="@10")
 
 # create display
 nodeColor = []
@@ -69,7 +77,9 @@ for edge in G.edges():
         G.edges[edge[0],edge[1], data[0]]["penwidth"] = 3.0
 
 # Need to create a layout when doing separate calls to draw nodes and edges
-pos=nx.planar_layout(G)
+#pos=nx.shell_layout(G)
+pos=nx.kamada_kawai_layout(G)
+pos=nx.spiral_layout(G)
 nx.draw_networkx_nodes(G, pos, cmap=plt.get_cmap('jet'), linewidths=2.0, node_shape='o',
                        node_color = nodeColor,  node_size=3000)
 nx.draw_networkx_labels(G, pos, font_size=24)
@@ -79,6 +89,6 @@ nx.nx_agraph.write_dot(G,"multi.dot")
 #dot -T png multi.dot > multi.png  or #cat multi.dot | dot -T png > multi.dot.png
 os.system("cat multi.dot | dot -T png > multi.dot.png")
 subprocess.run(["firefox", "multi.dot.png"])
-plt.show()
+#plt.show()
 
 

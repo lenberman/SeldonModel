@@ -17,6 +17,8 @@ class TimeSpec:
 """
 class Decode:
     def __init__(self, string:str):
+        if string.__class__ == int:
+            string=str(string)
         atIndx =string.find("@")
         starIndx = string.find("*")
         if atIndx >= 0:
